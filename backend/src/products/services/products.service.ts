@@ -12,7 +12,6 @@ export class ProductsService {
       description: 'Portátil de 15 pulgadas para trabajo y estudio',
       price: 749.99,
       stock: 12,
-      image: 'https://example.com/laptop.jpg',
     },
     {
       id: 2,
@@ -20,7 +19,6 @@ export class ProductsService {
       description: 'Smartphone Apple con 128 GB de almacenamiento',
       price: 799.99,
       stock: 8,
-      image: 'https://example.com/laptop.jpg',
     },
   ];
 

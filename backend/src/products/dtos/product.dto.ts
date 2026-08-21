@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty, IsUrl } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -18,10 +18,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsNumber()
   stock!: number;
-
-  @IsNotEmpty()
-  @IsUrl()
-  image!: string;
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
