@@ -9,8 +9,23 @@ import { ProductVariantController } from './controllers/product-variant.controll
 import { ProductImageController } from './controllers/product-image.controller';
 import { ProductVariantService } from './services/product-variant.service';
 import { ProductImageService } from './services/product-image.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Brand } from './entities/brand.entity';
+import { Category } from './entities/category.entity';
+import { ProductImage } from './entities/product-image.entity';
+import { ProductVariant } from './entities/product-variant.entity';
+import { Product } from './entities/product.entity';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([
+      Brand,
+      Category,
+      ProductImage,
+      ProductVariant,
+      Product,
+    ]),
+  ],
   controllers: [
     ProductsController,
     CategoriesController,

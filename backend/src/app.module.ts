@@ -8,6 +8,7 @@ import { OrdersController } from './orders/controllers/orders.controller';
 import { OrdersModule } from './orders/orders.module';
 
 import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
       isGlobal: true,
     }),
+    DatabaseModule,
   ],
   controllers: [AppController, OrdersController],
   providers: [AppService, OrdersService],
