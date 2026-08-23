@@ -7,8 +7,18 @@ import { OrdersService } from './orders/services/orders.service';
 import { OrdersController } from './orders/controllers/orders.controller';
 import { OrdersModule } from './orders/orders.module';
 
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
-  imports: [ProductsModule, UsersModule, OrdersModule],
+  imports: [
+    ProductsModule,
+    UsersModule,
+    OrdersModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
+  ],
   controllers: [AppController, OrdersController],
   providers: [AppService, OrdersService],
 })
