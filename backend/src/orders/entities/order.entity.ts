@@ -8,6 +8,6 @@ export class Order {
   @Column({ type: 'varchar', length: 100 })
   status!: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'decimal', scale: 2 })
   total!: number;
 }

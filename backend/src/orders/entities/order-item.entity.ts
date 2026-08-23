@@ -8,6 +8,6 @@ export class OrderItem {
   @Column({ type: 'int' })
   quantity!: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'decimal', scale: 2 })
   unitPrice!: number;
 }

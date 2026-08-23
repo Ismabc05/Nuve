@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsPositive } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateOrderDto {
@@ -6,8 +6,9 @@ export class CreateOrderDto {
   @IsString()
   status!: string;
 
+  @IsPositive()
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
   total!: number;
 }
 
