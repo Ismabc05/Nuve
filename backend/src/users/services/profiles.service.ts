@@ -1,72 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Profile } from '../entities/profile.entity';
 import { CreateProfileDto, UpdateProfileDto } from '../dtos/profile.dto';
 
 @Injectable()
 export class ProfilesService {
-  private profiles: Profile[] = [
-    {
-      id: 1,
-      name: 'ismael',
-      lastname: 'bedmar',
-      phone: 4767675,
-      address: 'calle tintor',
-      image: 'https://example.com/laptop.jpg',
-      zip_code: 14500,
-    },
-    {
-      id: 2,
-      name: 'nerea',
-      lastname: 'bedmar',
-      phone: 4767675,
-      address: 'calle tintor',
-      image: 'https://example.com/laptop.jpg',
-      zip_code: 14500,
-    },
-  ];
+  constructor(
+    @InjectRepository(Profile) private profileRepo: Repository<Profile>,
+  ) {}
 
   findAll() {
-    return this.profiles;
+    return this.profileRepo.find();
   }
 
-  findOne(id: number) {
-    const profile = this.profiles.find((profile) => profile.id === id);
+  async findOne(id: number) {
+    const profile = await this.profileRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
     return profile;
   }
 
-  create(newProfile: CreateProfileDto) {
-    const profile: Profile = {
-      id: this.profiles.length + 1,
-      ...newProfile,
-    };
-    this.profiles.push(profile);
-    return profile;
+  async create(body: CreateProfileDto) {
+    const newProfile = this.profileRepo.create(body);
+    const savedProfile = await this.profileRepo.save(newProfile);
+    return savedProfile;
   }
 
-  update(id: number, updatedProfile: UpdateProfileDto) {
-    const profileIndex = this.profiles.findIndex(
-      (profile) => profile.id === id,
-    );
-    if (profileIndex === -1) {
-      return null;
-    }
-
-    this.profiles[profileIndex] = {
-      ...this.profiles[profileIndex],
-      ...updatedProfile,
-    };
-
-    return this.profiles[profileIndex];
+  async update(id: number, body: UpdateProfileDto) {
+    const profile = await this.findOne(id);
+    const updatedProfile = this.profileRepo.merge(profile, body);
+    const savedProfile = await this.profileRepo.save(updatedProfile);
+    return savedProfile;
   }
 
-  remove(id: number) {
-    const profileIndex = this.profiles.findIndex(
-      (profile) => profile.id === id,
-    );
-    if (profileIndex === -1) {
-      return null;
-    }
-    return this.profiles.splice(profileIndex, 1);
+  async remove(id: number) {
+    const profile = await this.findOne(id);
+    await this.profileRepo.remove(profile);
+    return {
+      message: 'Profile deleted succesfuly',
+    };
   }
 }

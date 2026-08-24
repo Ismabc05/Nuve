@@ -25,15 +25,15 @@ export class UsersService {
     return user;
   }
 
-  async create(user: CreateUserDto) {
-    const newUser = this.userRepo.create(user);
+  async create(body: CreateUserDto) {
+    const newUser = this.userRepo.create(body);
     const savedUser = await this.userRepo.save(newUser);
     return savedUser;
   }
 
-  async update(id: number, updateUser: UpdateUserDto) {
+  async update(id: number, body: UpdateUserDto) {
     const user = await this.findOne(id);
-    const updatedUser = this.userRepo.merge(user, updateUser);
+    const updatedUser = this.userRepo.merge(user, body);
     const savedUser = await this.userRepo.save(updatedUser);
     return savedUser;
   }
