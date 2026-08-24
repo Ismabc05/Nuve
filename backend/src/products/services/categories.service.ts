@@ -1,62 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Category } from '../entities/category.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
 
 @Injectable()
 export class CategoriesService {
-  private categories: Category[] = [
-    {
-      id: 1,
-      name: 'Laptop Lenovo IdeaPad',
-    },
-    {
-      id: 2,
-      name: 'iPhone 15',
-    },
-  ];
+  constructor(
+    @InjectRepository(Category) private categoryRepo: Repository<Category>,
+  ) {}
 
-  findAll() {
-    return this.categories;
+  async findAll() {
+    return await this.categoryRepo.find();
   }
 
-  findOne(id: number) {
-    const category = this.categories.find((category) => category.id === id);
+  async findOne(id: number) {
+    const category = await this.categoryRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!category) {
+      throw new BadRequestException('Categoria no encontrada');
+    }
     return category;
   }
 
-  create(newCategory: CreateCategoryDto) {
-    const category: Category = {
-      id: this.categories.length + 1,
-      ...newCategory,
-    };
-    this.categories.push(category);
-    return category;
+  async create(body: CreateCategoryDto) {
+    const newCategory = this.categoryRepo.create(body);
+    const saveCategory = await this.categoryRepo.save(newCategory);
+    return saveCategory;
   }
 
-  update(id: number, updateCategory: UpdateCategoryDto) {
-    const categoryIndex = this.categories.findIndex(
-      (category) => category.id === id,
-    );
-    if (categoryIndex === -1) {
-      return null;
-    }
-
-    this.categories[categoryIndex] = {
-      ...this.categories[categoryIndex],
-      ...updateCategory,
-    };
-    return this.categories[categoryIndex];
+  async update(id: number, body: UpdateCategoryDto) {
+    const category = await this.findOne(id);
+    const updatedCategory = this.categoryRepo.merge(category, body);
+    const savedCategory = await this.categoryRepo.save(updatedCategory);
+    return savedCategory;
   }
 
-  remove(id: number) {
-    const categoryIndex = this.categories.findIndex(
-      (category) => category.id === id,
-    );
-    if (categoryIndex === -1) {
-      return null;
-    }
-
-    return this.categories.splice(categoryIndex, 1);
+  async remove(id: number) {
+    const category = await this.findOne(id);
+    await this.categoryRepo.remove(category);
+    return {
+      message: 'Categoria borrada correctamente',
+    };
   }
 }

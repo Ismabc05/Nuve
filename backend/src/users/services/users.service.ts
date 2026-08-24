@@ -9,8 +9,8 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  findAll() {
-    return this.userRepo.find();
+  async findAll() {
+    return await this.userRepo.find();
   }
 
   async findOne(id: number) {

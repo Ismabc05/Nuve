@@ -1,57 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Brand } from '../entities/brand.entity';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
 
 @Injectable()
 export class BrandsService {
-  private brands: Brand[] = [
-    {
-      id: 1,
-      name: 'Laptop Lenovo IdeaPad',
-    },
-    {
-      id: 2,
-      name: 'iPhone 15',
-    },
-  ];
+  constructor(@InjectRepository(Brand) private brandRepo: Repository<Brand>) {}
 
-  findAll() {
-    return this.brands;
+  async findAll() {
+    return await this.brandRepo.find();
   }
 
-  findOne(id: number) {
-    const brand = this.brands.find((brand) => brand.id === id);
+  async findOne(id: number) {
+    const brand = await this.brandRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!brand) {
+      throw new BadRequestException('Marca no econtrada');
+    }
     return brand;
   }
 
-  create(newBrand: CreateBrandDto) {
-    const brand: Brand = {
-      id: this.brands.length + 1,
-      ...newBrand,
-    };
-    this.brands.push(brand);
-    return brand;
+  async create(body: CreateBrandDto) {
+    const createBrand = this.brandRepo.create(body);
+    const saveBrand = await this.brandRepo.save(createBrand);
+    return saveBrand;
   }
 
-  update(id: number, updateBrand: UpdateBrandDto) {
-    const brandIndex = this.brands.findIndex((brand) => brand.id === id);
-    if (brandIndex === -1) {
-      return null;
-    }
-    this.brands[brandIndex] = {
-      ...this.brands[brandIndex],
-      ...updateBrand,
-    };
-    return this.brands[brandIndex];
+  async update(id: number, body: UpdateBrandDto) {
+    const brand = await this.findOne(id);
+    const updateBrand = this.brandRepo.merge(brand, body);
+    const saveBrand = await this.brandRepo.save(updateBrand);
+    return saveBrand;
   }
 
-  remove(id: number) {
-    const brandIndex = this.brands.findIndex((brand) => brand.id === id);
-    if (brandIndex === -1) {
-      return null;
-    }
-
-    return this.brands.splice(brandIndex, 1);
+  async remove(id: number) {
+    const brand = await this.findOne(id);
+    await this.brandRepo.remove(brand);
+    return {
+      message: 'Marca borrada correctamente',
+    };
   }
 }

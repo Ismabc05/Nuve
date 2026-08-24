@@ -11,8 +11,8 @@ export class OrderItemService {
     @InjectRepository(OrderItem) private orderItemRepo: Repository<OrderItem>,
   ) {}
 
-  findAll() {
-    return this.orderItemRepo.find();
+  async findAll() {
+    return await this.orderItemRepo.find();
   }
 
   async findOne(id: number) {

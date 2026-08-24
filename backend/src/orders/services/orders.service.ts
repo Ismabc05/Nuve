@@ -9,8 +9,8 @@ import { CreateOrderDto, UdateOrderDto } from '../dtos/order.dto';
 export class OrdersService {
   constructor(@InjectRepository(Order) private orderRepo: Repository<Order>) {}
 
-  findAll() {
-    return this.orderRepo.find();
+  async findAll() {
+    return await this.orderRepo.find();
   }
 
   async findOne(id: number) {

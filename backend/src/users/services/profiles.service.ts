@@ -11,8 +11,8 @@ export class ProfilesService {
     @InjectRepository(Profile) private profileRepo: Repository<Profile>,
   ) {}
 
-  findAll() {
-    return this.profileRepo.find();
+  async findAll() {
+    return await this.profileRepo.find();
   }
 
   async findOne(id: number) {
