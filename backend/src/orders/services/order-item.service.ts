@@ -1,62 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { OrderItem } from '../entities/order-item.entity';
 import { CreateOrderItem, UpdateOrderItemDto } from '../dtos/order-item.dto';
 
 @Injectable()
 export class OrderItemService {
-  private orderItems: OrderItem[] = [
-    {
-      id: 1,
-      quantity: 24,
-      unitPrice: 2,
-    },
-    {
-      id: 2,
-      quantity: 10,
-      unitPrice: 2,
-    },
-  ];
+  constructor(
+    @InjectRepository(OrderItem) private orderItemRepo: Repository<OrderItem>,
+  ) {}
 
   findAll() {
-    return this.orderItems;
+    return this.orderItemRepo.find();
   }
 
-  findOne(id: number) {
-    const orderItem = this.orderItems.find((order) => order.id === id);
+  async findOne(id: number) {
+    const orderItem = await this.orderItemRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!orderItem) {
+      throw new BadRequestException('Linea de pedido no encontrada');
+    }
     return orderItem;
   }
 
-  create(newOrderItem: CreateOrderItem) {
-    const orderItem: OrderItem = {
-      id: this.orderItems.length + 1,
-      ...newOrderItem,
-    };
-    this.orderItems.push(orderItem);
-    return orderItem;
+  async create(body: CreateOrderItem) {
+    const createOrder = this.orderItemRepo.create(body);
+    const savedOrder = await this.orderItemRepo.save(createOrder);
+    return savedOrder;
   }
 
-  update(id: number, updateOrderItem: UpdateOrderItemDto) {
-    const orderItemIndex = this.orderItems.findIndex(
-      (orderItem) => orderItem.id === id,
-    );
-    if (orderItemIndex === -1) {
-      return null;
-    }
-    this.orderItems[orderItemIndex] = {
-      ...this.orderItems[orderItemIndex],
-      ...updateOrderItem,
-    };
-    return this.orderItems[orderItemIndex];
+  async update(id: number, body: UpdateOrderItemDto) {
+    const orderItem = await this.findOne(id);
+    const updateOrderItem = this.orderItemRepo.merge(orderItem, body);
+    const saveOrderItem = await this.orderItemRepo.save(updateOrderItem);
+    return saveOrderItem;
   }
-
-  remove(id: number) {
-    const orderItemIndex = this.orderItems.findIndex(
-      (orderItem) => orderItem.id === id,
-    );
-    if (orderItemIndex === -1) {
-      return null;
-    }
-    return this.orderItems.splice(orderItemIndex, 1);
+  async remove(id: number) {
+    const orderItem = await this.findOne(id);
+    await this.orderItemRepo.remove(orderItem);
+    return {
+      message: 'Linea de pedido borrada correctamente',
+    };
   }
 }

@@ -1,58 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Order } from '../entities/order.entity';
 import { CreateOrderDto, UdateOrderDto } from '../dtos/order.dto';
 
 @Injectable()
 export class OrdersService {
-  private orders: Order[] = [
-    {
-      id: 1,
-      total: 24,
-      status: 'esperando',
-    },
-    {
-      id: 2,
-      total: 10,
-      status: 'enviado',
-    },
-  ];
+  constructor(@InjectRepository(Order) private orderRepo: Repository<Order>) {}
 
   findAll() {
-    return this.orders;
+    return this.orderRepo.find();
   }
 
-  findOne(id: number) {
-    const order = this.orders.find((order) => order.id === id);
+  async findOne(id: number) {
+    const order = await this.orderRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!order) {
+      throw new NotFoundException('Order no encontrada');
+    }
     return order;
   }
 
-  create(newOrder: CreateOrderDto) {
-    const order: Order = {
-      id: this.orders.length + 1,
-      ...newOrder,
-    };
-    this.orders.push(order);
-    return order;
+  async create(body: CreateOrderDto) {
+    const createProfile = this.orderRepo.create(body);
+    const savedProfile = await this.orderRepo.save(createProfile);
+    return savedProfile;
   }
 
-  update(id: number, updatedOrder: UdateOrderDto) {
-    const orderIndex = this.orders.findIndex((order) => order.id === id);
-    if (orderIndex === -1) {
-      return null;
-    }
-    this.orders[orderIndex] = {
-      ...this.orders[orderIndex],
-      ...updatedOrder,
-    };
-    return this.orders[orderIndex];
+  async update(id: number, body: UdateOrderDto) {
+    const profile = await this.findOne(id);
+    const updateOrder = this.orderRepo.merge(profile, body);
+    const savedOrder = await this.orderRepo.save(updateOrder);
+    return savedOrder;
   }
 
-  remove(id: number) {
-    const orderIndex = this.orders.findIndex((order) => order.id === id);
-    if (orderIndex === -1) {
-      return null;
-    }
-    return this.orders.splice(orderIndex, 1);
+  async remove(id: number) {
+    const profile = await this.findOne(id);
+    await this.orderRepo.remove(profile);
+    return {
+      meesage: 'Pedido borrado correctamente',
+    };
   }
 }

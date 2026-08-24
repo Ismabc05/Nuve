@@ -22,7 +22,7 @@ export class ProfilesService {
       },
     });
     if (!profile) {
-      throw new NotFoundException('Profile not found');
+      throw new NotFoundException('Perfil no encontrado');
     }
     return profile;
   }
@@ -44,7 +44,7 @@ export class ProfilesService {
     const profile = await this.findOne(id);
     await this.profileRepo.remove(profile);
     return {
-      message: 'Profile deleted succesfuly',
+      message: 'Perfil borrado correctamente',
     };
   }
 }

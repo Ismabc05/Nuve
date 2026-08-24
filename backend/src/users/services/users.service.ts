@@ -20,7 +20,7 @@ export class UsersService {
       },
     });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Usuario no encontrado');
     }
     return user;
   }
@@ -42,7 +42,7 @@ export class UsersService {
     const user = await this.findOne(id);
     await this.userRepo.remove(user);
     return {
-      message: 'User deleted successfully',
+      message: 'User borrado correctamente',
     };
   }
 }
