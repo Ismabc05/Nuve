@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { ProductImage } from '../entities/product-image.entity';
 import {
@@ -8,59 +10,46 @@ import {
 
 @Injectable()
 export class ProductImageService {
-  private productImages: ProductImage[] = [
-    {
-      id: 1,
-      url: 'https://example.com/laptop.jpg',
-    },
-    {
-      id: 2,
-      url: 'https://example.com/laptop.jpg',
-    },
-  ];
+  constructor(
+    @InjectRepository(ProductImage)
+    private productImageRepo: Repository<ProductImage>,
+  ) {}
 
-  findAll() {
-    return this.productImages;
+  async findAll() {
+    return await this.productImageRepo.find();
   }
 
-  findOne(id: number) {
-    const productImage = this.productImages.find(
-      (productImage) => productImage.id === id,
-    );
+  async findOne(id: number) {
+    const productImage = await this.productImageRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!productImage) {
+      throw new BadRequestException('Imagenes del product no encontradas');
+    }
     return productImage;
   }
 
-  create(body: CreateProductImageDto) {
-    const newProductImage: ProductImage = {
-      id: this.productImages.length + 1,
-      ...body,
-    };
-    this.productImages.push(newProductImage);
-    return newProductImage;
+  async create(body: CreateProductImageDto) {
+    const newProductImage = this.productImageRepo.create(body);
+    const savedProductImage = await this.productImageRepo.save(newProductImage);
+    return savedProductImage;
   }
 
-  update(id: number, body: UpdateProductImageDto) {
-    const productImageIndex = this.productImages.findIndex(
-      (productImage) => productImage.id === id,
-    );
-    if (productImageIndex === -1) {
-      return null;
-    }
-
-    this.productImages[productImageIndex] = {
-      ...this.productImages[productImageIndex],
-      ...body,
-    };
-    return this.productImages[productImageIndex];
+  async update(id: number, body: UpdateProductImageDto) {
+    const productImage = await this.findOne(id);
+    const updateProductImage = this.productImageRepo.merge(productImage, body);
+    const savedProductImage =
+      await this.productImageRepo.save(updateProductImage);
+    return savedProductImage;
   }
 
-  remove(id: number) {
-    const productImageIndex = this.productImages.findIndex(
-      (productImage) => productImage.id === id,
-    );
-    if (productImageIndex === -1) {
-      return null;
-    }
-    return this.productImages.splice(productImageIndex, 1);
+  async remove(id: number) {
+    const productImage = await this.findOne(id);
+    await this.productImageRepo.remove(productImage);
+    return {
+      message: 'Imagen del producto borrado correctamente',
+    };
   }
 }

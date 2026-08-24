@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { ProductVariant } from '../entities/product-variant.entity';
 import {
@@ -8,62 +10,50 @@ import {
 
 @Injectable()
 export class ProductVariantService {
-  private productVariants: ProductVariant[] = [
-    {
-      id: 1,
-      size: 'M',
-      color: 'red',
-      stock: 10,
-    },
-    {
-      id: 2,
-      size: 'S',
-      color: 'blue',
-      stock: 5,
-    },
-  ];
+  constructor(
+    @InjectRepository(ProductVariant)
+    private productVariantRepo: Repository<ProductVariant>,
+  ) {}
 
-  findAll() {
-    return this.productVariants;
+  async findAll() {
+    return await this.productVariantRepo.find();
   }
 
-  findOne(id: number) {
-    const productVariant = this.productVariants.find(
-      (productVariant) => productVariant.id === id,
-    );
+  async findOne(id: number) {
+    const productVariant = await this.productVariantRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!productVariant) {
+      throw new BadRequestException('Talla no econtrada');
+    }
     return productVariant;
   }
 
-  create(body: CreateProductVariantDto) {
-    const newProductVariant: ProductVariant = {
-      id: this.productVariants.length + 1,
-      ...body,
-    };
-    this.productVariants.push(newProductVariant);
-    return newProductVariant;
+  async create(body: CreateProductVariantDto) {
+    const newProductVariant = this.productVariantRepo.create(body);
+    const savedProductVariant =
+      await this.productVariantRepo.save(newProductVariant);
+    return savedProductVariant;
   }
 
-  update(id: number, body: UpdateProductVariantDto) {
-    const productVariantIndex = this.productVariants.findIndex(
-      (productVariant) => productVariant.id === id,
+  async update(id: number, body: UpdateProductVariantDto) {
+    const productVariant = await this.findOne(id);
+    const updateProductVariant = this.productVariantRepo.merge(
+      productVariant,
+      body,
     );
-    if (productVariantIndex === -1) {
-      return null;
-    }
-    this.productVariants[productVariantIndex] = {
-      ...this.productVariants[productVariantIndex],
-      ...body,
-    };
-    return this.productVariants[productVariantIndex];
+    const savedProductVariant =
+      await this.productVariantRepo.save(updateProductVariant);
+    return savedProductVariant;
   }
 
-  remove(id: number) {
-    const productVariantIndex = this.productVariants.findIndex(
-      (productVariant) => productVariant.id === id,
-    );
-    if (productVariantIndex === -1) {
-      return null;
-    }
-    return this.productVariants.splice(productVariantIndex, 1);
+  async remove(id: number) {
+    const productVariant = await this.findOne(id);
+    await this.productVariantRepo.remove(productVariant);
+    return {
+      message: 'Talla del product borrada correctamente',
+    };
   }
 }
