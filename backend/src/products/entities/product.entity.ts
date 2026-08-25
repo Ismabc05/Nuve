@@ -14,14 +14,11 @@ export class Product {
   @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @Column({ type: 'decimal', scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   price!: number;
 
   @Column({ type: 'varchar', length: 300 })
   description!: string;
-
-  @Column({ type: 'int' })
-  stock!: number;
 
   @CreateDateColumn({
     type: 'timestamptz',

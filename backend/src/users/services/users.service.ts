@@ -15,9 +15,8 @@ export class UsersService {
 
   async findOne(id: number) {
     const user = await this.userRepo.findOne({
-      where: {
-        id,
-      },
+      where: { id },
+      relations: { profile: true },
     });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
@@ -26,7 +25,15 @@ export class UsersService {
   }
 
   async create(body: CreateUserDto) {
-    const newUser = this.userRepo.create(body);
+    const { email, password, name } = body;
+    const newUser = this.userRepo.create({
+      email,
+      password,
+      profile: {
+        // Dentro de profile meto name y las demas propiedades opcionales que estan dentro de perfil
+        name,
+      },
+    });
     const savedUser = await this.userRepo.save(newUser);
     return savedUser;
   }

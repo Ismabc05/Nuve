@@ -6,6 +6,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { OneToOne } from 'typeorm';
+import { User } from './user.entitiy';
+
 @Entity({ name: 'profiles' })
 export class Profile {
   @PrimaryGeneratedColumn()
@@ -17,7 +20,7 @@ export class Profile {
   @Column({ type: 'varchar', length: 100, nullable: true })
   lastname!: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   phone!: number;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
@@ -26,7 +29,7 @@ export class Profile {
   @Column({ type: 'varchar', length: 200, nullable: true })
   image!: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   zip_code!: number;
 
   @CreateDateColumn({
@@ -42,4 +45,7 @@ export class Profile {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @OneToOne(() => User, (user) => user.profile)
+  user!: User;
 }

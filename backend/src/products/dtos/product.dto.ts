@@ -14,10 +14,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   description!: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  stock!: number;
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
