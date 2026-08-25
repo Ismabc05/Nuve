@@ -2,9 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Category } from './category.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -33,4 +37,8 @@ export class Product {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToMany(() => Category, (category) => category.products)
+  @JoinTable()
+  categories!: Category[];
 }

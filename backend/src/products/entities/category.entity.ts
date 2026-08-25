@@ -1,10 +1,12 @@
 import {
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Column } from 'typeorm/browser';
+import { Product } from './product.entity';
 
 @Entity({ name: 'categories' })
 export class Category {
@@ -27,4 +29,7 @@ export class Category {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToMany(() => Product, (product) => product.categories)
+  products!: Product[];
 }
