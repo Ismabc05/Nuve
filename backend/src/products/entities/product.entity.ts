@@ -4,6 +4,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -12,6 +13,7 @@ import {
 import { Category } from './category.entity';
 import { ProductVariant } from './product-variant.entity';
 import { ProductImage } from './product-image.entity';
+import { Brand } from './brand.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -50,4 +52,7 @@ export class Product {
 
   @OneToMany(() => ProductImage, (image) => image.product)
   images!: ProductImage[];
+
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand!: Brand;
 }

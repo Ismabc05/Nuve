@@ -15,9 +15,8 @@ export class BrandsService {
 
   async findOne(id: number) {
     const brand = await this.brandRepo.findOne({
-      where: {
-        id,
-      },
+      where: { id },
+      relations: { products: true },
     });
     if (!brand) {
       throw new BadRequestException('Marca no econtrada');

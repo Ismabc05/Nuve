@@ -9,12 +9,14 @@ import { Repository } from 'typeorm';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import { Category } from '../entities/category.entity';
+import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
+    @InjectRepository(Brand) private brandRepo: Repository<Brand>,
   ) {}
 
   async findAll() {
@@ -24,7 +26,12 @@ export class ProductsService {
   async findOne(id: number) {
     const product = await this.productRepo.findOne({
       where: { id },
-      relations: { categories: true, variants: true, images: true },
+      relations: {
+        categories: true,
+        variants: true,
+        images: true,
+        brand: true,
+      },
     });
     if (!product) {
       throw new BadRequestException('Product no encontrado');
@@ -33,15 +40,22 @@ export class ProductsService {
   }
 
   async create(body: CreateProductDto) {
-    const { categories, ...productData } = body;
+    const { brandId, categories, ...productData } = body;
     const categoryEntity = await this.categoryRepo.find({
       where: categories.map((id) => ({ id })),
     });
     if (categoryEntity.length !== categories.length) {
       throw new NotFoundException('Una o más categorías no existen');
     }
+    const brand = await this.brandRepo.findOne({
+      where: { id: brandId },
+    });
+    if (!brand) {
+      throw new NotFoundException('Marca no encontrafa');
+    }
     const newProduct = this.productRepo.create({
       ...productData,
+      brand,
       categories: categoryEntity,
     });
     const savedProduct = await this.productRepo.save(newProduct);
