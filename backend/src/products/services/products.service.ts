@@ -24,7 +24,7 @@ export class ProductsService {
   async findOne(id: number) {
     const product = await this.productRepo.findOne({
       where: { id },
-      relations: { categories: true },
+      relations: { categories: true, variants: true, images: true },
     });
     if (!product) {
       throw new BadRequestException('Product no encontrado');

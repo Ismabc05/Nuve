@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -7,12 +11,15 @@ import {
   CreateProductVariantDto,
   UpdateProductVariantDto,
 } from '../dtos/product-variant.dto';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductVariantService {
   constructor(
     @InjectRepository(ProductVariant)
     private productVariantRepo: Repository<ProductVariant>,
+    @InjectRepository(Product)
+    private productRepo: Repository<Product>,
   ) {}
 
   async findAll() {
@@ -32,10 +39,18 @@ export class ProductVariantService {
   }
 
   async create(body: CreateProductVariantDto) {
-    const newProductVariant = this.productVariantRepo.create(body);
-    const savedProductVariant =
-      await this.productVariantRepo.save(newProductVariant);
-    return savedProductVariant;
+    const { productId, ...variantsData } = body;
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
+    });
+    if (!product) {
+      throw new NotFoundException('Product no encontrado');
+    }
+    const newProductVariant = this.productVariantRepo.create({
+      ...variantsData,
+      product,
+    });
+    return this.productVariantRepo.save(newProductVariant);
   }
 
   async update(id: number, body: UpdateProductVariantDto) {

@@ -13,6 +13,10 @@ export class CreateProductVariantDto {
   @IsNotEmpty()
   @IsNumber()
   stock!: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  productId!: number;
 }
 
 export class UpdateProductVariantDto extends PartialType(

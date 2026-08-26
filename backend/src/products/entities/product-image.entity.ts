@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './product.entity';
 
 @Entity({ name: 'product-images' })
 export class ProductImage {
@@ -26,4 +28,10 @@ export class ProductImage {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToOne(() => Product, (product) => product.images, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  product!: Product;
 }

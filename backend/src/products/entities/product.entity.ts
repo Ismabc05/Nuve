@@ -4,11 +4,14 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Category } from './category.entity';
+import { ProductVariant } from './product-variant.entity';
+import { ProductImage } from './product-image.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -41,4 +44,10 @@ export class Product {
   @ManyToMany(() => Category, (category) => category.products)
   @JoinTable()
   categories!: Category[];
+
+  @OneToMany(() => ProductVariant, (variant) => variant.product)
+  variants!: ProductVariant[];
+
+  @OneToMany(() => ProductImage, (image) => image.product)
+  images!: ProductImage[];
 }

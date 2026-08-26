@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './product.entity';
 
 @Entity({ name: 'product-variants' })
 export class ProductVariant {
@@ -33,4 +35,10 @@ export class ProductVariant {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToOne(() => Product, (product) => product.variants, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  product!: Product;
 }
