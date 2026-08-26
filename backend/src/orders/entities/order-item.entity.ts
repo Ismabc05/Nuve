@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity({ name: 'order-items' })
 export class OrderItem {
@@ -30,4 +32,10 @@ export class OrderItem {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @ManyToOne(() => Order, (order) => order.items, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  order!: Order;
 }

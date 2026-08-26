@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderItem } from './order-item.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -30,4 +32,7 @@ export class Order {
     name: 'updated_at',
   })
   updatedAt!: Date;
+
+  @OneToMany(() => OrderItem, (item) => item.order)
+  items!: OrderItem[];
 }
