@@ -2,12 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderItem } from './order-item.entity';
 import { OrderStatus } from '../models/order.status';
+import { User } from '../../users/entities/user.entitiy';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -36,4 +38,7 @@ export class Order {
 
   @OneToMany(() => OrderItem, (item) => item.order)
   items!: OrderItem[];
+
+  @ManyToOne(() => User, (user) => user.orders, { nullable: false })
+  user!: User;
 }

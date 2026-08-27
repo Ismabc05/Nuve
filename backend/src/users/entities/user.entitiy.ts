@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { OneToOne } from 'typeorm/browser';
 import { Profile } from './profile.entity';
+import { Order } from '../../orders/entities/order.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -38,4 +40,7 @@ export class User {
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   @JoinColumn({ name: 'profile_id' })
   profile!: Profile;
+
+  @OneToMany(() => Order, (order) => order.user, { cascade: true })
+  orders!: Order[];
 }

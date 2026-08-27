@@ -4,10 +4,15 @@ import { User } from '../entities/user.entitiy';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Order } from '../../orders/entities/order.entity';
+import { OrderStatus } from '../../orders/models/order.status';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Order) private orderRepo: Repository<Order>,
+  ) {}
 
   async findAll() {
     return await this.userRepo.find();
@@ -33,6 +38,12 @@ export class UsersService {
         // Dentro de profile meto name y las demas propiedades opcionales que estan dentro de perfil
         name,
       },
+      orders: [
+        {
+          status: OrderStatus.ACTIVE,
+          total: 0,
+        },
+      ],
     });
     const savedUser = await this.userRepo.save(newUser);
     return savedUser;

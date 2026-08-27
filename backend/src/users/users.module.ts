@@ -6,9 +6,10 @@ import { ProfilesService } from './services/profiles.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entitiy';
 import { Profile } from './entities/profile.entity';
+import { Order } from '../orders/entities/order.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Profile])],
+  imports: [TypeOrmModule.forFeature([User, Profile, Order])],
   controllers: [UsersController, ProfilesController],
   providers: [UsersService, ProfilesService],
 })
