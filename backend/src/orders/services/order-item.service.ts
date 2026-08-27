@@ -9,12 +9,15 @@ import { Repository } from 'typeorm';
 import { OrderItem } from '../entities/order-item.entity';
 import { CreateOrderItem, UpdateOrderItemDto } from '../dtos/order-item.dto';
 import { Order } from '../entities/order.entity';
+import { ProductVariant } from '../../products/entities/product-variant.entity';
 
 @Injectable()
 export class OrderItemService {
   constructor(
     @InjectRepository(OrderItem) private orderItemRepo: Repository<OrderItem>,
     @InjectRepository(Order) private orderRepo: Repository<Order>,
+    @InjectRepository(ProductVariant)
+    private productVariantRepo: Repository<ProductVariant>,
   ) {}
 
   async findAll() {
@@ -24,7 +27,7 @@ export class OrderItemService {
   async findOne(id: number) {
     const orderItem = await this.orderItemRepo.findOne({
       where: { id },
-      relations: { order: true },
+      relations: { order: true, productvariant: true },
     });
     if (!orderItem) {
       throw new BadRequestException('Linea de pedido no encontrada');
@@ -33,16 +36,26 @@ export class OrderItemService {
   }
 
   async create(body: CreateOrderItem) {
-    const { orderId, ...itemData } = body;
+    const { orderId, productvariantId, quantity } = body;
     const order = await this.orderRepo.findOne({
       where: { id: orderId },
     });
     if (!order) {
       throw new NotFoundException('Pedido no encontrado');
     }
+    const productvariant = await this.productVariantRepo.findOne({
+      where: { id: productvariantId },
+      relations: { product: true },
+    });
+
+    if (!productvariant) {
+      throw new NotFoundException('Variante de producto no encontrada');
+    }
 
     const newOrderItem = this.orderItemRepo.create({
-      ...itemData,
+      quantity,
+      unitPrice: productvariant.product.price,
+      productvariant,
       order,
     });
     const saveOrderItem = await this.orderItemRepo.save(newOrderItem);

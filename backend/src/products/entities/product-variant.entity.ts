@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
+import { OrderItem } from '../../orders/entities/order-item.entity';
 
 @Entity({ name: 'product-variants' })
 export class ProductVariant {
@@ -41,4 +43,7 @@ export class ProductVariant {
     onDelete: 'CASCADE',
   })
   product!: Product;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.productvariant)
+  orderitems!: OrderItem[];
 }

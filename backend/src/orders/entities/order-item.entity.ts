@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Order } from './order.entity';
+import { ProductVariant } from '../../products/entities/product-variant.entity';
 
 @Entity({ name: 'order-items' })
 export class OrderItem {
@@ -38,4 +39,10 @@ export class OrderItem {
     onDelete: 'CASCADE',
   })
   order!: Order;
+
+  @ManyToOne(
+    () => ProductVariant,
+    (productVariant) => productVariant.orderitems,
+  )
+  productvariant!: ProductVariant;
 }

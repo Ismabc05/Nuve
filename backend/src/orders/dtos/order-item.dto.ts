@@ -9,8 +9,7 @@ export class CreateOrderItem {
 
   @IsPositive()
   @IsNotEmpty()
-  @IsNumber({ maxDecimalPlaces: 2 })
-  unitPrice!: number;
+  productvariantId!: number;
 
   @IsNotEmpty()
   @IsNumber()
