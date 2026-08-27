@@ -23,9 +23,8 @@ export class OrderItemService {
 
   async findOne(id: number) {
     const orderItem = await this.orderItemRepo.findOne({
-      where: {
-        id,
-      },
+      where: { id },
+      relations: { order: true },
     });
     if (!orderItem) {
       throw new BadRequestException('Linea de pedido no encontrada');
@@ -46,20 +45,47 @@ export class OrderItemService {
       ...itemData,
       order,
     });
-    return await this.orderItemRepo.save(newOrderItem);
+    const saveOrderItem = await this.orderItemRepo.save(newOrderItem);
+    await this.updateOrderTotal(orderId);
+    return saveOrderItem;
   }
 
   async update(id: number, body: UpdateOrderItemDto) {
     const orderItem = await this.findOne(id);
     const updateOrderItem = this.orderItemRepo.merge(orderItem, body);
     const saveOrderItem = await this.orderItemRepo.save(updateOrderItem);
+    await this.updateOrderTotal(orderItem.order.id);
     return saveOrderItem;
   }
+
   async remove(id: number) {
     const orderItem = await this.findOne(id);
+    const orderId = orderItem.order.id;
     await this.orderItemRepo.remove(orderItem);
+    await this.updateOrderTotal(orderId);
     return {
       message: 'Linea de pedido borrada correctamente',
     };
+  }
+
+  private async updateOrderTotal(orderId: number) {
+    const order = await this.orderRepo.findOne({
+      where: { id: orderId },
+      relations: {
+        items: true,
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Pedido no encontrado');
+    }
+
+    const total = order.items.reduce((sum, item) => {
+      return sum + Number(item.quantity) * Number(item.unitPrice);
+    }, 0);
+
+    order.total = total;
+
+    await this.orderRepo.save(order);
   }
 }
