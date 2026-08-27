@@ -43,6 +43,7 @@ export class OrderItem {
   @ManyToOne(
     () => ProductVariant,
     (productVariant) => productVariant.orderitems,
+    { nullable: false },
   )
   productvariant!: ProductVariant;
 }
