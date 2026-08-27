@@ -1,15 +1,16 @@
-import { IsNotEmpty, IsNumber, IsString, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsEnum, IsPositive } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
+import { OrderStatus } from '../models/order.status';
 
 export class CreateOrderDto {
-  @IsNotEmpty()
-  @IsString()
-  status!: string;
-
   @IsPositive()
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
   total!: number;
 }
 
-export class UdateOrderDto extends PartialType(CreateOrderDto) {}
+// Actualizar
+export class UdateOrderDto extends PartialType(CreateOrderDto) {
+  @IsEnum(OrderStatus)
+  status!: OrderStatus;
+}

@@ -7,14 +7,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderItem } from './order-item.entity';
+import { OrderStatus } from '../models/order.status';
 
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'varchar', length: 100 })
-  status!: string;
+  @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.ACTIVE })
+  status!: OrderStatus;
 
   @Column({ type: 'decimal', scale: 2 })
   total!: number;
