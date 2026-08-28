@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsUrl, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsUrl, IsNotEmpty, IsInt, IsPositive } from 'class-validator';
 
 export class CreateProductImageDto {
   @IsUrl()
@@ -7,7 +7,8 @@ export class CreateProductImageDto {
   url!: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
+  @IsPositive()
   productId!: number;
 }
 

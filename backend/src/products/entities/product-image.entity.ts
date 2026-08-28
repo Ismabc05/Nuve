@@ -30,7 +30,7 @@ export class ProductImage {
   updatedAt!: Date;
 
   @ManyToOne(() => Product, (product) => product.images, {
-    nullable: true,
+    nullable: false,
     onDelete: 'CASCADE',
   })
   product!: Product;

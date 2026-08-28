@@ -4,6 +4,8 @@ import {
   IsNotEmpty,
   IsArray,
   IsInt,
+  ArrayNotEmpty,
+  IsPositive,
 } from 'class-validator';
 
 import { PartialType } from '@nestjs/mapped-types';
@@ -14,6 +16,7 @@ export class CreateProductDto {
   name!: string;
 
   @IsNotEmpty()
+  @IsPositive()
   @IsNumber()
   price!: number;
 
@@ -21,13 +24,14 @@ export class CreateProductDto {
   @IsString()
   description!: string;
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
   @IsInt({ each: true })
   categories!: number[];
 
   @IsNotEmpty()
   @IsNumber()
+  @IsInt()
   brandId!: number;
 }
 

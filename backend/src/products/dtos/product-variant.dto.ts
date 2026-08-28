@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsPositive, IsInt, Min } from 'class-validator';
 
 export class CreateProductVariantDto {
   @IsNotEmpty()
@@ -11,11 +11,13 @@ export class CreateProductVariantDto {
   color!: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
+  @Min(0)
   stock!: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
+  @IsPositive()
   productId!: number;
 }
 

@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 
 import { ProductVariant } from '../entities/product-variant.entity';
 import {
@@ -23,17 +23,18 @@ export class ProductVariantService {
   ) {}
 
   async findAll() {
-    return await this.productVariantRepo.find();
+    return await this.productVariantRepo.find({
+      relations: { product: true },
+    });
   }
 
   async findOne(id: number) {
     const productVariant = await this.productVariantRepo.findOne({
-      where: {
-        id,
-      },
+      where: { id },
+      relations: { product: true, orderitems: true },
     });
     if (!productVariant) {
-      throw new BadRequestException('Talla no econtrada');
+      throw new NotFoundException('Variant del product no encontrada');
     }
     return productVariant;
   }
@@ -50,25 +51,58 @@ export class ProductVariantService {
       ...variantsData,
       product,
     });
-    return this.productVariantRepo.save(newProductVariant);
+    try {
+      return await this.productVariantRepo.save(newProductVariant);
+    } catch (error) {
+      this.handleDatabaseError(error);
+    }
   }
 
   async update(id: number, body: UpdateProductVariantDto) {
     const productVariant = await this.findOne(id);
-    const updateProductVariant = this.productVariantRepo.merge(
-      productVariant,
-      body,
-    );
-    const savedProductVariant =
-      await this.productVariantRepo.save(updateProductVariant);
-    return savedProductVariant;
+    const { productId, ...variantData } = body;
+    if (productId !== undefined) {
+      const product = await this.productRepo.findOne({
+        where: { id: productId },
+      });
+      if (!product) {
+        throw new NotFoundException('Product no encontrado');
+      }
+      productVariant.product = product;
+    }
+    this.productVariantRepo.merge(productVariant, variantData);
+    try {
+      return await this.productVariantRepo.save(productVariant);
+    } catch (error) {
+      this.handleDatabaseError(error);
+    }
   }
 
   async remove(id: number) {
     const productVariant = await this.findOne(id);
+    if (productVariant.orderitems.length > 0) {
+      throw new ConflictException(
+        'No se puede eliminar la variante porque está asociada a uno o más pedidos',
+      );
+    }
     await this.productVariantRepo.remove(productVariant);
     return {
       message: 'Talla del product borrada correctamente',
     };
+  }
+
+  private handleDatabaseError(error: unknown) {
+    if (
+      error instanceof QueryFailedError &&
+      error.driverError &&
+      'code' in error.driverError &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      error.driverError.code === '23505'
+    ) {
+      throw new ConflictException(
+        'Ya existe una variante con esa talla y color para este producto',
+      );
+    }
+    throw error;
   }
 }

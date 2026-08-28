@@ -5,12 +5,14 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
 import { OrderItem } from '../../orders/entities/order-item.entity';
 
 @Entity({ name: 'product-variants' })
+@Unique(['product', 'size', 'color'])
 export class ProductVariant {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -39,7 +41,7 @@ export class ProductVariant {
   updatedAt!: Date;
 
   @ManyToOne(() => Product, (product) => product.variants, {
-    nullable: true,
+    nullable: false,
     onDelete: 'CASCADE',
   })
   product!: Product;

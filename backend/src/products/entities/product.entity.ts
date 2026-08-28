@@ -20,7 +20,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, unique: true })
   name!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
@@ -53,6 +53,8 @@ export class Product {
   @OneToMany(() => ProductImage, (image) => image.product)
   images!: ProductImage[];
 
-  @ManyToOne(() => Brand, (brand) => brand.products)
+  @ManyToOne(() => Brand, (brand) => brand.products, {
+    nullable: false,
+  })
   brand!: Brand;
 }

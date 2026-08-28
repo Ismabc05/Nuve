@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -23,7 +19,9 @@ export class ProductImageService {
   ) {}
 
   async findAll() {
-    return await this.productImageRepo.find();
+    return await this.productImageRepo.find({
+      relations: { product: true },
+    });
   }
 
   async findOne(id: number) {
@@ -32,7 +30,7 @@ export class ProductImageService {
       relations: { product: true },
     });
     if (!productImage) {
-      throw new BadRequestException('Imagenes del product no encontradas');
+      throw new NotFoundException('Imagen del product no encontrada');
     }
     return productImage;
   }
@@ -54,17 +52,25 @@ export class ProductImageService {
 
   async update(id: number, body: UpdateProductImageDto) {
     const productImage = await this.findOne(id);
-    const updateProductImage = this.productImageRepo.merge(productImage, body);
-    const savedProductImage =
-      await this.productImageRepo.save(updateProductImage);
-    return savedProductImage;
+    const { productId, ...imageData } = body;
+    if (productId !== undefined) {
+      const product = await this.productRepo.findOne({
+        where: { id: productId },
+      });
+      if (!product) {
+        throw new NotFoundException('Product no encontrado');
+      }
+      productImage.product = product;
+    }
+    this.productImageRepo.merge(productImage, imageData);
+    return this.productImageRepo.save(productImage);
   }
 
   async remove(id: number) {
     const productImage = await this.findOne(id);
     await this.productImageRepo.remove(productImage);
     return {
-      message: 'Imagen del producto borrado correctamente',
+      message: 'Imagen del producto borrada correctamente',
     };
   }
 }

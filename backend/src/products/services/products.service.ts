@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
@@ -20,7 +20,12 @@ export class ProductsService {
   ) {}
 
   async findAll() {
-    return await this.productRepo.find();
+    return await this.productRepo.find({
+      relations: {
+        brand: true,
+        categories: true,
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -34,7 +39,7 @@ export class ProductsService {
       },
     });
     if (!product) {
-      throw new BadRequestException('Product no encontrado');
+      throw new NotFoundException('Product no encontrado');
     }
     return product;
   }
@@ -51,21 +56,24 @@ export class ProductsService {
       where: { id: brandId },
     });
     if (!brand) {
-      throw new NotFoundException('Marca no encontrafa');
+      throw new NotFoundException('Marca no encontrada');
     }
     const newProduct = this.productRepo.create({
       ...productData,
       brand,
       categories: categoryEntity,
     });
-    const savedProduct = await this.productRepo.save(newProduct);
-    return savedProduct;
+    try {
+      return await this.productRepo.save(newProduct);
+    } catch (error) {
+      this.handleDatabaseError(error);
+    }
   }
 
   async update(id: number, body: UpdateProductDto) {
     const product = await this.findOne(id);
-    const { categories, ...productData } = body;
-    if (categories) {
+    const { categories, brandId, ...productData } = body;
+    if (categories !== undefined) {
       const categoryEntities = await this.categoryRepo.find({
         where: categories.map((id) => ({ id })),
       });
@@ -74,15 +82,42 @@ export class ProductsService {
       }
       product.categories = categoryEntities;
     }
+    if (brandId !== undefined) {
+      const brand = await this.brandRepo.findOne({
+        where: { id: brandId },
+      });
+      if (!brand) {
+        throw new NotFoundException('Marca no encontrada');
+      }
+      product.brand = brand;
+    }
     this.productRepo.merge(product, productData);
     return this.productRepo.save(product);
   }
 
   async remove(id: number) {
-    const product = await this.findOne(id);
+    const product = await this.productRepo.findOne({
+      where: { id },
+    });
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
     await this.productRepo.remove(product);
     return {
       message: 'Producto borrado correctamente',
     };
+  }
+
+  private handleDatabaseError(error: unknown) {
+    if (
+      error instanceof QueryFailedError &&
+      error.driverError &&
+      'code' in error.driverError &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      error.driverError.code === '23505'
+    ) {
+      throw new ConflictException('Ya existe una producto con ese nombre');
+    }
+    throw error;
   }
 }
