@@ -36,7 +36,7 @@ export class Order {
   })
   updatedAt!: Date;
 
-  @OneToMany(() => OrderItem, (item) => item.order)
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
   items!: OrderItem[];
 
   @ManyToOne(() => User, (user) => user.orders, {

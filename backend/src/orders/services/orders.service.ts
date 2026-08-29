@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Order } from '../entities/order.entity';
-import { CreateOrderDto, UdateOrderDto } from '../dtos/order.dto';
+import { UpdateOrderDto } from '../dtos/order.dto';
+import { OrderStatus } from '../models/order.status';
 
 @Injectable()
 export class OrdersService {
@@ -16,7 +21,14 @@ export class OrdersService {
   async findOne(id: number) {
     const order = await this.orderRepo.findOne({
       where: { id },
-      relations: { items: true, user: true },
+      relations: {
+        items: {
+          productvariant: {
+            product: true,
+          },
+        },
+        user: true,
+      },
     });
     if (!order) {
       throw new NotFoundException('Order no encontrada');
@@ -24,13 +36,7 @@ export class OrdersService {
     return order;
   }
 
-  async create(body: CreateOrderDto) {
-    const createProfile = this.orderRepo.create(body);
-    const savedProfile = await this.orderRepo.save(createProfile);
-    return savedProfile;
-  }
-
-  async update(id: number, body: UdateOrderDto) {
+  async update(id: number, body: UpdateOrderDto) {
     const profile = await this.findOne(id);
     const updateOrder = this.orderRepo.merge(profile, body);
     const savedOrder = await this.orderRepo.save(updateOrder);
@@ -38,8 +44,13 @@ export class OrdersService {
   }
 
   async remove(id: number) {
-    const profile = await this.findOne(id);
-    await this.orderRepo.remove(profile);
+    const order = await this.findOne(id);
+    if (order.status !== OrderStatus.ACTIVE) {
+      throw new ConflictException(
+        'No se puede eliminar un pedido que ya ha sido procesado',
+      );
+    }
+    await this.orderRepo.remove(order);
     return {
       meesage: 'Pedido borrado correctamente',
     };

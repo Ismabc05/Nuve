@@ -4,9 +4,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { OneToOne } from 'typeorm';
 import { User } from './user.entitiy';
 
 @Entity({ name: 'profiles' })
@@ -18,19 +18,19 @@ export class Profile {
   name!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  lastname!: string;
+  lastname?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  phone!: number;
+  phone?: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  address!: string;
+  address?: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  image!: string;
+  image?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  zip_code!: number;
+  zip_code?: string;
 
   @CreateDateColumn({
     type: 'timestamptz',

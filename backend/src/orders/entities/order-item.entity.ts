@@ -35,7 +35,7 @@ export class OrderItem {
   updatedAt!: Date;
 
   @ManyToOne(() => Order, (order) => order.items, {
-    nullable: true,
+    nullable: false,
     onDelete: 'CASCADE',
   })
   order!: Order;

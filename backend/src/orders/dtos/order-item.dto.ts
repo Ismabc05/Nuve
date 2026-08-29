@@ -1,19 +1,23 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsNumber, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsPositive, IsInt } from 'class-validator';
 
 export class CreateOrderItem {
   @IsPositive()
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   quantity!: number;
 
   @IsPositive()
   @IsNotEmpty()
+  @IsInt()
   productvariantId!: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   orderId!: number;
 }
 
-export class UpdateOrderItemDto extends PartialType(CreateOrderItem) {}
+export class UpdateOrderItemDto {
+  @IsInt()
+  @IsPositive()
+  quantity!: number;
+}

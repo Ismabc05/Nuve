@@ -12,7 +12,7 @@ export class CreateProfileDto {
 
   @IsString()
   @IsOptional()
-  phone?: number;
+  phone?: string;
 
   @IsString()
   @IsOptional()
@@ -24,7 +24,7 @@ export class CreateProfileDto {
 
   @IsOptional()
   @IsString()
-  zip_code?: number;
+  zip_code?: string;
 }
 
 export class UpdateProfileDto extends PartialType(CreateProfileDto) {}

@@ -6,9 +6,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { OneToOne } from 'typeorm/browser';
 import { Profile } from './profile.entity';
 import { Order } from '../../orders/entities/order.entity';
 
@@ -37,7 +37,10 @@ export class User {
   })
   updatedAt!: Date;
 
-  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'profile_id' })
   profile!: Profile;
 
