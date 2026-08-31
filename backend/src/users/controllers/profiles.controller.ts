@@ -11,26 +11,73 @@ import {
 
 import { ProfilesService } from '../services/profiles.service';
 import { CreateProfileDto, UpdateProfileDto } from '../dtos/profile.dto';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
+import { Profile } from '../entities/profile.entity';
 
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
 
+  @ApiOperation({ summary: 'Obtiene todos los perfiles.' })
+  @ApiOkResponse({
+    description: 'Perfil encontrado',
+    type: Profile,
+  })
+  @ApiNotFoundResponse({
+    description: 'Perfil no encontrado',
+  })
   @Get()
   findAll() {
     return this.profileService.findAll();
   }
 
+  @ApiOperation({ summary: 'Obtiene una perfil en especifico.' })
+  @ApiOkResponse({
+    description: 'Perfil encontrado',
+    type: Profile,
+  })
+  @ApiNotFoundResponse({
+    description: 'Perfil no encontrado',
+  })
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.profileService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Crea un perfil.' })
+  @ApiCreatedResponse({
+    description: 'Perfil creado correctamente',
+    type: Profile,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
+  @ApiConflictResponse({
+    description: 'El perfil ya está registrado',
+  })
   @Post()
   create(@Body() newProfile: CreateProfileDto) {
     return this.profileService.create(newProfile);
   }
 
+  @ApiOperation({ summary: 'Actualiza un perfil.' })
+  @ApiCreatedResponse({
+    description: 'Perfil actualizado correctamente',
+    type: Profile,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
+  @ApiConflictResponse({
+    description: 'El perfil ya está registrado',
+  })
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -39,6 +86,14 @@ export class ProfilesController {
     return this.profileService.update(id, updatedProfile);
   }
 
+  @ApiOperation({ summary: 'Elimina un perfil.' })
+  @ApiOkResponse({
+    description: 'Perfil borrado',
+    type: Profile,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.profileService.remove(id);
