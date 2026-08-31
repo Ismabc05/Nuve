@@ -14,6 +14,7 @@ import { Category } from './category.entity';
 import { ProductVariant } from './product-variant.entity';
 import { ProductImage } from './product-image.entity';
 import { Brand } from './brand.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -34,6 +35,7 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
+  @Exclude()
   createdAt!: Date;
 
   @UpdateDateColumn({
@@ -41,6 +43,7 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
   })
+  @Exclude()
   updatedAt!: Date;
 
   @ManyToMany(() => Category, (category) => category.products)

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { User } from './user.entitiy';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'profiles' })
 export class Profile {
@@ -37,6 +38,7 @@ export class Profile {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
+  @Exclude()
   createdAt!: Date;
 
   @UpdateDateColumn({
@@ -44,6 +46,7 @@ export class Profile {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
   })
+  @Exclude()
   updatedAt!: Date;
 
   @OneToOne(() => User, (user) => user.profile)

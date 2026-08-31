@@ -10,6 +10,7 @@ import {
 import { OrderItem } from './order-item.entity';
 import { OrderStatus } from '../models/order.status';
 import { User } from '../../users/entities/user.entitiy';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -27,6 +28,7 @@ export class Order {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
+  @Exclude()
   createdAt!: Date;
 
   @UpdateDateColumn({
@@ -34,6 +36,7 @@ export class Order {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
   })
+  @Exclude()
   updatedAt!: Date;
 
   @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })

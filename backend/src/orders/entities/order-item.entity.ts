@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Order } from './order.entity';
 import { ProductVariant } from '../../products/entities/product-variant.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'order-items' })
 export class OrderItem {
@@ -25,6 +26,7 @@ export class OrderItem {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
+  @Exclude()
   createdAt!: Date;
 
   @UpdateDateColumn({
@@ -32,6 +34,7 @@ export class OrderItem {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
   })
+  @Exclude()
   updatedAt!: Date;
 
   @ManyToOne(() => Order, (order) => order.items, {

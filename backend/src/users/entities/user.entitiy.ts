@@ -12,6 +12,7 @@ import {
 import { Profile } from './profile.entity';
 import { Order } from '../../orders/entities/order.entity';
 import { UserRole } from '../models/user.role';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class User {
@@ -36,6 +37,7 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
+  @Exclude()
   createdAt!: Date;
 
   @UpdateDateColumn({
@@ -43,6 +45,7 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
   })
+  @Exclude()
   updatedAt!: Date;
 
   @OneToOne(() => Profile, (profile) => profile.user, {
