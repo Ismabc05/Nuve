@@ -5,6 +5,7 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderStatus } from '../../orders/models/order.status';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UsersService {
@@ -31,9 +32,11 @@ export class UsersService {
     const { email, password, name, lastname, phone, address, zipCode, image } =
       body;
 
+    const hashPassword = await argon2.hash(password);
+
     const newUser = this.userRepo.create({
       email,
-      password,
+      password: hashPassword,
 
       profile: {
         name,
