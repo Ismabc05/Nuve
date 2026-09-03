@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Post,
@@ -19,8 +19,11 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { OrderItem } from '../entities/order-item.entity';
 
+import { OrderItem } from '../entities/order-item.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('order-item')
 export class OrderItemController {
   constructor(private orderItemService: OrderItemService) {}

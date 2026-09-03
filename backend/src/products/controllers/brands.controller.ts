@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Post,
@@ -20,7 +20,9 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { Brand } from '../entities/brand.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('brands')
 export class BrandsController {
   constructor(private brandService: BrandsService) {}

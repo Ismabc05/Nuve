@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Post,
@@ -23,8 +23,11 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { ProductVariant } from '../entities/product-variant.entity';
 
+import { ProductVariant } from '../entities/product-variant.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('product-variant')
 export class ProductVariantController {
   constructor(private productVariantService: ProductVariantService) {}

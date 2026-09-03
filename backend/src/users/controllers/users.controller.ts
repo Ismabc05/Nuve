@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Post,
@@ -19,12 +19,15 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
+
 import { User } from '../entities/user.entitiy';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obtiene todos los usuarios.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
@@ -38,6 +41,7 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obtiene un usuario en especifico.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
@@ -67,6 +71,7 @@ export class UsersController {
     return this.userService.create(newUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Actualiza un usuario.' })
   @Put(':id')
   @ApiCreatedResponse({
@@ -86,6 +91,7 @@ export class UsersController {
     return this.userService.update(id, updatedUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Elimina un usuario.' })
   @ApiOkResponse({
     description: 'Usuario borrado',

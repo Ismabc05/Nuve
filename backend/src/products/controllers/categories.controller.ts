@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Put,
@@ -19,8 +19,11 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { Category } from '../entities/category.entity';
 
+import { Category } from '../entities/category.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('categories')
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}

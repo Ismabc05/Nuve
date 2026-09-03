@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Post,
@@ -22,8 +22,11 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { ProductImage } from '../entities/product-image.entity';
 
+import { ProductImage } from '../entities/product-image.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('product-image')
 export class ProductImageController {
   constructor(private productImageService: ProductImageService) {}

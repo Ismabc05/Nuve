@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { Get, Put, Delete, Param, ParseIntPipe, Body } from '@nestjs/common';
 
 import { OrdersService } from '../services/orders.service';
@@ -11,8 +11,11 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { Order } from '../entities/order.entity';
 
+import { Order } from '../entities/order.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('orders')
 export class OrdersController {
   constructor(private orderService: OrdersService) {}

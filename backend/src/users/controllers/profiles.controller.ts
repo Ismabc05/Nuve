@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import {
   Get,
   Put,
@@ -19,12 +19,15 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
+
 import { Profile } from '../entities/profile.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obtiene todos los perfiles.' })
   @ApiOkResponse({
     description: 'Perfil encontrado',
@@ -38,6 +41,7 @@ export class ProfilesController {
     return this.profileService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obtiene una perfil en especifico.' })
   @ApiOkResponse({
     description: 'Perfil encontrado',
@@ -67,6 +71,7 @@ export class ProfilesController {
     return this.profileService.create(newProfile);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Actualiza un perfil.' })
   @ApiCreatedResponse({
     description: 'Perfil actualizado correctamente',
@@ -86,6 +91,7 @@ export class ProfilesController {
     return this.profileService.update(id, updatedProfile);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Elimina un perfil.' })
   @ApiOkResponse({
     description: 'Perfil borrado',
