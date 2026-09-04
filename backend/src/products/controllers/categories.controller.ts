@@ -21,13 +21,18 @@ import {
 } from '@nestjs/swagger';
 
 import { Category } from '../entities/category.entity';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../users/models/user.role';
+import { RolesGuard } from '../../auth/guards/role.guard';
+
 @Controller('categories')
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene todas las categorías.' })
   @ApiOkResponse({
     description: 'Categoría encontrada',
@@ -41,6 +46,8 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene una categoría en especifico.' })
   @ApiOkResponse({
     description: 'Categoría encontrada',
@@ -54,6 +61,8 @@ export class CategoriesController {
     return this.categoriesService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Crea una categoría.' })
   @ApiCreatedResponse({
     description: 'Categoría creada correctamente',
@@ -70,6 +79,8 @@ export class CategoriesController {
     return this.categoriesService.create(newCategory);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Actualiza una categoría.' })
   @ApiCreatedResponse({
     description: 'Categoría actualizada correctamente',
@@ -89,6 +100,8 @@ export class CategoriesController {
     return this.categoriesService.update(id, updateCategory);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Elimina una categoria.' })
   @ApiOkResponse({
     description: 'Categoría borrada',

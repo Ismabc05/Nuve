@@ -25,13 +25,18 @@ import {
 } from '@nestjs/swagger';
 
 import { ProductVariant } from '../entities/product-variant.entity';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../users/models/user.role';
+import { RolesGuard } from '../../auth/guards/role.guard';
+
 @Controller('product-variant')
 export class ProductVariantController {
   constructor(private productVariantService: ProductVariantService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene todas las variantes del producto.' })
   @ApiOkResponse({
     description: 'Variante encontrada',
@@ -45,6 +50,8 @@ export class ProductVariantController {
     return this.productVariantService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene una variante del producto.' })
   @ApiOkResponse({
     description: 'Variante encontrada',
@@ -58,6 +65,8 @@ export class ProductVariantController {
     return this.productVariantService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Crea una variante del producto.' })
   @ApiCreatedResponse({
     description: 'Variante creada correctamente',
@@ -74,6 +83,8 @@ export class ProductVariantController {
     return this.productVariantService.create(newProductVariant);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Actualiza una variante del producto.' })
   @Put(':id')
   update(
@@ -83,6 +94,8 @@ export class ProductVariantController {
     return this.productVariantService.update(id, updateProductVariant);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Elimina una variante del producto' })
   @ApiOkResponse({
     description: 'Variante borrada',

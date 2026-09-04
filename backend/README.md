@@ -1,98 +1,224 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Clothing Store API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful desarrollada con **NestJS** para la gestión integral de una tienda de ropa. Permite administrar productos, usuarios, pedidos, categorías y marcas, incluyendo un sistema de autenticación y autorización.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologías utilizadas
 
-## Description
+- NestJS
+- TypeScript
+- TypeORM
+- PostgreSQL
+- Docker
+- Swagger
+- JWT
+- Class Validator
+- Class Transformer
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Funcionalidades
 
-## Project setup
+- Registro e inicio de sesión de usuarios.
+- Autenticación mediante tokens JWT.
+- Control de acceso basado en roles.
+- Gestión de productos.
+- Gestión de categorías.
+- Gestión de marcas.
+- Creación y administración de pedidos.
+- Validación de datos de entrada.
+- Persistencia de datos mediante TypeORM.
+- Base de datos PostgreSQL ejecutada mediante Docker.
+- Documentación interactiva con Swagger.
+- Arquitectura modular y escalable.
 
-```bash
-$ npm install
-```
+## Requisitos previos
 
-## Compile and run the project
+- Node.js 18 o superior.
+- npm o pnpm.
+- Docker y Docker Compose.
+- Git.
 
-```bash
-# development
-$ npm run start
+## Instalación
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+Clona el repositorio:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone https://github.com/tu-usuario/clothing-store-api.git
+cd clothing-store-api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Instala las dependencias:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Variables de entorno
 
-## Resources
+Crea un archivo `.env` en la raíz del proyecto:
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+PORT=3000
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=clothing_store
 
-## Support
+JWT_SECRET=tu_clave_secreta
+JWT_EXPIRES_IN=1d
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+> No compartas el archivo `.env` ni incluyas claves secretas directamente en el repositorio.
 
-## Stay in touch
+## Base de datos con Docker
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Inicia el contenedor de PostgreSQL:
 
-## License
+```bash
+docker compose up -d
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Comprueba que el contenedor está ejecutándose:
+
+```bash
+docker ps
+```
+
+Para detener los contenedores:
+
+```bash
+docker compose down
+```
+
+Si el proyecto utiliza migraciones de TypeORM, ejecútalas con:
+
+```bash
+npm run migration:run
+```
+
+Los comandos disponibles pueden variar según la configuración del proyecto.
+
+## Ejecución del proyecto
+
+Modo desarrollo:
+
+```bash
+npm run start:dev
+```
+
+Modo producción:
+
+```bash
+npm run build
+npm run start:prod
+```
+
+La aplicación estará disponible en:
+
+```text
+http://localhost:3000
+```
+
+## Documentación de la API
+
+La documentación de Swagger está disponible en:
+
+```text
+http://localhost:3000/api
+```
+
+Desde Swagger UI puedes consultar y probar los diferentes endpoints de la API.
+
+## Estructura del proyecto
+
+```text
+src/
+├── auth/
+├── users/
+├── products/
+├── categories/
+├── brands/
+├── orders/
+├── database/
+├── app.module.ts
+└── main.ts
+```
+
+La estructura puede variar según la organización actual del proyecto.
+
+## Scripts disponibles
+
+| Comando | Descripción |
+|---|---|
+| `npm run start` | Inicia la aplicación |
+| `npm run start:dev` | Inicia la aplicación en modo desarrollo |
+| `npm run start:debug` | Inicia la aplicación en modo depuración |
+| `npm run start:prod` | Inicia la aplicación en modo producción |
+| `npm run build` | Compila el proyecto |
+| `npm run lint` | Analiza el código fuente |
+| `npm run test` | Ejecuta los tests |
+| `npm run test:e2e` | Ejecuta los tests end-to-end |
+| `docker compose up -d` | Inicia PostgreSQL mediante Docker |
+| `docker compose down` | Detiene los contenedores |
+
+## Autenticación
+
+Los endpoints protegidos requieren un token JWT en la cabecera `Authorization`:
+
+```http
+Authorization: Bearer <token>
+```
+
+Ejemplo:
+
+```http
+GET /products
+Authorization: Bearer <token>
+```
+
+## Ejemplo de respuesta
+
+```json
+{
+  "id": 1,
+  "name": "Camiseta básica",
+  "description": "Camiseta de algodón de corte regular",
+  "price": 19.99,
+  "stock": 50,
+  "categoryId": 1,
+  "brandId": 1
+}
+```
+
+## Estado del proyecto
+
+El proyecto se encuentra actualmente en desarrollo.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas.
+
+1. Haz un fork del repositorio.
+2. Crea una rama para tu funcionalidad:
+
+```bash
+git checkout -b feature/nueva-funcionalidad
+```
+
+3. Realiza tus cambios y crea un commit:
+
+```bash
+git commit -m "feat: añade nueva funcionalidad"
+```
+
+4. Sube la rama al repositorio:
+
+```bash
+git push origin feature/nueva-funcionalidad
+```
+
+5. Abre un Pull Request.
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia MIT.

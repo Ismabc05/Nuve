@@ -21,13 +21,18 @@ import {
 } from '@nestjs/swagger';
 
 import { User } from '../entities/user.entitiy';
+
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { UserRole } from '../models/user.role';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { RolesGuard } from '../../auth/guards/role.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Obtiene todos los usuarios.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
@@ -41,7 +46,8 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene un usuario en especifico.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
@@ -55,6 +61,8 @@ export class UsersController {
     return this.userService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Crea un usuario.' })
   @ApiCreatedResponse({
     description: 'Usuario creado correctamente',
@@ -71,7 +79,8 @@ export class UsersController {
     return this.userService.create(newUser);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Actualiza un usuario.' })
   @Put(':id')
   @ApiCreatedResponse({
@@ -91,7 +100,8 @@ export class UsersController {
     return this.userService.update(id, updatedUser);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Elimina un usuario.' })
   @ApiOkResponse({
     description: 'Usuario borrado',

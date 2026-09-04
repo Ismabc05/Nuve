@@ -21,13 +21,18 @@ import {
 } from '@nestjs/swagger';
 
 import { Product } from '../entities/product.entity';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../users/models/user.role';
+import { RolesGuard } from '../../auth/guards/role.guard';
+
 @Controller('products')
 export class ProductsController {
   constructor(private productService: ProductsService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene todos los productos.' })
   @ApiOkResponse({
     description: 'Producto encontrado',
@@ -41,6 +46,8 @@ export class ProductsController {
     return this.productService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene un producto en especifico.' })
   @ApiOkResponse({
     description: 'Producto encontrado',
@@ -54,6 +61,8 @@ export class ProductsController {
     return this.productService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Crea un producto.' })
   @ApiCreatedResponse({
     description: 'Producto creado correctamente',
@@ -70,6 +79,8 @@ export class ProductsController {
     return this.productService.create(newProduct);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Actualiza un producto.' })
   @ApiCreatedResponse({
     description: 'Producto actualizado correctamente',
@@ -89,6 +100,8 @@ export class ProductsController {
     return this.productService.update(id, updateProduct);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Elimina un producto.' })
   @ApiOkResponse({
     description: 'Producto borrado',

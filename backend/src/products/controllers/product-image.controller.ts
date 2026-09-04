@@ -24,13 +24,18 @@ import {
 } from '@nestjs/swagger';
 
 import { ProductImage } from '../entities/product-image.entity';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../users/models/user.role';
+import { RolesGuard } from '../../auth/guards/role.guard';
+
 @Controller('product-image')
 export class ProductImageController {
   constructor(private productImageService: ProductImageService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene las imagenes del producto.' })
   @ApiOkResponse({
     description: 'Imagen encontrada',
@@ -44,6 +49,8 @@ export class ProductImageController {
     return this.productImageService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene una imagen del producto.' })
   @ApiOkResponse({
     description: 'Imagen encontrada',
@@ -57,6 +64,8 @@ export class ProductImageController {
     return this.productImageService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Crea una imagen del producto.' })
   @ApiCreatedResponse({
     description: 'Imagen creada correctamente',
@@ -73,6 +82,8 @@ export class ProductImageController {
     return this.productImageService.create(newProductImage);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Actualiza una imagen del producto.' })
   @ApiCreatedResponse({
     description: 'Imagen actualizada correctamente',
@@ -92,6 +103,8 @@ export class ProductImageController {
     return this.productImageService.update(id, updateProductImage);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Elimina una imagen del producto.' })
   @ApiOkResponse({
     description: 'Imagen borrada',

@@ -22,12 +22,16 @@ import {
 
 import { Profile } from '../entities/profile.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { UserRole } from '../models/user.role';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { RolesGuard } from '../../auth/guards/role.guard';
 
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Obtiene todos los perfiles.' })
   @ApiOkResponse({
     description: 'Perfil encontrado',
@@ -41,7 +45,8 @@ export class ProfilesController {
     return this.profileService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene una perfil en especifico.' })
   @ApiOkResponse({
     description: 'Perfil encontrado',
@@ -55,6 +60,8 @@ export class ProfilesController {
     return this.profileService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Crea un perfil.' })
   @ApiCreatedResponse({
     description: 'Perfil creado correctamente',
@@ -71,7 +78,8 @@ export class ProfilesController {
     return this.profileService.create(newProfile);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Actualiza un perfil.' })
   @ApiCreatedResponse({
     description: 'Perfil actualizado correctamente',
@@ -91,7 +99,8 @@ export class ProfilesController {
     return this.profileService.update(id, updatedProfile);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Elimina un perfil.' })
   @ApiOkResponse({
     description: 'Perfil borrado',

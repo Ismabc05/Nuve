@@ -21,13 +21,18 @@ import {
 } from '@nestjs/swagger';
 
 import { OrderItem } from '../entities/order-item.entity';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../users/models/user.role';
+import { RolesGuard } from '../../auth/guards/role.guard';
+
 @Controller('order-item')
 export class OrderItemController {
   constructor(private orderItemService: OrderItemService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene todas las lineas de pedido.' })
   @ApiOkResponse({
     description: 'Linea de pedido encontrado',
@@ -41,6 +46,8 @@ export class OrderItemController {
     return this.orderItemService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene una linea de pedido especifica.' })
   @ApiOkResponse({
     description: 'Linea de pedido encontrado',
@@ -54,6 +61,8 @@ export class OrderItemController {
     return this.orderItemService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Crea una linea de pedido.' })
   @ApiCreatedResponse({
     description: 'Linea de pedido creado correctamente',
@@ -70,6 +79,8 @@ export class OrderItemController {
     return this.orderItemService.create(newOrderItem);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Actualiza una linea de pedido.' })
   @ApiCreatedResponse({
     description: 'Linea de pedido actualizado correctamente',
@@ -89,6 +100,8 @@ export class OrderItemController {
     return this.orderItemService.update(id, updateOrderItem);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Borra una linea de pedido.' })
   @ApiOkResponse({
     description: 'Linea de pedido borrada',
