@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -45,11 +45,23 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     example: 'Calle Cruz del Estudiante',
-    description: 'Direccion del usuario',
+    description: 'Direccion del perfil',
+  })
+  address?: {
+    name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+
+  @ApiPropertyOptional({
+    example: [1, 2, 3],
+    description: 'IDs de los productos favoritos del usuario',
   })
   @IsOptional()
-  @IsString()
-  address?: string;
+  @IsArray()
+  favorites?: number[];
 
   @ApiPropertyOptional({
     example: '14500',

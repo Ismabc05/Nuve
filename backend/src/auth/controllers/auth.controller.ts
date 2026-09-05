@@ -7,7 +7,7 @@ import type { Request } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-  @UseGuards(AuthGuard('local')) // usamos el guardian proporcionado por passporta con el nombre que le hemos puesto a la estrategia
+  @UseGuards(AuthGuard('local'))
   @Post('login')
   login(@Req() req: Request) {
     const user = req.user as User;

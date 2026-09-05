@@ -1,6 +1,12 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNotEmpty, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNotEmpty,
+  IsUrl,
+  IsArray,
+} from 'class-validator';
 
 export class CreateProfileDto {
   @ApiProperty({
@@ -31,9 +37,21 @@ export class CreateProfileDto {
     example: 'Calle Cruz del Estudiante',
     description: 'Direccion del perfil',
   })
-  @IsString()
+  address?: {
+    name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+
+  @ApiPropertyOptional({
+    example: [1, 2, 3],
+    description: 'Productos favoritos del perfil',
+  })
   @IsOptional()
-  address?: string;
+  @IsArray()
+  favorites?: number[];
 
   @ApiPropertyOptional({
     example: 'https://example.com/juan.jpg',

@@ -6,6 +6,7 @@ import {
   IsInt,
   ArrayNotEmpty,
   IsPositive,
+  IsOptional,
 } from 'class-validator';
 
 import { PartialType } from '@nestjs/mapped-types';
@@ -45,6 +46,18 @@ export class CreateProductDto {
   @IsArray()
   @IsInt({ each: true })
   categories!: number[];
+
+  @ApiProperty({
+    example: 'Product muy bueno y de calidad',
+    description: 'Reseñas del producto',
+  })
+  @IsArray()
+  @IsOptional()
+  reviews?: {
+    userId: number;
+    rating: number;
+    comment: string;
+  }[];
 
   @ApiProperty({
     example: 1,

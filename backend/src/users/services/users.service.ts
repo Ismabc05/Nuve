@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { User } from '../entities/user.entitiy';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
@@ -28,6 +32,30 @@ export class UsersService {
     return user;
   }
 
+  async getAddress(id: number) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    if (!user.profile.address) {
+      throw new NotFoundException('Dirección no encontrada');
+    }
+
+    return user.profile.address;
+  }
+
+  async getFavorites(id: number) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    return user.profile.favorites ?? [];
+  }
+
   async findByEmail(email: string) {
     const user = await this.userRepo.findOne({
       where: { email },
@@ -39,8 +67,17 @@ export class UsersService {
   }
 
   async create(body: CreateUserDto) {
-    const { email, password, name, lastname, phone, address, zipCode, image } =
-      body;
+    const {
+      email,
+      password,
+      name,
+      lastname,
+      phone,
+      address,
+      favorites,
+      zipCode,
+      image,
+    } = body;
 
     const hashPassword = await argon2.hash(password);
 
@@ -53,6 +90,7 @@ export class UsersService {
         lastname,
         phone,
         address,
+        favorites,
         zip_code: zipCode,
         image,
       },
@@ -69,11 +107,74 @@ export class UsersService {
     return savedUser;
   }
 
+  async createFavorite(id: number, productId: number) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    const favorites = user.profile.favorites ?? [];
+
+    if (favorites.includes(productId)) {
+      return {
+        message: 'El producto ya está en favoritos',
+        favorites,
+      };
+    }
+
+    favorites.push(productId);
+
+    user.profile.favorites = favorites;
+
+    await this.userRepo.save(user);
+
+    return {
+      message: 'Producto añadido a favoritos',
+      favorites,
+    };
+  }
+
+  async createAddress(
+    id: number,
+    address: {
+      name?: string;
+      street?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+    },
+  ) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    if (user.profile.address) {
+      throw new ConflictException('El usuario ya tiene una dirección');
+    }
+
+    user.profile.address = address;
+
+    await this.userRepo.save(user);
+
+    return user.profile.address;
+  }
+
   async update(id: number, body: UpdateUserDto) {
     const user = await this.findOne(id);
 
-    const { name, lastname, phone, address, zipCode, image, ...userData } =
-      body;
+    const {
+      name,
+      lastname,
+      phone,
+      address,
+      favorites,
+      zipCode,
+      image,
+      ...userData
+    } = body;
 
     this.userRepo.merge(user, userData);
 
@@ -82,6 +183,7 @@ export class UsersService {
       user.profile.lastname = lastname ?? user.profile.lastname;
       user.profile.phone = phone ?? user.profile.phone;
       user.profile.address = address ?? user.profile.address;
+      user.profile.favorites = favorites ?? user.profile.favorites;
       user.profile.zip_code = zipCode ?? user.profile.zip_code;
       user.profile.image = image ?? user.profile.image;
     }
@@ -91,11 +193,86 @@ export class UsersService {
     return savedUser;
   }
 
+  async updateAddress(
+    id: number,
+    address: {
+      name?: string;
+      street?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+    },
+  ) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    if (!user.profile.address) {
+      throw new NotFoundException('Dirección no encontrada');
+    }
+
+    user.profile.address = {
+      ...user.profile.address,
+      ...address,
+    };
+
+    await this.userRepo.save(user);
+
+    return user.profile.address;
+  }
+
   async remove(id: number) {
     const user = await this.findOne(id);
     await this.userRepo.remove(user);
     return {
       message: 'User borrado correctamente',
+    };
+  }
+
+  async removeAddress(id: number) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    if (!user.profile.address) {
+      throw new NotFoundException('Dirección no encontrada');
+    }
+
+    user.profile.address = null;
+
+    await this.userRepo.save(user);
+
+    return {
+      message: 'Dirección eliminada correctamente',
+    };
+  }
+
+  async removeFavorite(id: number, productId: number) {
+    const user = await this.findOne(id);
+
+    if (!user.profile) {
+      throw new NotFoundException('Perfil no encontrado');
+    }
+
+    const favorites = user.profile.favorites ?? [];
+
+    if (!favorites.includes(productId)) {
+      throw new NotFoundException('El producto no se encuentra en favoritos');
+    }
+
+    user.profile.favorites = favorites.filter(
+      (favoriteId) => favoriteId !== productId,
+    );
+
+    await this.userRepo.save(user);
+
+    return {
+      message: 'Producto eliminado de favoritos',
+      favorites: user.profile.favorites,
     };
   }
 }

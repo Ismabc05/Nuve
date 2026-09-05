@@ -63,6 +63,34 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Obtiene la dirección de un usuario.' })
+  @ApiOkResponse({
+    description: 'Dirección encontrada',
+  })
+  @ApiNotFoundResponse({
+    description: 'Dirección no encontrada',
+  })
+  @Get(':id/address')
+  getAddress(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getAddress(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Obtiene los productos favoritos de un usuario.' })
+  @ApiOkResponse({
+    description: 'Productos favoritos encontrados',
+  })
+  @ApiNotFoundResponse({
+    description: 'Productos favoritos no encontrados',
+  })
+  @Get(':id/favorites')
+  getFavorites(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getFavorites(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Crea un usuario.' })
   @ApiCreatedResponse({
     description: 'Usuario creado correctamente',
@@ -77,6 +105,47 @@ export class UsersController {
   @Post()
   create(@Body() newUser: CreateUserDto) {
     return this.userService.create(newUser);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Añade un producto a los favoritos de un usuario.' })
+  @ApiCreatedResponse({
+    description: 'Producto añadido a favoritos',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Post(':id/favorites/:productId')
+  createFavorite(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.userService.createFavorite(id, productId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Crea una dirección para un usuario.' })
+  @ApiCreatedResponse({
+    description: 'Dirección creada correctamente',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Post(':id/address')
+  createAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    address: {
+      name?: string;
+      street?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+    },
+  ) {
+    return this.userService.createAddress(id, address);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -102,6 +171,30 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Actualiza la dirección de un usuario.' })
+  @ApiCreatedResponse({
+    description: 'Dirección actualizada correctamente',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Put(':id/address')
+  updateAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    address: {
+      name?: string;
+      street?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+    },
+  ) {
+    return this.userService.updateAddress(id, address);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Elimina un usuario.' })
   @ApiOkResponse({
     description: 'Usuario borrado',
@@ -113,5 +206,38 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.userService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Elimina la dirección de un usuario.' })
+  @ApiOkResponse({
+    description: 'Dirección borrada',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Delete(':id/address')
+  removeAddress(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.removeAddress(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({
+    summary: 'Elimina un producto de los favoritos de un usuario.',
+  })
+  @ApiOkResponse({
+    description: 'Producto eliminado de favoritos',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Delete(':id/favorites/:productId')
+  removeFavorite(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.userService.removeFavorite(id, productId);
   }
 }

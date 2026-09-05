@@ -30,6 +30,13 @@ export class Product {
   @Column({ type: 'varchar', length: 300 })
   description!: string;
 
+  @Column({ type: 'jsonb', nullable: true })
+  reviews?: {
+    userId: number;
+    rating: number;
+    comment: string;
+  }[];
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',

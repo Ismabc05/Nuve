@@ -24,8 +24,17 @@ export class Profile {
   @Column({ type: 'varchar', length: 100, nullable: true })
   phone?: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
-  address?: string;
+  @Column({ type: 'jsonb', nullable: true })
+  address?: {
+    name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  } | null;
+
+  @Column({ type: 'jsonb', nullable: true })
+  favorites?: number[];
 
   @Column({ type: 'varchar', length: 200, nullable: true })
   image?: string;
