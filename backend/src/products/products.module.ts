@@ -40,5 +40,12 @@ import { Product } from './entities/product.entity';
     ProductVariantService,
     ProductImageService,
   ],
+  exports: [
+    ProductsService,
+    CategoriesService,
+    BrandsService,
+    ProductVariantService,
+    ProductImageService,
+  ],
 })
 export class ProductsModule {}

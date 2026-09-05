@@ -7,13 +7,17 @@ import {
 import { User } from '../entities/user.entitiy';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { OrderStatus } from '../../orders/models/order.status';
 import * as argon2 from 'argon2';
+import { Product } from '../../products/entities/product.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Product) private productRepo: Repository<Product>,
+  ) {}
 
   async findAll() {
     return await this.userRepo.find({
@@ -53,7 +57,17 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    return user.profile.favorites ?? [];
+    const favorites = user.profile.favorites ?? [];
+
+    if (favorites.length === 0) {
+      return [];
+    }
+
+    return await this.productRepo.find({
+      where: {
+        id: In(favorites),
+      },
+    });
   }
 
   async findByEmail(email: string) {
@@ -151,7 +165,9 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (user.profile.address) {
+    const currentAddress = user.profile.address;
+
+    if (currentAddress && Object.keys(currentAddress).length > 0) {
       throw new ConflictException('El usuario ya tiene una dirección');
     }
 

@@ -47,6 +47,7 @@ export class CreateUserDto {
     example: 'Calle Cruz del Estudiante',
     description: 'Direccion del perfil',
   })
+  @IsOptional()
   address?: {
     name?: string;
     street?: string;
