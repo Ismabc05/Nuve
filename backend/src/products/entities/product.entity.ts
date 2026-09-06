@@ -9,12 +9,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { Category } from './category.entity';
 import { ProductVariant } from './product-variant.entity';
 import { ProductImage } from './product-image.entity';
 import { Brand } from './brand.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -25,6 +25,7 @@ export class Product {
   name!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
+  // Maximo de 10 digitos, 2 decimales. Ejemplo: 99999999.99
   price!: number;
 
   @Column({ type: 'varchar', length: 300 })

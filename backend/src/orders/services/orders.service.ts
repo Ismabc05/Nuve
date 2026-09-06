@@ -9,10 +9,14 @@ import { Repository } from 'typeorm';
 import { Order } from '../entities/order.entity';
 import { UpdateOrderDto } from '../dtos/order.dto';
 import { OrderStatus } from '../models/order.status';
+import { User } from '../../users/entities/user.entitiy';
 
 @Injectable()
 export class OrdersService {
-  constructor(@InjectRepository(Order) private orderRepo: Repository<Order>) {}
+  constructor(
+    @InjectRepository(Order) private orderRepo: Repository<Order>,
+    @InjectRepository(User) private userRepo: Repository<User>,
+  ) {}
 
   async findAll() {
     return await this.orderRepo.find();
@@ -34,6 +38,36 @@ export class OrdersService {
       throw new NotFoundException('Order no encontrada');
     }
     return order;
+  }
+
+  async createOrder(userId: number) {
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    const activeOrder = await this.orderRepo.findOne({
+      where: {
+        user: { id: userId },
+        status: OrderStatus.ACTIVE,
+      },
+    });
+
+    if (activeOrder) {
+      throw new ConflictException('El usuario ya tiene una orden activa');
+    }
+
+    const order = this.orderRepo.create({
+      user,
+      status: OrderStatus.ACTIVE,
+      total: 0,
+      items: [],
+    });
+
+    return await this.orderRepo.save(order);
   }
 
   async update(id: number, body: UpdateOrderDto) {

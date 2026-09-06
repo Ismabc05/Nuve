@@ -7,10 +7,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
 import { OrderItem } from './order-item.entity';
 import { OrderStatus } from '../models/order.status';
 import { User } from '../../users/entities/user.entitiy';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -18,6 +19,7 @@ export class Order {
   id!: number;
 
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.ACTIVE })
+  // Los estados posibles son: ACTIVE, COMPLETED, CANCELLED. Por defecto es ACTIVE
   status!: OrderStatus;
 
   @Column({ type: 'decimal', scale: 2 })

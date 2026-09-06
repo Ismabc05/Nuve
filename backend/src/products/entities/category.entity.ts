@@ -6,8 +6,9 @@ import {
   UpdateDateColumn,
   Column,
 } from 'typeorm';
-import { Product } from './product.entity';
 import { Exclude } from 'class-transformer';
+
+import { Product } from './product.entity';
 
 @Entity({ name: 'categories' })
 export class Category {

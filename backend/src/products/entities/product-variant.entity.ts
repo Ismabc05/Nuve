@@ -8,12 +8,14 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
 import { Product } from './product.entity';
 import { OrderItem } from '../../orders/entities/order-item.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'product-variants' })
 @Unique(['product', 'size', 'color'])
+// No puede haber dos variantes del mismo producto con el mismo tamaño y color.
 export class ProductVariant {
   @PrimaryGeneratedColumn()
   id!: number;

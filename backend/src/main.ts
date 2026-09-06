@@ -5,6 +5,7 @@ import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   const config = new DocumentBuilder()
     .setTitle('Clothing Store API')
     .setDescription(
@@ -20,14 +21,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      whitelist: true, // Elimina propiedades no definidas en los DTOs
+      forbidNonWhitelisted: true, // Lanza un error si se envían propiedades no definidas en los DTOs
       transformOptions: {
-        enableImplicitConversion: true,
+        enableImplicitConversion: true, // Permite la conversión implícita de tipos, por ejemplo, de string a number usando PaerseIntPipe o ParseFloatPipe
       },
     }),
   );
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector))); // Se usa junta a @Exclude() para ocultar propiedades de la respuesta
+
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

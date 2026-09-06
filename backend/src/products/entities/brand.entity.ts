@@ -6,8 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Product } from './product.entity';
 import { Exclude } from 'class-transformer';
+
+import { Product } from './product.entity';
 
 @Entity({ name: 'brands' })
 export class Brand {

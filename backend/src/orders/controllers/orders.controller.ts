@@ -1,4 +1,4 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { Get, Put, Delete, Param, ParseIntPipe, Body } from '@nestjs/common';
 
 import { OrdersService } from '../services/orders.service';
@@ -51,6 +51,20 @@ export class OrdersController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.orderService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Crea una nueva orden vacía para un usuario.' })
+  @ApiCreatedResponse({
+    description: 'Orden creada correctamente',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @Post(':id/orders')
+  createOrder(@Param('id', ParseIntPipe) id: number) {
+    return this.orderService.createOrder(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -6,9 +6,9 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { User } from './user.entitiy';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'profiles' })
 export class Profile {
@@ -25,6 +25,8 @@ export class Profile {
   phone?: string;
 
   @Column({ type: 'jsonb', nullable: true })
+  // Se almacenan como JSONB porque solo necesitamos guardarlas y mostrarlas,
+  // sin necesidad de tratarlas como entidades independientes.
   addresses?:
     | {
         id: number;
