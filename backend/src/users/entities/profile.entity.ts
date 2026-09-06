@@ -25,13 +25,15 @@ export class Profile {
   phone?: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  address?: {
-    name?: string;
-    street?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  } | null;
+  addresses?:
+    | {
+        name?: string;
+        street?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+      }[]
+    | null;
 
   @Column({ type: 'jsonb', nullable: true })
   favorites?: number[];

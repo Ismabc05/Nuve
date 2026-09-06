@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '../entities/user.entitiy';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
@@ -28,7 +24,7 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.userRepo.findOne({
       where: { id },
-      relations: { profile: true },
+      relations: { profile: true, orders: true },
     });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
@@ -43,11 +39,11 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (!user.profile.address) {
-      throw new NotFoundException('Dirección no encontrada');
+    if (!user.profile.addresses || user.profile.addresses.length === 0) {
+      throw new NotFoundException('Direcciones no encontradas');
     }
 
-    return user.profile.address;
+    return user.profile.addresses;
   }
 
   async getFavorites(id: number) {
@@ -87,7 +83,7 @@ export class UsersService {
       name,
       lastname,
       phone,
-      address,
+      addresses: address,
       favorites,
       zipCode,
       image,
@@ -103,7 +99,7 @@ export class UsersService {
         name,
         lastname,
         phone,
-        address,
+        addresses: address,
         favorites,
         zip_code: zipCode,
         image,
@@ -165,17 +161,15 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    const currentAddress = user.profile.address;
+    const addresses = user.profile.addresses ?? [];
 
-    if (currentAddress && Object.keys(currentAddress).length > 0) {
-      throw new ConflictException('El usuario ya tiene una dirección');
-    }
+    addresses.push(address);
 
-    user.profile.address = address;
+    user.profile.addresses = addresses;
 
     await this.userRepo.save(user);
 
-    return user.profile.address;
+    return address;
   }
 
   async update(id: number, body: UpdateUserDto) {
@@ -185,7 +179,7 @@ export class UsersService {
       name,
       lastname,
       phone,
-      address,
+      addresses,
       favorites,
       zipCode,
       image,
@@ -198,7 +192,7 @@ export class UsersService {
       user.profile.name = name ?? user.profile.name;
       user.profile.lastname = lastname ?? user.profile.lastname;
       user.profile.phone = phone ?? user.profile.phone;
-      user.profile.address = address ?? user.profile.address;
+      user.profile.addresses = addresses ?? user.profile.addresses;
       user.profile.favorites = favorites ?? user.profile.favorites;
       user.profile.zip_code = zipCode ?? user.profile.zip_code;
       user.profile.image = image ?? user.profile.image;
@@ -225,18 +219,19 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (!user.profile.address) {
-      throw new NotFoundException('Dirección no encontrada');
+    if (!user.profile.addresses || user.profile.addresses.length === 0) {
+      throw new NotFoundException('Direcciones no encontradas');
     }
 
-    user.profile.address = {
-      ...user.profile.address,
+    user.profile.addresses = {
+      ...user.profile.addresses,
+
       ...address,
     };
 
     await this.userRepo.save(user);
 
-    return user.profile.address;
+    return user.profile.addresses;
   }
 
   async remove(id: number) {
@@ -254,11 +249,11 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (!user.profile.address) {
-      throw new NotFoundException('Dirección no encontrada');
+    if (!user.profile.addresses || user.profile.addresses.length === 0) {
+      throw new NotFoundException('Direcciones no encontradas');
     }
 
-    user.profile.address = null;
+    user.profile.addresses = null;
 
     await this.userRepo.save(user);
 
