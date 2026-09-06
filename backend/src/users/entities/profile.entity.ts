@@ -27,6 +27,7 @@ export class Profile {
   @Column({ type: 'jsonb', nullable: true })
   addresses?:
     | {
+        id: number;
         name?: string;
         street?: string;
         city?: string;

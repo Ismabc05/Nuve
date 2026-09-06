@@ -65,6 +65,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsArray()
   addresses?: {
+    id: number;
     name?: string;
     street?: string;
     city?: string;

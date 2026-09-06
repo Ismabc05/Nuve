@@ -55,6 +55,7 @@ export class CreateProfileDto {
   @IsOptional()
   @IsArray()
   addresses?: {
+    id: number;
     name?: string;
     street?: string;
     city?: string;

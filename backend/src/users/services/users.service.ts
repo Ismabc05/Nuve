@@ -163,13 +163,21 @@ export class UsersService {
 
     const addresses = user.profile.addresses ?? [];
 
-    addresses.push(address);
+    const newAddress = {
+      id:
+        addresses.length > 0
+          ? Math.max(...addresses.map((address) => address.id)) + 1
+          : 1,
+      ...address,
+    };
+
+    addresses.push(newAddress);
 
     user.profile.addresses = addresses;
 
     await this.userRepo.save(user);
 
-    return address;
+    return newAddress;
   }
 
   async update(id: number, body: UpdateUserDto) {
@@ -205,6 +213,7 @@ export class UsersService {
 
   async updateAddress(
     id: number,
+    addressId: number,
     address: {
       name?: string;
       street?: string;
@@ -219,19 +228,24 @@ export class UsersService {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (!user.profile.addresses || user.profile.addresses.length === 0) {
-      throw new NotFoundException('Direcciones no encontradas');
+    const addresses = user.profile.addresses ?? [];
+
+    const addressIndex = addresses.findIndex((item) => item.id === addressId);
+
+    if (addressIndex === -1) {
+      throw new NotFoundException('Dirección no encontrada');
     }
 
-    user.profile.addresses = {
-      ...user.profile.addresses,
-
+    addresses[addressIndex] = {
+      ...addresses[addressIndex],
       ...address,
     };
 
+    user.profile.addresses = addresses;
+
     await this.userRepo.save(user);
 
-    return user.profile.addresses;
+    return addresses[addressIndex];
   }
 
   async remove(id: number) {
@@ -242,18 +256,26 @@ export class UsersService {
     };
   }
 
-  async removeAddress(id: number) {
+  async removeAddress(id: number, addressId: number) {
     const user = await this.findOne(id);
 
     if (!user.profile) {
       throw new NotFoundException('Perfil no encontrado');
     }
 
-    if (!user.profile.addresses || user.profile.addresses.length === 0) {
-      throw new NotFoundException('Direcciones no encontradas');
+    const addresses = user.profile.addresses ?? [];
+
+    const addressIndex = addresses.findIndex(
+      (address) => address.id === addressId,
+    );
+
+    if (addressIndex === -1) {
+      throw new NotFoundException('Dirección no encontrada');
     }
 
-    user.profile.addresses = null;
+    addresses.splice(addressIndex, 1);
+
+    user.profile.addresses = addresses;
 
     await this.userRepo.save(user);
 

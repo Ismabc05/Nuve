@@ -89,8 +89,6 @@ export class UsersController {
     return this.userService.getFavorites(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Crea un usuario.' })
   @ApiCreatedResponse({
     description: 'Usuario creado correctamente',
@@ -171,16 +169,17 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
-  @ApiOperation({ summary: 'Actualiza la dirección de un usuario.' })
-  @ApiCreatedResponse({
+  @ApiOperation({ summary: 'Actualiza una dirección de un usuario.' })
+  @ApiOkResponse({
     description: 'Dirección actualizada correctamente',
   })
   @ApiNotFoundResponse({
-    description: 'Usuario no encontrado',
+    description: 'Usuario o dirección no encontrada',
   })
-  @Put(':id/address')
+  @Put(':id/addresses/:addressId')
   updateAddress(
     @Param('id', ParseIntPipe) id: number,
+    @Param('addressId', ParseIntPipe) addressId: number,
     @Body()
     address: {
       name?: string;
@@ -190,7 +189,7 @@ export class UsersController {
       country?: string;
     },
   ) {
-    return this.userService.updateAddress(id, address);
+    return this.userService.updateAddress(id, addressId, address);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -210,16 +209,19 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
-  @ApiOperation({ summary: 'Elimina la dirección de un usuario.' })
+  @ApiOperation({ summary: 'Elimina una dirección de un usuario.' })
   @ApiOkResponse({
     description: 'Dirección borrada',
   })
   @ApiNotFoundResponse({
-    description: 'Usuario no encontrado',
+    description: 'Usuario o dirección no encontrada',
   })
-  @Delete(':id/address')
-  removeAddress(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.removeAddress(id);
+  @Delete(':id/addresses/:addressId')
+  removeAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('addressId', ParseIntPipe) addressId: number,
+  ) {
+    return this.userService.removeAddress(id, addressId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
