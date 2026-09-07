@@ -17,7 +17,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   async validate(email: string, password: string) {
     const user = await this.authService.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException('not allowed');
+      throw new UnauthorizedException(
+        'No tienes permisos para acceder a este recurso',
+      );
     }
     return user;
   }

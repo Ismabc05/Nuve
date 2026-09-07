@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsArray,
+  IsEmail,
+} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -7,6 +13,7 @@ export class CreateUserDto {
     example: 'juan@gmail.com',
     description: 'Email del usuario',
   })
+  @IsEmail()
   @IsString()
   @IsNotEmpty()
   email!: string;
@@ -43,25 +50,6 @@ export class CreateUserDto {
   @IsString()
   phone?: string;
 
-  @ApiPropertyOptional({
-    example: [
-      {
-        name: 'Casa',
-        street: 'Calle Cruz del Estudiante',
-        city: 'Puente Genil',
-        state: 'Córdoba',
-        country: 'España',
-      },
-      {
-        name: 'Trabajo',
-        street: 'Avenida Andalucía',
-        city: 'Málaga',
-        state: 'Málaga',
-        country: 'España',
-      },
-    ],
-    description: 'Direcciones del perfil',
-  })
   @IsOptional()
   @IsArray()
   addresses?: {
@@ -73,10 +61,6 @@ export class CreateUserDto {
     country?: string;
   }[];
 
-  @ApiPropertyOptional({
-    example: [1, 2, 3],
-    description: 'IDs de los productos favoritos del usuario',
-  })
   @IsOptional()
   @IsArray()
   favorites?: number[];

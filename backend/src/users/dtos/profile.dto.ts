@@ -33,25 +33,6 @@ export class CreateProfileDto {
   @IsOptional()
   phone?: string;
 
-  @ApiPropertyOptional({
-    example: [
-      {
-        name: 'Casa',
-        street: 'Calle Cruz del Estudiante',
-        city: 'Puente Genil',
-        state: 'Córdoba',
-        country: 'España',
-      },
-      {
-        name: 'Trabajo',
-        street: 'Avenida Andalucía',
-        city: 'Málaga',
-        state: 'Málaga',
-        country: 'España',
-      },
-    ],
-    description: 'Direcciones del perfil',
-  })
   @IsOptional()
   @IsArray()
   addresses?: {
@@ -63,10 +44,6 @@ export class CreateProfileDto {
     country?: string;
   }[];
 
-  @ApiPropertyOptional({
-    example: [1, 2, 3],
-    description: 'Productos favoritos del perfil',
-  })
   @IsOptional()
   @IsArray()
   favorites?: number[];

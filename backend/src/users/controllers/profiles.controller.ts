@@ -61,7 +61,7 @@ export class ProfilesController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Crea un perfil.' })
   @ApiCreatedResponse({
     description: 'Perfil creado correctamente',
@@ -79,7 +79,7 @@ export class ProfilesController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Actualiza un perfil.' })
   @ApiCreatedResponse({
     description: 'Perfil actualizado correctamente',
@@ -100,7 +100,7 @@ export class ProfilesController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Elimina un perfil.' })
   @ApiOkResponse({
     description: 'Perfil borrado',

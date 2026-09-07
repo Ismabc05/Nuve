@@ -23,7 +23,7 @@ export class OrderItemService {
   async findOne(id: number) {
     const orderItem = await this.orderItemRepo.findOne({
       where: { id },
-      relations: { order: true, productvariant: true },
+      relations: { productvariant: true },
     });
     if (!orderItem) {
       throw new NotFoundException('Linea de pedido no encontrada');

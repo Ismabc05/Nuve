@@ -71,7 +71,7 @@ export class UsersService {
       where: { email },
     });
     if (!user) {
-      throw new NotFoundException(`User #${email} not found`);
+      throw new NotFoundException(`Usuario con email ${email} no encontrado`);
     }
     return user;
   }
