@@ -120,4 +120,54 @@ export class ProductsService {
     }
     throw error;
   }
+
+  async createReview(
+    productId: number,
+    review: { userId: number; rating: number; comment: string },
+  ) {
+    const product = await this.findOne(productId);
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
+    const reviews = product.reviews ?? [];
+    const newReview = {
+      id: reviews.length > 0 ? reviews[reviews.length - 1].id + 1 : 1,
+      userId: review.userId,
+      rating: review.rating,
+      comment: review.comment,
+    };
+    reviews.push(newReview);
+    product.reviews = reviews;
+    return this.productRepo.save(product);
+  }
+
+  async getReviews(productId: number) {
+    const product = await this.findOne(productId);
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
+    return product.reviews ?? [];
+  }
+
+  async deleteReview(productId: number, reviewId: number, userId: number) {
+    const product = await this.findOne(productId);
+
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
+
+    const reviews = product.reviews ?? [];
+
+    const review = reviews.find(
+      (review) => review.id === reviewId && review.userId === userId,
+    );
+
+    if (!review) {
+      throw new NotFoundException('Review no encontrada');
+    }
+
+    product.reviews = reviews.filter((review) => review.id !== reviewId);
+
+    return this.productRepo.save(product);
+  }
 }

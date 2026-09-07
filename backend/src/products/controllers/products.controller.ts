@@ -114,4 +114,56 @@ export class ProductsController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Crea una reseña para un producto.' })
+  @ApiCreatedResponse({
+    description: 'Reseña creada correctamente',
+    type: Product,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
+  @Post(':id/reviews')
+  createReview(
+    @Param('id', ParseIntPipe) productId: number,
+    @Body() review: { userId: number; rating: number; comment: string },
+  ) {
+    return this.productService.createReview(productId, review);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Obtiene todas las reseñas de un producto.' })
+  @ApiOkResponse({
+    description: 'Reseñas obtenidas correctamente',
+    type: Product,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
+  @Get(':id/reviews')
+  getReviews(@Param('id', ParseIntPipe) productId: number) {
+    return this.productService.getReviews(productId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Elimina una reseña de un producto.' })
+  @ApiOkResponse({
+    description: 'Reseña eliminada correctamente',
+    type: Product,
+  })
+  @ApiBadRequestResponse({
+    description: 'Datos enviados incorrectamente',
+  })
+  @Delete(':id/reviews/:reviewId')
+  deleteReview(
+    @Param('id', ParseIntPipe) productId: number,
+    @Param('reviewId', ParseIntPipe) reviewId: number,
+    @Body() { userId }: { userId: number },
+  ) {
+    return this.productService.deleteReview(productId, reviewId, userId);
+  }
 }

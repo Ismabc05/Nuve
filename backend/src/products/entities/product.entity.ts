@@ -33,6 +33,7 @@ export class Product {
 
   @Column({ type: 'jsonb', nullable: true })
   reviews?: {
+    id: number;
     userId: number;
     rating: number;
     comment: string;
