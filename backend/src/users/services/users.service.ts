@@ -5,7 +5,7 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { OrderStatus } from '../../orders/models/order.status';
-import * as argon2 from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { Product } from '../../products/entities/product.entity';
 
 @Injectable()
@@ -89,7 +89,7 @@ export class UsersService {
       image,
     } = body;
 
-    const hashPassword = await argon2.hash(password);
+    const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = this.userRepo.create({
       email,
