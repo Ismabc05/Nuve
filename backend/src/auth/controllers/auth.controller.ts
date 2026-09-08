@@ -3,10 +3,32 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../../users/entities/user.entitiy';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
+import {
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  @ApiOperation({ summary: 'Inicia sesión y obtiene un token JWT.' })
+  @ApiOkResponse({
+    description: 'Inicio de sesión exitoso',
+    type: String,
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no encontrado',
+  })
+  @ApiBody({
+    schema: {
+      example: {
+        email: 'usuario@ejemplo.com',
+        password: 'Password123!',
+      },
+    },
+  })
   @UseGuards(AuthGuard('local'))
   @Post('login')
   login(@Req() req: Request) {
