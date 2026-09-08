@@ -1,5 +1,14 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
-import { Get, Put, Delete, Param, ParseIntPipe, Body } from '@nestjs/common';
+import {
+  Get,
+  Put,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Body,
+  Request,
+  ForbiddenException,
+} from '@nestjs/common';
 
 import { OrdersService } from '../services/orders.service';
 import { UpdateOrderDto } from '../dtos/order.dto';
@@ -34,8 +43,11 @@ export class OrdersController {
     description: 'Pedido no encontrado',
   })
   @Get()
-  findAll() {
-    return this.orderService.findAll();
+  findAll(@Request() req: { user: { sub: number; role: UserRole } }) {
+    if (req.user.role === UserRole.ADMIN) {
+      return this.orderService.findAll();
+    }
+    return this.orderService.findAll(req.user.sub);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -49,8 +61,16 @@ export class OrdersController {
     description: 'Pedido no encontrado',
   })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.orderService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    const order = await this.orderService.findOne(id);
+
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== order.user.id) {
+      throw new ForbiddenException('No tienes permisos para ver este pedido');
+    }
+    return order;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -63,7 +83,15 @@ export class OrdersController {
     description: 'Usuario no encontrado',
   })
   @Post(':id/orders')
-  createOrder(@Param('id', ParseIntPipe) id: number) {
+  async createOrder(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para crear una orden para este usuario',
+      );
+    }
     return this.orderService.createOrder(id);
   }
 
@@ -81,10 +109,17 @@ export class OrdersController {
     description: 'El pedido ya está registrado',
   })
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOrder: UpdateOrderDto,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    const order = await this.orderService.findOne(id);
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== order.user.id) {
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar este pedido',
+      );
+    }
     return this.orderService.update(id, updateOrder);
   }
 
@@ -99,7 +134,16 @@ export class OrdersController {
     description: 'Datos enviados incorrectamente',
   })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    const order = await this.orderService.findOne(id);
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== order.user.id) {
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este pedido',
+      );
+    }
     return this.orderService.remove(id);
   }
 }

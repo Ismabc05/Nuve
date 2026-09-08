@@ -18,8 +18,35 @@ export class OrdersService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
-  async findAll() {
-    return await this.orderRepo.find();
+  async findAll(userId?: number) {
+    if (userId) {
+      return await this.orderRepo.find({
+        where: {
+          user: {
+            id: userId,
+          },
+        },
+        relations: {
+          user: true,
+          items: {
+            productvariant: {
+              product: true,
+            },
+          },
+        },
+      });
+    }
+
+    return await this.orderRepo.find({
+      relations: {
+        user: true,
+        items: {
+          productvariant: {
+            product: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {

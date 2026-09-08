@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Body,
   Param,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 
 import { ProfilesService } from '../services/profiles.service';
@@ -56,7 +58,13 @@ export class ProfilesController {
     description: 'Perfil no encontrado',
   })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException('No tienes permisos para ver este perfil');
+    }
     return this.profileService.findOne(id);
   }
 
@@ -95,7 +103,13 @@ export class ProfilesController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatedProfile: UpdateProfileDto,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar este perfil',
+      );
+    }
     return this.profileService.update(id, updatedProfile);
   }
 
@@ -110,7 +124,15 @@ export class ProfilesController {
     description: 'Datos enviados incorrectamente',
   })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este perfil',
+      );
+    }
     return this.profileService.remove(id);
   }
 }

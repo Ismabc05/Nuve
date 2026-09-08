@@ -7,6 +7,8 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 
 import { UsersService } from '../services/users.service';
@@ -57,7 +59,15 @@ export class UsersController {
     description: 'Usuario no encontrado',
   })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para acceder a este usuario',
+      );
+    }
     return this.userService.findOne(id);
   }
 
@@ -71,7 +81,15 @@ export class UsersController {
     description: 'Dirección no encontrada',
   })
   @Get(':id/address')
-  getAddress(@Param('id', ParseIntPipe) id: number) {
+  getAddress(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para acceder a esta dirección',
+      );
+    }
     return this.userService.getAddress(id);
   }
 
@@ -85,7 +103,15 @@ export class UsersController {
     description: 'Productos favoritos no encontrados',
   })
   @Get(':id/favorites')
-  getFavorites(@Param('id', ParseIntPipe) id: number) {
+  getFavorites(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para acceder a los productos favoritos',
+      );
+    }
     return this.userService.getFavorites(id);
   }
 
@@ -118,7 +144,13 @@ export class UsersController {
   createFavorite(
     @Param('id', ParseIntPipe) id: number,
     @Param('productId', ParseIntPipe) productId: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para añadir productos a favoritos',
+      );
+    }
     return this.userService.createFavorite(id, productId);
   }
 
@@ -142,7 +174,13 @@ export class UsersController {
       state?: string;
       country?: string;
     },
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para crear una dirección para este usuario',
+      );
+    }
     return this.userService.createAddress(id, address);
   }
 
@@ -163,7 +201,13 @@ export class UsersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatedUser: UpdateUserDto,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar este usuario',
+      );
+    }
     return this.userService.update(id, updatedUser);
   }
 
@@ -188,7 +232,13 @@ export class UsersController {
       state?: string;
       country?: string;
     },
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar esta dirección',
+      );
+    }
     return this.userService.updateAddress(id, addressId, address);
   }
 
@@ -203,7 +253,15 @@ export class UsersController {
     description: 'Datos enviados incorrectamente',
   })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este usuario',
+      );
+    }
     return this.userService.remove(id);
   }
 
@@ -220,7 +278,13 @@ export class UsersController {
   removeAddress(
     @Param('id', ParseIntPipe) id: number,
     @Param('addressId', ParseIntPipe) addressId: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar esta dirección',
+      );
+    }
     return this.userService.removeAddress(id, addressId);
   }
 
@@ -239,7 +303,13 @@ export class UsersController {
   removeFavorite(
     @Param('id', ParseIntPipe) id: number,
     @Param('productId', ParseIntPipe) productId: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== id) {
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este producto de favoritos',
+      );
+    }
     return this.userService.removeFavorite(id, productId);
   }
 }

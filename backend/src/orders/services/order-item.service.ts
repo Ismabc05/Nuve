@@ -16,14 +16,44 @@ export class OrderItemService {
     private productVariantRepo: Repository<ProductVariant>,
   ) {}
 
-  async findAll() {
-    return await this.orderItemRepo.find();
+  async findAll(userId?: number) {
+    if (userId !== undefined) {
+      return await this.orderItemRepo.find({
+        where: {
+          order: {
+            user: {
+              id: userId,
+            },
+          },
+        },
+        relations: {
+          productvariant: true,
+          order: {
+            user: true,
+          },
+        },
+      });
+    }
+
+    return await this.orderItemRepo.find({
+      relations: {
+        productvariant: true,
+        order: {
+          user: true,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
     const orderItem = await this.orderItemRepo.findOne({
       where: { id },
-      relations: { productvariant: true },
+      relations: {
+        productvariant: true,
+        order: {
+          user: true,
+        },
+      },
     });
     if (!orderItem) {
       throw new NotFoundException('Linea de pedido no encontrada');

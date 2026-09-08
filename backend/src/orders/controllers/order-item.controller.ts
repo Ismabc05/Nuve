@@ -7,6 +7,8 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 
 import { OrderItemService } from '../services/order-item.service';
@@ -26,10 +28,14 @@ import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';
 import { RolesGuard } from '../../auth/guards/role.guard';
+import { OrdersService } from '../services/orders.service';
 
 @Controller('order-item')
 export class OrderItemController {
-  constructor(private orderItemService: OrderItemService) {}
+  constructor(
+    private orderItemService: OrderItemService,
+    private orderService: OrdersService,
+  ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.USER)
@@ -42,8 +48,11 @@ export class OrderItemController {
     description: 'Linea de pedido no encontrado',
   })
   @Get()
-  findAll() {
-    return this.orderItemService.findAll();
+  findAll(@Request() req: { user: { sub: number; role: UserRole } }) {
+    if (req.user.role === UserRole.ADMIN) {
+      return this.orderItemService.findAll();
+    }
+    return this.orderItemService.findAll(req.user.sub);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -57,8 +66,20 @@ export class OrderItemController {
     description: 'Linea de pedido no encontrado',
   })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.orderItemService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    const orderItem = await this.orderItemService.findOne(id);
+    if (
+      req.user.role === UserRole.USER &&
+      orderItem.order.user.id !== req.user.sub
+    ) {
+      throw new ForbiddenException(
+        'No tienes permiso para acceder a este recurso',
+      );
+    }
+    return orderItem;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -75,7 +96,16 @@ export class OrderItemController {
     description: 'La linea de pedido ya está registrado',
   })
   @Post()
-  create(@Body() newOrderItem: CreateOrderItem) {
+  async create(
+    @Body() newOrderItem: CreateOrderItem,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    const order = await this.orderService.findOne(newOrderItem.orderId);
+    if (req.user.role !== UserRole.ADMIN && req.user.sub !== order.user.id) {
+      throw new ForbiddenException(
+        'No tienes permisos para añadir una linea a este pedido',
+      );
+    }
     return this.orderItemService.create(newOrderItem);
   }
 
@@ -93,10 +123,20 @@ export class OrderItemController {
     description: 'La linea de pedido ya está registrado',
   })
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOrderItem: UpdateOrderItemDto,
+    @Request() req: { user: { sub: number; role: UserRole } },
   ) {
+    const orderItem = await this.orderItemService.findOne(id);
+    if (
+      req.user.role !== UserRole.ADMIN &&
+      req.user.sub !== orderItem.order.user.id
+    ) {
+      throw new ForbiddenException(
+        'No tienes permisos para actualizar esta linea de pedido',
+      );
+    }
     return this.orderItemService.update(id, updateOrderItem);
   }
 
@@ -111,7 +151,19 @@ export class OrderItemController {
     description: 'Datos enviados incorrectamente',
   })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    const orderItem = await this.orderItemService.findOne(id);
+    if (
+      req.user.role !== UserRole.ADMIN &&
+      req.user.sub !== orderItem.order.user.id
+    ) {
+      throw new ForbiddenException(
+        'No tienes permisos para borrar esta linea de pedido',
+      );
+    }
     return this.orderItemService.remove(id);
   }
 }
