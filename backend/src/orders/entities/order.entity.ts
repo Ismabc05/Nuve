@@ -11,7 +11,7 @@ import { Exclude } from 'class-transformer';
 
 import { OrderItem } from './order-item.entity';
 import { OrderStatus } from '../models/order.status';
-import { User } from '../../users/entities/user.entitiy';
+import { User } from '../../users/entities/user.entity';
 
 @Entity({ name: 'orders' })
 export class Order {

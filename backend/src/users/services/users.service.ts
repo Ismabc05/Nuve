@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { User } from '../entities/user.entitiy';
+import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { OrderStatus } from '../../orders/models/order.status';
 import { Product } from '../../products/entities/product.entity';

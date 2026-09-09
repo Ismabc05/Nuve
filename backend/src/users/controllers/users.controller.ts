@@ -21,7 +21,7 @@ import {
 
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { User } from '../entities/user.entitiy';
+import { User } from '../entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { UserRole } from '../models/user.role';
 import { Roles } from '../../auth/decorators/roles.decorator';

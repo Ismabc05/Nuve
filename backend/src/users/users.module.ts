@@ -5,7 +5,7 @@ import { UsersService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
 import { ProfilesController } from './controllers/profiles.controller';
 import { ProfilesService } from './services/profiles.service';
-import { User } from './entities/user.entitiy';
+import { User } from './entities/user.entity';
 import { Profile } from './entities/profile.entity';
 import { Order } from '../orders/entities/order.entity';
 import { Product } from '../products/entities/product.entity';

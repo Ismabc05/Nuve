@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { Order } from '../entities/order.entity';
 import { UpdateOrderDto } from '../dtos/order.dto';
 import { OrderStatus } from '../models/order.status';
-import { User } from '../../users/entities/user.entitiy';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class OrdersService {

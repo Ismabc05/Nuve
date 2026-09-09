@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuthService } from '../services/auth.service';
-import { User } from '../../users/entities/user.entitiy';
+import { User } from '../../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {

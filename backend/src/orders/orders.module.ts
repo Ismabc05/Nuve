@@ -8,7 +8,7 @@ import { OrderItemService } from './services/order-item.service';
 import { Order } from './entities/order.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { ProductVariant } from '../products/entities/product-variant.entity';
-import { User } from '../users/entities/user.entitiy';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, OrderItem, ProductVariant, User])],

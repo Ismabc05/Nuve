@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-import { User } from './user.entitiy';
+import { User } from './user.entity';
 
 @Entity({ name: 'profiles' })
 export class Profile {
