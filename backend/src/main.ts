@@ -14,10 +14,19 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Clothing Store API')
     .setDescription(
-      'API RESTful desarrollada con NestJS para ofrecer una solución completa de gestión ' +
-        'para tiendas de ropa. El sistema incluye funcionalidades para la administración de ' +
-        'productos, usuarios, pedidos, categorías y marcas, así como mecanismos seguros de ' +
-        'autenticación y autorización.',
+      'API RESTful desarrollada con NestJS y TypeScript para la gestión integral de una tienda de ropa online. ' +
+        'La aplicación proporciona una arquitectura backend orientada a la gestión de usuarios, perfiles, productos, ' +
+        'variantes, imágenes, categorías, marcas, pedidos y líneas de pedido. ' +
+        'El sistema implementa autenticación y autorización mediante JWT y Passport, permitiendo controlar el acceso ' +
+        'a los diferentes recursos en función del rol del usuario (ADMIN o USER) y de la propiedad de los recursos. ' +
+        'Los usuarios pueden gestionar sus propios perfiles y pedidos, mientras que los administradores disponen de ' +
+        'permisos adicionales para administrar los recursos generales de la aplicación. ' +
+        'La API incluye validación de datos mediante DTOs y class-validator, persistencia de datos mediante TypeORM ' +
+        'y PostgreSQL, y gestión de la estructura de la base de datos mediante migraciones. ' +
+        'Además, se han incorporado medidas de seguridad como Helmet y configuración de CORS, dejando la aplicación ' +
+        'preparada para su despliegue en entornos de producción. ' +
+        'Esta documentación permite consultar y probar de forma interactiva los diferentes endpoints disponibles, ' +
+        'incluyendo sus parámetros, cuerpos de petición, respuestas y mecanismos de autenticación.',
     )
     .setVersion('1.0.0')
     .build();

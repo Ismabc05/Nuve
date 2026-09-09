@@ -115,7 +115,7 @@ La API incluye las siguientes funcionalidades:
 * PostgreSQL.
 * TypeORM.
 * Entidades relacionadas.
-* Relaciones `OneToOne`, `OneToMany` y `ManyToOne`.
+* Relaciones `OneToOne`, `OneToMany`, `ManyToOne` y `ManyToMany`.
 * Persistencia mediante repositorios TypeORM.
 * Soporte para migraciones.
 
@@ -160,13 +160,10 @@ Los módulos principales son:
 ```text
 src/
 ├── auth/
-├── users/
-├── profiles/
-├── products/
-├── categories/
-├── brands/
-├── orders/
 ├── database/
+├── orders/
+├── products/
+├── users/
 ├── app.module.ts
 └── main.ts
 ```
