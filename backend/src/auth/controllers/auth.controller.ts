@@ -1,6 +1,4 @@
 import { Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { User } from '../../users/entities/user.entitiy';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
 import {
@@ -9,6 +7,9 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
+
+import { AuthService } from '../services/auth.service';
+import { User } from '../../users/entities/user.entitiy';
 
 @Controller('auth')
 export class AuthController {

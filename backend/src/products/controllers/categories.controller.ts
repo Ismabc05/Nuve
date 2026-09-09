@@ -8,9 +8,6 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-
-import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
-import { CategoriesService } from '../services/categories.service';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -20,8 +17,9 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 
+import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
+import { CategoriesService } from '../services/categories.service';
 import { Category } from '../entities/category.entity';
-
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';

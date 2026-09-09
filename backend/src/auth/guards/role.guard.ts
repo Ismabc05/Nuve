@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+
 import { UserRole } from '../../users/models/user.role';
 
 interface AuthenticatedUser {

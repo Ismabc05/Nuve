@@ -8,11 +8,11 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { Profile } from './profile.entity';
 import { Order } from '../../orders/entities/order.entity';
 import { UserRole } from '../models/user.role';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class User {

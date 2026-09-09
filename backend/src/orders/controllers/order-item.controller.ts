@@ -10,9 +10,6 @@ import {
   Request,
   ForbiddenException,
 } from '@nestjs/common';
-
-import { OrderItemService } from '../services/order-item.service';
-import { CreateOrderItem, UpdateOrderItemDto } from '../dtos/order-item.dto';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -22,8 +19,9 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 
+import { OrderItemService } from '../services/order-item.service';
+import { CreateOrderItem, UpdateOrderItemDto } from '../dtos/order-item.dto';
 import { OrderItem } from '../entities/order-item.entity';
-
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';

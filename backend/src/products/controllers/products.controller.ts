@@ -8,9 +8,6 @@ import {
   ParseIntPipe,
   Body,
 } from '@nestjs/common';
-
-import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
-import { ProductsService } from '../services/products.service';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -20,8 +17,9 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 
+import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
+import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
-
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';

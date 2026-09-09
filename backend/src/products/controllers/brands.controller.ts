@@ -8,9 +8,6 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-
-import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
-import { BrandsService } from '../services/brands.service';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -19,8 +16,10 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { Brand } from '../entities/brand.entity';
 
+import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
+import { BrandsService } from '../services/brands.service';
+import { Brand } from '../entities/brand.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';

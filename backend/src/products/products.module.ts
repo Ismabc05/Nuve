@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { ProductsController } from './controllers/products.controller';
 import { CategoriesController } from './controllers/categories.controller';
 import { ProductsService } from './services/products.service';
@@ -9,7 +11,6 @@ import { ProductVariantController } from './controllers/product-variant.controll
 import { ProductImageController } from './controllers/product-image.controller';
 import { ProductVariantService } from './services/product-variant.service';
 import { ProductImageService } from './services/product-image.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Brand } from './entities/brand.entity';
 import { Category } from './entities/category.entity';
 import { ProductImage } from './entities/product-image.entity';

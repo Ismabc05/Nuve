@@ -10,9 +10,6 @@ import {
   Request,
   ForbiddenException,
 } from '@nestjs/common';
-
-import { ProfilesService } from '../services/profiles.service';
-import { CreateProfileDto, UpdateProfileDto } from '../dtos/profile.dto';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -22,6 +19,8 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 
+import { ProfilesService } from '../services/profiles.service';
+import { CreateProfileDto, UpdateProfileDto } from '../dtos/profile.dto';
 import { Profile } from '../entities/profile.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { UserRole } from '../models/user.role';

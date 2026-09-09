@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { In, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '../entities/user.entitiy';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
 import { OrderStatus } from '../../orders/models/order.status';
-import * as bcrypt from 'bcrypt';
 import { Product } from '../../products/entities/product.entity';
 
 @Injectable()
