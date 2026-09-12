@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom"
 
 
-import Login from "./paginas/login/Login"
-import Register from "./paginas/register/Register"
-import Home from "./paginas/home/Home"
-import Carrito from "./paginas/carrito/Carrito"
-import Favoritos from "./paginas/favoritos/Favoritos"
-import Perfil from "./paginas/perfil/Perfil"
-import Order from "./paginas/order/Order"
-import Product from "./paginas/product/Product"
-import Admin from "./paginas/admin/Admin"
-import RootRedirect from "./paginas/root/RootRedirect"
-import Orders from "./paginas/orders/Pedidos"
+import Login from "./paginas/Auth/Login"
+import Register from "./paginas/Auth/Register"
+import Home from "./paginas/Product/Home"
+import Carrito from "./paginas/User/Carrito"
+import Favoritos from "./paginas/User/Favoritos"
+import Perfil from "./paginas/User/Perfil"
+import Order from "./paginas/Orders/Order"
+import Product from "./paginas/Product/Product"
+import Admin from "./paginas/Admin/Admin"
+import RootRedirect from "./paginas/Root/RootRedirect"
+import Orders from "./paginas/Orders/Orders"
 
 function App() {
 
