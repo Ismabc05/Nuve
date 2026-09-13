@@ -6,7 +6,6 @@
   padding: 74px 24px 40px;
   background-color: #ffffff;
   color: #222222;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .login__container {
@@ -79,6 +78,7 @@
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+  margin-bottom: 20px;
 }
 
 .login__form input:focus {
