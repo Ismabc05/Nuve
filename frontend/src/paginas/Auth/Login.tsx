@@ -16,7 +16,10 @@ function Login() {
                         <label htmlFor="email">EMAIL:</label>
                         <input id="email" type="email" name="email" />
                         <label htmlFor="email">CONTRASEÑA:</label>
-                        <input id="password" type="passwors" name="password" />
+                        <input id="password" type="password" name="password" />
+                        <p className="login__forgot__password">
+                            ¿Has olvidado tu contraseña?
+                        </p>
                         <p className="login__terms">
                             Al continuar, aceptas los términos y condiciones de Nuvé
                             y confirmas que has leído nuestra política de privacidad.

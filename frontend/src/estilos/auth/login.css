@@ -123,6 +123,13 @@
   text-align: center;
 }
 
+.login__forgot__password {
+  color: #666666;
+  font-size: 13px;
+  margin-top: 0px;
+  text-align: center;
+}
+
 /* Móvil */
 
 @media (max-width: 600px) {
