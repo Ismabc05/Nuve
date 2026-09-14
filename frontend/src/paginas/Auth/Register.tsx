@@ -1,6 +1,11 @@
 import '../../estilos/auth/register.css'
+import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useState } from 'react';
 
 function Register() {
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setConfirmShowPassword] = useState(false);
   return (
     <main className="register">
       <section className="register__container">
@@ -34,12 +39,45 @@ function Register() {
                 Contraseña <span>*</span>
               </label>
 
-              <input
-                id="password"
-                type="password"
-                name="password"
-                required
-              />
+              <div className="register__password-wrapper">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="register__password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="register__field">
+              <label htmlFor="confirmPassword">
+                Confirmar contraseña <span>*</span>
+              </label>
+
+              <div className="register__password-wrapper">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  required
+                />
+                <button
+                  type="button"
+                  className="register__password-toggle"
+                  onClick={() => setConfirmShowPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showConfirmPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+                </button>
+              </div>
             </div>
 
             <div className="register__field">
@@ -64,7 +102,6 @@ function Register() {
                 id="lastName"
                 type="text"
                 name="lastName"
-                required
               />
             </div>
 
@@ -77,7 +114,6 @@ function Register() {
                 id="phone"
                 type="tel"
                 name="phone"
-                required
               />
             </div>
 
@@ -90,13 +126,12 @@ function Register() {
                 id="postalCode"
                 type="text"
                 name="postalCode"
-                required
               />
             </div>
 
-            <div className="register__field register__field--full">
+            <div className="register__field">
               <label htmlFor="image">
-                Imagen <span>(opcional)</span>
+                Foto de perfil <span>(opcional)</span>
               </label>
 
               <input
