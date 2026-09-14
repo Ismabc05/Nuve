@@ -130,24 +130,24 @@ function Register() {
             </div>
 
             <div className="register__field">
-  <label htmlFor="image">
-    Foto de perfil <span>(opcional)</span>
-  </label>
+              <label htmlFor="image">
+                Foto de perfil <span>(opcional)</span>
+              </label>
 
-  <div className="register__file-wrapper">
-    <input
-      id="image"
-      type="file"
-      name="image"
-      accept="image/*"
-      className="register__file-input"
-    />
-    <label htmlFor="image" className="register__file-label">
-      <span className="register__file-button">Seleccionar archivo</span>
-      <span className="register__file-text">Ningún archivo seleccionado</span>
-    </label>
-  </div>
-</div>
+            <div className="register__file-wrapper">
+              <input
+                id="image"
+                type="file"
+                name="image"
+                accept="image/*"
+                className="register__file-input"
+              />
+              <label htmlFor="image" className="register__file-label">
+                <span className="register__file-button">Seleccionar archivo</span>
+                <span className="register__file-text">Ningún archivo seleccionado</span>
+              </label>
+              </div>
+            </div>
           </div>
 
           <button className="register__button" type="submit">

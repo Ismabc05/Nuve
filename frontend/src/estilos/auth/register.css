@@ -4,9 +4,6 @@
   justify-content: center;
   align-items: flex-start;
   padding: 74px 24px 40px;
-  background-color: #ffffff;
-  color: #222222;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .register__container {
@@ -83,35 +80,6 @@
   box-shadow: 0 0 0 1px #111111;
 }
 
-.register__button {
-  display: block;
-  width: 100%;
-  height: 60px;
-  margin-top: 36px;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background-color: #050505;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.register__button:hover {
-  background-color: #333333;
-}
-
-.register__button:active {
-  transform: scale(0.99);
-}
-
-/* Wrapper de la contraseña */
 .register__password-wrapper {
   position: relative;
   width: 100%;
@@ -120,7 +88,7 @@
 .register__password-wrapper input {
   width: 100%;
   height: 56px;
-  padding: 0 48px 0 16px; /* espacio a la derecha para el ojito */
+  padding: 0 48px 0 16px;
   border: 1px solid #888888;
   border-radius: 0;
   outline: none;
@@ -136,7 +104,6 @@
   box-shadow: 0 0 0 1px #111111;
 }
 
-/* Botón del ojito */
 .register__password-toggle {
   position: absolute;
   right: 14px;
@@ -159,8 +126,6 @@
 .register__password-toggle:hover {
   color: #111111;
 }
-
-/* ========== Input File personalizado ========== */
 
 .register__file-wrapper {
   position: relative;
@@ -212,6 +177,7 @@
   border: 1px solid #cccccc;
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .register__file-text {
@@ -224,7 +190,33 @@
   min-width: 0;
 }
 
-/* Móvil */
+.register__button {
+  display: block;
+  width: 100%;
+  height: 60px;
+  margin-top: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: #050505;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.register__button:hover {
+  background-color: #333333;
+}
+
+.register__button:active {
+  transform: scale(0.99);
+}
 
 @media (max-width: 600px) {
   .register {
