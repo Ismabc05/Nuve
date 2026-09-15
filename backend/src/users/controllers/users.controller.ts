@@ -114,7 +114,6 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
   @ApiOperation({ summary: 'Obtiene añ usuario por su correo electronico.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
