@@ -113,7 +113,6 @@ export class UsersController {
     return this.userService.getFavorites(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Obtiene añ usuario por su correo electronico.' })
   @ApiOkResponse({
     description: 'Usuario encontrado',
