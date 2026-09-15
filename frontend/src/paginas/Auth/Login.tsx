@@ -1,10 +1,64 @@
 import '../../estilos/auth/login.css'
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useState } from 'react';
+import { findByEmail } from '../../services/auth.service';
+import { useNavigate} from 'react-router-dom';
+import { Spinner } from './Spinner';
 
 function Login() {
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [ email, setEmail] = useState('');
+    const [ password, setPasword] = useState('');
+    const [ showPassword, setShowPassword] = useState(false);
+    const [showPasswordIcon, setShowPasswordIcon] = useState(false);
+    const [ loading, setLoading] = useState(false);
+    const [ error, setError] = useState('');
+    const navigate = useNavigate()
+
+    const handleContinue = async (event: React.SubmitEvent) => {
+        event.preventDefault()
+
+        if(!email) {
+            setError('Debes introducir un correo electrónico')
+
+            setTimeout(() => {
+                setError('');
+            }, 3000);
+
+            return;
+        }
+
+        if(!email.includes('@')) {
+            setError('Debes introducir un correo electrónico válido')
+            setTimeout(() => {
+                setError('');
+            }, 3000);
+
+            return;
+        }
+        
+        setError('')
+        setLoading(true)
+
+        setTimeout(async () => {
+            try {
+            const user = await findByEmail(email)
+
+            if(!user) {
+               navigate('/register', {
+                state: { email },
+               });
+               return;
+            }
+
+            setShowPassword(true);
+            } catch {
+                setError('Ha ocurrido un error. Intentalo de nuevo')
+            } finally {
+                setLoading(false)
+            }
+        }, 2000)
+    };
 
 
     return (
@@ -18,38 +72,48 @@ function Login() {
 
                     <p className="login__description">Introduce tu dirección de correo para iniciar sesión o registrarte</p>
 
-                    <form className="login__form">
+                    <form className="login__form" onSubmit={handleContinue}>
 
                         <label htmlFor="email">EMAIL:</label>
-                        <input id="email" type="email" name="email" />
+                        <input id="email" type="text" value={email} name="email" onChange={(event) => {
+                            event.preventDefault()
+                            setEmail(event.target.value)
+                        }} />
+                        
+                        {error && <p className='error'>{error}</p>}
 
-                        <label htmlFor="email">CONTRASEÑA:</label>
-                        <div className="login__password-wrapper">
-                            <input
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                            />
-                            <button
-                                type="button"
-                                className="login__password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            >
-                                {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
-                            </button>
-                        </div>
-
-                        <p className="login__forgot__password">
-                            ¿Has olvidado tu contraseña?
-                        </p>
+                        {showPassword && (
+                            <><label htmlFor="email">CONTRASEÑA:</label><div className="login__password-wrapper">
+                                <input
+                                    id="password"
+                                    type={showPasswordIcon ? "text" : "password"}
+                                    value={password}
+                                    name="password"
+                                    onChange={(event) => {
+                                        event.preventDefault();
+                                        setPasword(event.target.value);
+                                    } } />
+                                <button
+                                    type="button"
+                                    className="login__password-toggle"
+                                    onClick={() => setShowPasswordIcon(!showPasswordIcon)}
+                                    aria-label={showPasswordIcon ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showPasswordIcon ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+                                </button>
+                            </div><p className="login__forgot__password">
+                                    ¿Has olvidado tu contraseña?
+                                </p></>
+                        )}
 
                         <p className="login__terms">
                             Al continuar, aceptas los términos y condiciones de Nuvé
                             y confirmas que has leído nuestra política de privacidad.
                         </p>
 
-                        <button type="submit">Continuar</button>
+                        <button type="submit" disabled={loading}>
+                            {loading ? <Spinner/> : 'CONTINUAR'}
+                        </button>
 
                     </form>
 
