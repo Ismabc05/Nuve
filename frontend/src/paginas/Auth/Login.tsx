@@ -1,7 +1,7 @@
 import '../../estilos/auth/login.css'
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useState } from 'react';
-import { findByEmail } from '../../services/auth.service';
+import { findByEmail, login } from '../../services/auth.service';
 import { useNavigate} from 'react-router-dom';
 import { Spinner } from './Spinner';
 
@@ -16,9 +16,11 @@ function Login() {
     const navigate = useNavigate()
 
     const handleContinue = async (event: React.SubmitEvent) => {
+
         event.preventDefault()
 
-        if(!email) {
+        if (!email) {
+
             setError('Debes introducir un correo electrónico')
 
             setTimeout(() => {
@@ -28,35 +30,92 @@ function Login() {
             return;
         }
 
-        if(!email.includes('@')) {
+        if (!email.includes('@')) {
+
             setError('Debes introducir un correo electrónico válido')
+
             setTimeout(() => {
                 setError('');
             }, 3000);
 
             return;
         }
-        
+
+        // SEGUNDO PASO: ya tenemos la contraseña visible
+        if (showPassword) {
+
+            if (!password) {
+
+                setError('Debes introducir tu contraseña')
+
+                setTimeout(() => {
+                    setError('');
+                }, 3000);
+
+                return;
+            }
+
+            setError('')
+            setLoading(true)
+
+            setTimeout(async () => {
+
+                try {
+
+                    const data = await login(email, password)
+
+                    console.log('LOGIN CORRECTO:', data)
+
+                } catch {
+
+                    setError('El correo o la contraseña no son correctos')
+
+                    setTimeout(() => {
+                        setError('');
+                    }, 3000);
+
+                } finally {
+
+                    setLoading(false)
+
+                }
+
+            }, 2000)
+
+            return;
+        }
+
+        // PRIMER PASO: comprobar si existe el email
         setError('')
         setLoading(true)
 
         setTimeout(async () => {
+
             try {
-            const user = await findByEmail(email)
 
-            if(!user) {
-               navigate('/register', {
-                state: { email },
-               });
-               return;
-            }
+                const user = await findByEmail(email)
 
-            setShowPassword(true);
+                if (!user) {
+
+                    navigate('/register', {
+                        state: { email },
+                    });
+
+                    return;
+                }
+
+                setShowPassword(true);
+
             } catch {
+
                 setError('Ha ocurrido un error. Intentalo de nuevo')
+
             } finally {
+
                 setLoading(false)
+
             }
+
         }, 2000)
     };
 
@@ -80,7 +139,9 @@ function Login() {
                             setEmail(event.target.value)
                         }} />
                         
-                        {error && <p className='error'>{error}</p>}
+                        {!showPassword && error && (
+                            <p className="error">{error}</p>
+                        )}
 
                         {showPassword && (
                             <><label htmlFor="email">CONTRASEÑA:</label><div className="login__password-wrapper">
@@ -101,9 +162,16 @@ function Login() {
                                 >
                                     {showPasswordIcon ? <LuEyeOff size={20} /> : <LuEye size={20} />}
                                 </button>
-                            </div><p className="login__forgot__password">
-                                    ¿Has olvidado tu contraseña?
-                                </p></>
+                                {error && (
+                                    <p className="error">{error}</p>
+                                )}
+                            </div>
+
+                            <p className="login__forgot__password">
+                                ¿Has olvidado tu contraseña?
+                            </p>
+
+                            </>
                         )}
 
                         <p className="login__terms">
