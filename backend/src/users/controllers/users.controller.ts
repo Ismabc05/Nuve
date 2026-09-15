@@ -113,6 +113,20 @@ export class UsersController {
     return this.userService.getFavorites(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @ApiOperation({ summary: 'Obtiene añ usuario por su correo electronico.' })
+  @ApiOkResponse({
+    description: 'Usuario encontrado',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuario no econtrado',
+  })
+  @Get('email/:email')
+  findByEmail(@Param('email') email: string) {
+    return this.userService.findByEmail(email);
+  }
+
   @ApiOperation({ summary: 'Crea un usuario.' })
   @ApiCreatedResponse({
     description: 'Usuario creado correctamente',
