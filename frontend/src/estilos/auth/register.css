@@ -210,10 +210,6 @@
     transform 0.2s ease;
 }
 
-.register__button:hover {
-  background-color: #333333;
-}
-
 .register__button:active {
   transform: scale(0.99);
 }

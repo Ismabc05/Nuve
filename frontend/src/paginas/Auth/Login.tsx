@@ -14,6 +14,7 @@ function Login() {
     const [ loading, setLoading] = useState(false);
     const [ error, setError] = useState('');
     const navigate = useNavigate()
+    const [isExiting, setIsExiting] = useState(false);
 
     const handleContinue = async (event: React.SubmitEvent) => {
 
@@ -96,7 +97,7 @@ function Login() {
                 const user = await findByEmail(email)
 
                 if (!user) {
-
+                    setIsExiting(true);
                     navigate('/register', {
                         state: { email },
                     });
@@ -122,7 +123,7 @@ function Login() {
 
     return (
         <>
-            <main className="login">
+            <main  className={`login ${isExiting ? 'login--exiting' : ''}`}>
                 <section className="login__container">
 
                     <img className="login__logo" src="/login.png" alt="Nuvé" />
@@ -139,9 +140,9 @@ function Login() {
                             setEmail(event.target.value)
                         }} />
                         
-                        {!showPassword && error && (
-                            <p className="error">{error}</p>
-                        )}
+                        <p className={`error ${error ? 'error--visible' : ''}`}>
+                            {error}
+                        </p>
 
                         {showPassword && (
                             <><label htmlFor="email">CONTRASEÑA:</label><div className="login__password-wrapper">
@@ -162,9 +163,9 @@ function Login() {
                                 >
                                     {showPasswordIcon ? <LuEyeOff size={20} /> : <LuEye size={20} />}
                                 </button>
-                                {error && (
-                                    <p className="error">{error}</p>
-                                )}
+                                <p className={`error ${error ? 'error--visible' : ''}`}>
+                                    {error}
+                                </p>
                             </div>
 
                             <p className="login__forgot__password">
