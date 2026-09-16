@@ -14,7 +14,6 @@ function Login() {
     const [ loading, setLoading] = useState(false);
     const [ error, setError] = useState('');
     const navigate = useNavigate()
-    const [isExiting, setIsExiting] = useState(false);
 
     const handleContinue = async (event: React.SubmitEvent) => {
 
@@ -97,7 +96,6 @@ function Login() {
                 const user = await findByEmail(email)
 
                 if (!user) {
-                    setIsExiting(true);
                     navigate('/register', {
                         state: { email },
                     });
@@ -123,7 +121,7 @@ function Login() {
 
     return (
         <>
-            <main  className={`login ${isExiting ? 'login--exiting' : ''}`}>
+            <main  className="login">
                 <section className="login__container">
 
                     <img className="login__logo" src="/login.png" alt="Nuvé" />
@@ -140,12 +138,14 @@ function Login() {
                             setEmail(event.target.value)
                         }} />
                         
-                        <p className={`error ${error ? 'error--visible' : ''}`}>
+                        {!showPassword && (
+                            <p className={`error ${error ? 'error--visible' : ''}`}>
                             {error}
-                        </p>
+                            </p>
+                        )}
 
                         {showPassword && (
-                            <><label htmlFor="email">CONTRASEÑA:</label><div className="login__password-wrapper">
+                            <><label htmlFor="password">CONTRASEÑA:</label><div className="login__password-wrapper">
                                 <input
                                     id="password"
                                     type={showPasswordIcon ? "text" : "password"}

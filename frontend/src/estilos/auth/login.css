@@ -5,18 +5,6 @@
   justify-content: center;
   align-items: flex-start;
   padding: 74px 24px 40px;
-
-  opacity: 1;
-  transform: translateY(0);
-
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.login--exiting {
-  opacity: 0;
-  transform: translateY(-8px);
 }
 
 .login__container {
