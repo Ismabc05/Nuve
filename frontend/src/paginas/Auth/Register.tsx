@@ -1,11 +1,49 @@
 import '../../estilos/auth/register.css'
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useState } from 'react';
+import { validateRegisterForm } from './Validation';
 
 function Register() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
+  const [formData, setFormData] = useState<{
+    email: string;
+    password: string;
+    confirmPassword: string;
+    name: string;
+    lastName: string;
+    phone: string;
+    zipCode: string;
+    image: File | null;
+  }>({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    lastName: '',
+    phone: '',
+    zipCode: '',
+    image: null
+  });
+  const [ errors, setErrors ] = useState<Record<string, string>>({});
+  //const [ loading, setLoading ] = useState(false);
+  //const [ success, setSuccess ] = useState(false);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const validationErrors = validateRegisterForm(formData);
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+        return;
+    }
+
+    console.log('Formulario válido');
+  };
+
   return (
     <main className="register">
       <section className="register__container">
@@ -19,7 +57,7 @@ function Register() {
           Crear cuenta
         </h1>
 
-        <form className="register__form">
+        <form className="register__form" onSubmit={handleSubmit}>
           <div className="register__fields">
             <div className="register__field">
               <label htmlFor="email">
@@ -30,8 +68,14 @@ function Register() {
                 id="email"
                 type="email"
                 name="email"
-                required
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    email: event.target.value
+                  });
+                }}
               />
+                <p className={`error ${errors.email ? 'error--visible' : ''}`}>{errors.email}</p>
             </div>
 
             <div className="register__field">
@@ -44,7 +88,12 @@ function Register() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  required
+                  onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    password: event.target.value
+                  });
+                }}
                 />
                 <button
                   type="button"
@@ -55,6 +104,7 @@ function Register() {
                   {showPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
                 </button>
               </div>
+                <p className={`error ${errors.password ? 'error--visible' : ''}`}>{errors.password}</p>
             </div>
 
             <div className="register__field">
@@ -67,7 +117,12 @@ function Register() {
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
-                  required
+                  onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    confirmPassword: event.target.value
+                  });
+                }}
                 />
                 <button
                   type="button"
@@ -78,6 +133,7 @@ function Register() {
                   {showConfirmPassword ? <LuEyeOff size={20} /> : <LuEye size={20} />}
                 </button>
               </div>
+                <p className={`error ${errors.confirmPassword ? 'error--visible' : ''}`}>{errors.confirmPassword}</p>
             </div>
 
             <div className="register__field">
@@ -89,8 +145,14 @@ function Register() {
                 id="name"
                 type="text"
                 name="name"
-                required
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    name: event.target.value
+                  });
+                }}
               />
+                <p className={`error ${errors.name ? 'error--visible' : ''}`}>{errors.name}</p>
             </div>
 
             <div className="register__field">
@@ -102,7 +164,14 @@ function Register() {
                 id="lastName"
                 type="text"
                 name="lastName"
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    lastName: event.target.value
+                  });
+                }}
               />
+                <p className={`error ${errors.lastName ? 'error--visible' : ''}`}>{errors.lastName}</p>
             </div>
 
             <div className="register__field">
@@ -114,7 +183,14 @@ function Register() {
                 id="phone"
                 type="tel"
                 name="phone"
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    phone: event.target.value
+                  });
+                }}
               />
+                <p className={`error ${errors.phone ? 'error--visible' : ''}`}>{errors.phone}</p>
             </div>
 
             <div className="register__field">
@@ -126,7 +202,14 @@ function Register() {
                 id="postalCode"
                 type="text"
                 name="postalCode"
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    zipCode: event.target.value
+                  });
+                }}
               />
+                <p className={`error ${errors.zipCode ? 'error--visible' : ''}`}>{errors.zipCode}</p>
             </div>
 
             <div className="register__field">
@@ -141,16 +224,23 @@ function Register() {
                 name="image"
                 accept="image/*"
                 className="register__file-input"
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    image: event.target.files?.[0] ?? null
+                  });
+                }}
               />
               <label htmlFor="image" className="register__file-label">
                 <span className="register__file-button">Seleccionar archivo</span>
                 <span className="register__file-text">Ningún archivo seleccionado</span>
               </label>
               </div>
+                <p className={`error ${errors.image ? 'error--visible' : ''}`}>{errors.image}</p>
             </div>
           </div>
 
-          <button className="register__button" type="submit">
+          <button className="register__button">
             CREAR CUENTA
           </button>
         </form>

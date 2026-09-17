@@ -31,8 +31,34 @@ export const login = async (email: string, password: string) => {
     );
 
     if (!response.ok) {
-        throw new Error('Error al crear el usuario');
+        throw new Error('Error al crear loguearse');
     }
 
      return await response.json();
+}
+
+export const createUser = async (data: {
+    email: string,
+    password: string,
+    name: string,
+    lastname: string,
+    phone: string,
+    zipCode: string,
+    image: string,
+}) => {
+    const response = await fetch(
+        `${API_URL}/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }
+    );
+
+    if(!response.ok) {
+        throw new Error('Error al crear el usuario');
+    }
+
+    return await response.json()
 }

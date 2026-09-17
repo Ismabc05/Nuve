@@ -214,6 +214,34 @@
   transform: scale(0.99);
 }
 
+.error {
+  margin: 2px 0 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #9b1c1c;
+  text-align: left;
+
+  opacity: 0;
+  transform: translateY(-4px);
+  max-height: 0;
+
+  overflow: hidden;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    max-height 0.25s ease,
+    margin 0.25s ease;
+}
+
+.error--visible {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 30px;
+  margin-top: 4px;
+}
+
 @media (max-width: 600px) {
   .register {
     min-height: 100vh;
