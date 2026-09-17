@@ -249,6 +249,13 @@
   border-radius: 50%;
 }
 
+.register__success {
+  margin-top: 1rem;
+  text-align: center;
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 600px) {
   .register {
     min-height: 100vh;

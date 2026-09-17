@@ -1,13 +1,14 @@
-import '../../estilos/auth/register.css'
+import '../../estilos/auth/register.css';
 
-import { LuEye, LuEyeOff } from "react-icons/lu";
+import { LuEye, LuEyeOff } from 'react-icons/lu';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { validateRegisterForm } from './Validation';
-import { uploadImage } from '../../services/auth.service';
+import { uploadImage, createUser } from '../../services/auth.service';
+import { Spinner } from './Spinner';
 
 function Register() {
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
 
@@ -32,14 +33,13 @@ function Register() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // const [loading, setLoading] = useState(false);
-  // const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate()
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
-
     event.preventDefault();
 
     const validationErrors = validateRegisterForm(formData);
@@ -47,33 +47,52 @@ function Register() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
+      setTimeout(() => {
+        setErrors({});
+      }, 3000);
+
       return;
     }
 
     try {
+      setLoading(true);
 
+      // Subir imagen a Cloudinary
       let imageUrl = '';
 
       if (formData.image) {
-
         imageUrl = await uploadImage(formData.image);
 
         console.log('URL de la imagen:', imageUrl);
       }
 
+      // Crear usuario
+      const newUser = await createUser({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        lastname: formData.lastName,
+        phone: formData.phone,
+        zipCode: formData.zipCode,
+        image: imageUrl
+      });
+
+      console.log('Usuario creado:', newUser);
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
     } catch (error) {
+      console.error('Error al crear el usuario:', error);
 
-      console.error('Error al subir la imagen:', error);
-
+    } finally {
+      setLoading(false);
     }
-
-    console.log('Formulario válido');
   };
 
   return (
-
     <main className="register">
-
       <section className="register__container">
 
         <img
@@ -89,12 +108,13 @@ function Register() {
         <form
           className="register__form"
           onSubmit={handleSubmit}
+          noValidate
         >
 
           <div className="register__fields">
 
+            {/* EMAIL */}
             <div className="register__field">
-
               <label htmlFor="email">
                 Email <span>*</span>
               </label>
@@ -114,12 +134,11 @@ function Register() {
               <p className={`error ${errors.email ? 'error--visible' : ''}`}>
                 {errors.email}
               </p>
-
             </div>
 
 
+            {/* CONTRASEÑA */}
             <div className="register__field">
-
               <label htmlFor="password">
                 Contraseña <span>*</span>
               </label>
@@ -128,7 +147,7 @@ function Register() {
 
                 <input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   onChange={(event) => {
                     setFormData({
@@ -144,8 +163,8 @@ function Register() {
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={
                     showPassword
-                      ? "Ocultar contraseña"
-                      : "Mostrar contraseña"
+                      ? 'Ocultar contraseña'
+                      : 'Mostrar contraseña'
                   }
                 >
                   {showPassword
@@ -159,12 +178,11 @@ function Register() {
               <p className={`error ${errors.password ? 'error--visible' : ''}`}>
                 {errors.password}
               </p>
-
             </div>
 
 
+            {/* CONFIRMAR CONTRASEÑA */}
             <div className="register__field">
-
               <label htmlFor="confirmPassword">
                 Confirmar contraseña <span>*</span>
               </label>
@@ -173,7 +191,7 @@ function Register() {
 
                 <input
                   id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
                   onChange={(event) => {
                     setFormData({
@@ -191,8 +209,8 @@ function Register() {
                   }
                   aria-label={
                     showConfirmPassword
-                      ? "Ocultar contraseña"
-                      : "Mostrar contraseña"
+                      ? 'Ocultar contraseña'
+                      : 'Mostrar contraseña'
                   }
                 >
                   {showConfirmPassword
@@ -206,12 +224,11 @@ function Register() {
               <p className={`error ${errors.confirmPassword ? 'error--visible' : ''}`}>
                 {errors.confirmPassword}
               </p>
-
             </div>
 
 
+            {/* NOMBRE */}
             <div className="register__field">
-
               <label htmlFor="name">
                 Nombre <span>*</span>
               </label>
@@ -231,12 +248,11 @@ function Register() {
               <p className={`error ${errors.name ? 'error--visible' : ''}`}>
                 {errors.name}
               </p>
-
             </div>
 
 
+            {/* APELLIDOS */}
             <div className="register__field">
-
               <label htmlFor="lastName">
                 Apellidos <span>(opcional)</span>
               </label>
@@ -256,12 +272,11 @@ function Register() {
               <p className={`error ${errors.lastName ? 'error--visible' : ''}`}>
                 {errors.lastName}
               </p>
-
             </div>
 
 
+            {/* TELÉFONO */}
             <div className="register__field">
-
               <label htmlFor="phone">
                 Teléfono <span>(opcional)</span>
               </label>
@@ -281,12 +296,11 @@ function Register() {
               <p className={`error ${errors.phone ? 'error--visible' : ''}`}>
                 {errors.phone}
               </p>
-
             </div>
 
 
+            {/* CÓDIGO POSTAL */}
             <div className="register__field">
-
               <label htmlFor="postalCode">
                 Código postal <span>(opcional)</span>
               </label>
@@ -306,12 +320,11 @@ function Register() {
               <p className={`error ${errors.zipCode ? 'error--visible' : ''}`}>
                 {errors.zipCode}
               </p>
-
             </div>
 
 
+            {/* FOTO DE PERFIL */}
             <div className="register__field">
-
               <label htmlFor="image">
                 Foto de perfil <span>(opcional)</span>
               </label>
@@ -325,12 +338,10 @@ function Register() {
                   accept="image/*"
                   className="register__file-input"
                   onChange={(event) => {
-
                     setFormData({
                       ...formData,
                       image: event.target.files?.[0] ?? null
                     });
-
                   }}
                 />
 
@@ -340,19 +351,15 @@ function Register() {
                 >
 
                   {formData.image ? (
-
                     <img
                       src={URL.createObjectURL(formData.image)}
                       alt="Vista previa de la foto de perfil"
                       className="register__file-preview"
                     />
-
                   ) : (
-
                     <span className="register__file-text">
                       Ningún archivo seleccionado
                     </span>
-
                   )}
 
                   <span className="register__file-button">
@@ -366,22 +373,24 @@ function Register() {
               <p className={`error ${errors.image ? 'error--visible' : ''}`}>
                 {errors.image}
               </p>
-
             </div>
 
           </div>
 
+
+          {/* BOTÓN */}
           <button
             type="submit"
             className="register__button"
+            disabled={loading}
           >
-            CREAR CUENTA
+            {loading ? <Spinner /> : 'CREAR CUENTA'}
           </button>
+          {success && ( <p className="register__success"> ¡Cuenta creada correctamente! </p> )}
 
         </form>
 
       </section>
-
     </main>
   );
 }
