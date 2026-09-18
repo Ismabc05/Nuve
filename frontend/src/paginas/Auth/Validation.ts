@@ -8,6 +8,7 @@ export const validateRegisterForm = (formData: {
     zipCode: string;
 }) => {
 
+    // Objeto que almacena errores, usando una clave y un mensaje de texto para cada error.
     const errors: Record<string, string> = {};
 
     if (!formData.email.trim()) {

@@ -85,7 +85,6 @@ function Login() {
             return;
         }
 
-        // PRIMER PASO: comprobar si existe el email
         setError('')
         setLoading(true)
 

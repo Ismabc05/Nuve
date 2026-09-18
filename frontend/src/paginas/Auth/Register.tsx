@@ -325,11 +325,13 @@ function Register() {
                   id="image"
                   type="file"
                   name="image"
+                  // solo acepta imagenes
                   accept="image/*"
                   className="register__file-input"
                   onChange={(event) => {
                     setFormData({
                       ...formData,
+                      // Guarda la imagen seleccionada o null si no existe
                       image: event.target.files?.[0] ?? null
                     });
                   }}
@@ -342,6 +344,8 @@ function Register() {
 
                   {formData.image ? (
                     <img
+                          // Crea una URL temporal para poder mostrar el archivo seleccionado
+                          // sin necesidad de subirlo todavía a Cloudinary
                       src={URL.createObjectURL(formData.image)}
                       alt="Vista previa de la foto de perfil"
                       className="register__file-preview"
