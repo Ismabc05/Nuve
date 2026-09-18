@@ -33,6 +33,7 @@ function Register() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [ serverError, setServerError ] = useState('')
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate()
@@ -55,19 +56,16 @@ function Register() {
     }
 
     try {
+      setServerError('')
       setLoading(true);
 
-      // Subir imagen a Cloudinary
       let imageUrl = '';
 
       if (formData.image) {
         imageUrl = await uploadImage(formData.image);
-
-        console.log('URL de la imagen:', imageUrl);
       }
 
-      // Crear usuario
-      const newUser = await createUser({
+       await createUser({
         email: formData.email,
         password: formData.password,
         name: formData.name,
@@ -77,7 +75,6 @@ function Register() {
         image: imageUrl
       });
 
-      console.log('Usuario creado:', newUser);
       setSuccess(true);
       setTimeout(() => {
         navigate('/login');
@@ -85,6 +82,7 @@ function Register() {
 
     } catch (error) {
       console.error('Error al crear el usuario:', error);
+      setServerError('Ha ocurrido un error al crear la cuenta. Inténtalo de nuevo.')
 
     } finally {
       setLoading(false);
@@ -113,7 +111,6 @@ function Register() {
 
           <div className="register__fields">
 
-            {/* EMAIL */}
             <div className="register__field">
               <label htmlFor="email">
                 Email <span>*</span>
@@ -136,8 +133,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* CONTRASEÑA */}
             <div className="register__field">
               <label htmlFor="password">
                 Contraseña <span>*</span>
@@ -180,8 +175,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* CONFIRMAR CONTRASEÑA */}
             <div className="register__field">
               <label htmlFor="confirmPassword">
                 Confirmar contraseña <span>*</span>
@@ -226,8 +219,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* NOMBRE */}
             <div className="register__field">
               <label htmlFor="name">
                 Nombre <span>*</span>
@@ -250,8 +241,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* APELLIDOS */}
             <div className="register__field">
               <label htmlFor="lastName">
                 Apellidos <span>(opcional)</span>
@@ -274,8 +263,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* TELÉFONO */}
             <div className="register__field">
               <label htmlFor="phone">
                 Teléfono <span>(opcional)</span>
@@ -298,8 +285,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* CÓDIGO POSTAL */}
             <div className="register__field">
               <label htmlFor="postalCode">
                 Código postal <span>(opcional)</span>
@@ -322,8 +307,6 @@ function Register() {
               </p>
             </div>
 
-
-            {/* FOTO DE PERFIL */}
             <div className="register__field">
               <label htmlFor="image">
                 Foto de perfil <span>(opcional)</span>
@@ -377,8 +360,6 @@ function Register() {
 
           </div>
 
-
-          {/* BOTÓN */}
           <button
             type="submit"
             className="register__button"
@@ -387,6 +368,7 @@ function Register() {
             {loading ? <Spinner /> : 'CREAR CUENTA'}
           </button>
           {success && ( <p className="register__success"> ¡Cuenta creada correctamente! </p> )}
+          {serverError && ( <p className="error error--visible">{serverError}</p>)}
 
         </form>
 
