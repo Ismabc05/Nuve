@@ -21,11 +21,7 @@ function Login() {
 
         if (!email) {
 
-            setError('Debes introducir un correo electrónico')
-
-            setTimeout(() => {
-                setError('');
-            }, 3000);
+            setError('Debes introducir un correo electrónico');
 
             return;
         }
@@ -33,10 +29,6 @@ function Login() {
         if (!email.includes('@')) {
 
             setError('Debes introducir un correo electrónico válido')
-
-            setTimeout(() => {
-                setError('');
-            }, 3000);
 
             return;
         }
@@ -47,10 +39,6 @@ function Login() {
             if (!password) {
 
                 setError('Debes introducir tu contraseña')
-
-                setTimeout(() => {
-                    setError('');
-                }, 3000);
 
                 return;
             }
@@ -69,10 +57,6 @@ function Login() {
                 } catch {
 
                     setError('El correo o la contraseña no son correctos')
-
-                    setTimeout(() => {
-                        setError('');
-                    }, 3000);
 
                 } finally {
 
@@ -132,8 +116,7 @@ function Login() {
                     <form className="login__form" onSubmit={handleContinue}>
 
                         <label htmlFor="email">EMAIL:</label>
-                        <input id="email" type="text" value={email} name="email" onChange={(event) => {
-                            event.preventDefault()
+                        <input id="email" type="text" value={email} name="email"  onFocus={() => setError('')} onChange={(event) => {
                             setEmail(event.target.value)
                         }} />
                         
@@ -150,8 +133,8 @@ function Login() {
                                     type={showPasswordIcon ? "text" : "password"}
                                     value={password}
                                     name="password"
+                                     onFocus={() => setError('')}
                                     onChange={(event) => {
-                                        event.preventDefault();
                                         setPasword(event.target.value);
                                     } } />
                                 <button

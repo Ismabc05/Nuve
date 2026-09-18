@@ -48,10 +48,6 @@ function Register() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
-      setTimeout(() => {
-        setErrors({});
-      }, 3000);
-
       return;
     }
 
@@ -78,7 +74,7 @@ function Register() {
       setSuccess(true);
       setTimeout(() => {
         navigate('/login');
-      }, 3000);
+      }, 5000);
 
     } catch (error) {
       console.error('Error al crear el usuario:', error);
@@ -87,6 +83,13 @@ function Register() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const clearFieldError = (field: string) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: ''
+    }));
   };
 
   return (
@@ -120,7 +123,9 @@ function Register() {
                 id="email"
                 type="email"
                 name="email"
+                disabled={loading}
                 value={formData.email}
+                onFocus={() => clearFieldError('email')}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -146,6 +151,8 @@ function Register() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
+                  onFocus={() => clearFieldError('password')}
+                  disabled={loading}
                   onChange={(event) => {
                     setFormData({
                       ...formData,
@@ -158,6 +165,7 @@ function Register() {
                   type="button"
                   className="register__password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
                   aria-label={
                     showPassword
                       ? 'Ocultar contraseña'
@@ -189,6 +197,8 @@ function Register() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
                   value={formData.confirmPassword}
+                  onFocus={() => clearFieldError('confirmPassword')}
+                  disabled={loading}
                   onChange={(event) => {
                     setFormData({
                       ...formData,
@@ -200,6 +210,7 @@ function Register() {
                 <button
                   type="button"
                   className="register__password-toggle"
+                  disabled={loading}
                   onClick={() =>
                     setConfirmShowPassword(!showConfirmPassword)
                   }
@@ -231,6 +242,8 @@ function Register() {
                 id="name"
                 type="text"
                 name="name"
+                disabled={loading}
+                onFocus={() => clearFieldError('name')}
                 value={formData.name}
                 onChange={(event) => {
                   setFormData({
@@ -254,6 +267,8 @@ function Register() {
                 id="lastName"
                 type="text"
                 name="lastName"
+                disabled={loading}
+                onFocus={() => clearFieldError('lastName')}
                 value={formData.lastName}
                 onChange={(event) => {
                   setFormData({
@@ -277,6 +292,8 @@ function Register() {
                 id="phone"
                 type="tel"
                 name="phone"
+                disabled={loading}
+                onFocus={() => clearFieldError('phone')}
                 value={formData.phone}
                 onChange={(event) => {
                   setFormData({
@@ -292,7 +309,7 @@ function Register() {
             </div>
 
             <div className="register__field">
-              <label htmlFor="postalCode">
+              <label htmlFor="zipCode">
                 Código postal <span>(opcional)</span>
               </label>
 
@@ -300,7 +317,9 @@ function Register() {
                 id="zipCode"
                 type="text"
                 name="zipCode"
+                disabled={loading}
                 value={formData.zipCode}
+                onFocus={() => clearFieldError('zipCode')}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -325,6 +344,8 @@ function Register() {
                   id="image"
                   type="file"
                   name="image"
+                  disabled={loading}
+                  onFocus={() => clearFieldError('image')}
                   // solo acepta imagenes
                   accept="image/*"
                   className="register__file-input"
@@ -378,15 +399,18 @@ function Register() {
           >
             {loading ? <Spinner /> : 'CREAR CUENTA'}
           </button>
-          {success && ( 
-            <div className="register__notification register__notification--success"> 
-              <span className="register__notification-icon">✓</span> 
-              <div> 
-                <strong>¡Cuenta creada!</strong> 
-                <p>Tu cuenta se ha creado correctamente.</p> 
-              </div> 
-            </div> 
+          {success && (
+            <div className="register__notification register__notification--success">
+              <div className="register__notification-content">
+                <span className="register__notification-icon">✓</span>
+
+                <div className="register__notification-text">
+                  <p>Tu cuenta se ha creado correctamente. Redirigiendo al inicio de sesión...</p>
+                </div>
+              </div>
+            </div>
           )}
+
           {serverError && ( <p className="error error--visible">{serverError}</p>)}
 
         </form>
