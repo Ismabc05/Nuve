@@ -78,7 +78,7 @@ function Register() {
       setSuccess(true);
       setTimeout(() => {
         navigate('/login');
-      }, 2000);
+      }, 3000);
 
     } catch (error) {
       console.error('Error al crear el usuario:', error);
@@ -120,6 +120,7 @@ function Register() {
                 id="email"
                 type="email"
                 name="email"
+                value={formData.email}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -144,6 +145,7 @@ function Register() {
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
+                  value={formData.password}
                   onChange={(event) => {
                     setFormData({
                       ...formData,
@@ -186,6 +188,7 @@ function Register() {
                   id="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
+                  value={formData.confirmPassword}
                   onChange={(event) => {
                     setFormData({
                       ...formData,
@@ -228,6 +231,7 @@ function Register() {
                 id="name"
                 type="text"
                 name="name"
+                value={formData.name}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -250,6 +254,7 @@ function Register() {
                 id="lastName"
                 type="text"
                 name="lastName"
+                value={formData.lastName}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -272,6 +277,7 @@ function Register() {
                 id="phone"
                 type="tel"
                 name="phone"
+                value={formData.phone}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -291,9 +297,10 @@ function Register() {
               </label>
 
               <input
-                id="postalCode"
+                id="zipCode"
                 type="text"
-                name="postalCode"
+                name="zipCode"
+                value={formData.zipCode}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -367,7 +374,15 @@ function Register() {
           >
             {loading ? <Spinner /> : 'CREAR CUENTA'}
           </button>
-          {success && ( <p className="register__success"> ¡Cuenta creada correctamente! </p> )}
+          {success && ( 
+            <div className="register__notification register__notification--success"> 
+              <span className="register__notification-icon">✓</span> 
+              <div> 
+                <strong>¡Cuenta creada!</strong> 
+                <p>Tu cuenta se ha creado correctamente.</p> 
+              </div> 
+            </div> 
+          )}
           {serverError && ( <p className="error error--visible">{serverError}</p>)}
 
         </form>

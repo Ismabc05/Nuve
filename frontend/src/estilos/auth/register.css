@@ -249,12 +249,70 @@
   border-radius: 50%;
 }
 
-.register__success {
-  margin-top: 1rem;
-  text-align: center;
-  color: #2e7d32;
-  font-size: 0.9rem;
+.register__notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  min-width: 300px;
+  padding: 1rem 1.25rem;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+  z-index: 1000;
+
+  animation: registerNotificationIn 0.3s ease-out;
 }
+
+.register__notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: #2e7d32;
+  color: white;
+
+  font-weight: bold;
+}
+
+.register__notification strong {
+  display: block;
+  margin-bottom: 0.2rem;
+
+  font-size: 0.95rem;
+}
+
+.register__notification p {
+  margin: 0;
+
+  font-size: 0.85rem;
+  color: #666;
+}
+
+@keyframes registerNotificationIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 
 @media (max-width: 600px) {
   .register {
@@ -297,5 +355,13 @@
     padding: 0 12px;
     font-size: 16px;
     white-space: nowrap;
+  }
+
+  .register__notification {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+
+    min-width: auto;
   }
 }
