@@ -33,7 +33,6 @@ function Login() {
             return;
         }
 
-        // SEGUNDO PASO: ya tenemos la contraseña visible
         if (showPassword) {
 
             if (!password) {
@@ -52,7 +51,9 @@ function Login() {
 
                     const data = await login(email, password)
 
-                    console.log('LOGIN CORRECTO:', data)
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    navigate('/products')
 
                 } catch {
 
