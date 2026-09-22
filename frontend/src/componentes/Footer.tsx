@@ -21,8 +21,8 @@ function Footer() {
           <div className="footer__social-links">
             <a
               href="https://www.linkedin.com/in/ismaelbedmar/"
-              target="_blank"
-              rel="noreferrer"
+              target="_blank" // se abre el enlace en una pestaña nueva
+              rel="noreferrer" // el navegador no sabe de que página vengo
               aria-label="Linkedin"
             >
               <FaLinkedin />
