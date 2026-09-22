@@ -25,6 +25,7 @@ export class ProductsService {
         brand: true,
         categories: true,
         variants: true,
+        images: true,
       },
     });
   }
