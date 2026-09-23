@@ -90,6 +90,7 @@ const sizes = ['S', 'M', 'L', 'XL'];
  */
 const productImages: Record<string, string[]> = {
   'Camiseta Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790170562/2507699-01-L-removebg-preview.png',
     // 'https://res.cloudinary.com/TU_CLOUD/image/upload/....jpg',
     // 'https://res.cloudinary.com/TU_CLOUD/image/upload/....jpg',
   ],
