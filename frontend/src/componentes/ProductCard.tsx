@@ -1,55 +1,28 @@
 import { useState } from 'react';
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
+import type { Product } from '../types/product';
+
 import '../estilos/product/product-card.css';
 
-type Product = {
-  name: string;
-  price: number;
-  image: string;
-  colors: {
-    name: string;
-    value: string;
-  }[];
+type ProductCardProps = {
+  product: Product;
 };
 
-function ProductCard() {
+function ProductCard({ product }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const product: Product = {
-    name: 'Camiseta Oversize',
-    price: 39.99,
-    image: '/camiseta.jpg',
-    colors: [
-      {
-        name: 'Negro',
-        value: '#111111',
-      },
-      {
-        name: 'Beige',
-        value: '#E8E4DC',
-      },
-      {
-        name: 'Gris',
-        value: '#B8B8B8',
-      },
-      {
-        name: 'Marrón claro',
-        value: '#C9A58D',
-      },
-    ],
-  };
 
   const formattedPrice = new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
-  }).format(product.price);
+  }).format(Number(product.price));
 
   return (
     <article className="product-card">
       <div className="product-card__image-container">
+
         <img
           className="product-card__image"
-          src={product.image}
+          src={product.images[0]?.url}
           alt={product.name}
         />
 
@@ -77,16 +50,16 @@ function ProductCard() {
 
         <div
           className="product-card__colors"
-          aria-label={`Colores disponibles: ${product.colors
-            .map((color) => color.name)
+          aria-label={`Colores disponibles: ${product.variants
+            .map((variant) => variant.color)
             .join(', ')}`}
         >
-          {product.colors.map((color) => (
+          {product.variants.map((variant) => (
             <span
-              key={color.name}
+              key={variant.id}
               className="product-card__color"
-              style={{ backgroundColor: color.value }}
-              title={color.name}
+              style={{ backgroundColor: variant.colorHex }}
+              title={variant.color}
               aria-hidden="true"
             />
           ))}
@@ -99,9 +72,11 @@ function ProductCard() {
           <LuShoppingBag size={16} />
           <span>Ver producto</span>
         </button>
+
       </div>
 
       <div className="product-card__info">
+
         <div className="product-card__details">
           <h2 className="product-card__name">
             {product.name}
@@ -113,11 +88,12 @@ function ProductCard() {
         </div>
 
         <p className="product-card__available-colors">
-          {product.colors.length}{' '}
-          {product.colors.length === 1
+          {product.variants.length}{' '}
+          {product.variants.length === 1
             ? 'color disponible'
             : 'colores disponibles'}
         </p>
+
       </div>
     </article>
   );
