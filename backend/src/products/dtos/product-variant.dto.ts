@@ -20,6 +20,14 @@ export class CreateProductVariantDto {
   color!: string;
 
   @ApiProperty({
+    example: '#138788',
+    description: 'codigo del producto',
+  })
+  @IsNotEmpty()
+  @IsString()
+  colorHex!: string;
+
+  @ApiProperty({
     example: 10,
     description: 'stock del producto',
   })

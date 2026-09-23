@@ -26,6 +26,9 @@ export class ProductVariant {
   @Column({ type: 'varchar', length: 50 })
   color!: string;
 
+  @Column({ type: 'varchar', length: 7 })
+  colorHex!: string;
+
   @Column({ type: 'int' })
   stock!: number;
 
