@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
+
 import type { Product } from '../types/product';
 
 import '../estilos/product/product-card.css';
@@ -16,10 +18,16 @@ function ProductCard({ product }: ProductCardProps) {
     currency: 'EUR',
   }).format(Number(product.price));
 
+  // Obtener únicamente un color por cada color disponible
+  const uniqueColors = Array.from(
+    new Map(
+      product.variants.map((variant) => [variant.color, variant])
+    ).values()
+  );
+
   return (
     <article className="product-card">
       <div className="product-card__image-container">
-
         <img
           className="product-card__image"
           src={product.images[0]?.url}
@@ -50,13 +58,13 @@ function ProductCard({ product }: ProductCardProps) {
 
         <div
           className="product-card__colors"
-          aria-label={`Colores disponibles: ${product.variants
+          aria-label={`Colores disponibles: ${uniqueColors
             .map((variant) => variant.color)
             .join(', ')}`}
         >
-          {product.variants.map((variant) => (
+          {uniqueColors.map((variant) => (
             <span
-              key={variant.id}
+              key={variant.color}
               className="product-card__color"
               style={{ backgroundColor: variant.colorHex }}
               title={variant.color}
@@ -72,11 +80,9 @@ function ProductCard({ product }: ProductCardProps) {
           <LuShoppingBag size={16} />
           <span>Ver producto</span>
         </button>
-
       </div>
 
       <div className="product-card__info">
-
         <div className="product-card__details">
           <h2 className="product-card__name">
             {product.name}
@@ -88,12 +94,11 @@ function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <p className="product-card__available-colors">
-          {product.variants.length}{' '}
-          {product.variants.length === 1
+          {uniqueColors.length}{' '}
+          {uniqueColors.length === 1
             ? 'color disponible'
             : 'colores disponibles'}
         </p>
-
       </div>
     </article>
   );
