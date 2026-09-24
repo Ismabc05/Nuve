@@ -119,6 +119,7 @@ function Login() {
                         <label htmlFor="email">EMAIL:</label>
                         <input id="email" type="text" value={email} name="email"  onFocus={() => setError('')} onChange={(event) => {
                             setEmail(event.target.value)
+                            // OnFocus sirve para cuando estemos dentro del input, el error se elimine
                         }} />
                         
                         {!showPassword && (
@@ -131,10 +132,10 @@ function Login() {
                             <><label htmlFor="password">CONTRASEÑA:</label><div className="login__password-wrapper">
                                 <input
                                     id="password"
-                                    type={showPasswordIcon ? "text" : "password"}
+                                    type={showPasswordIcon ? "text" : "password"} // Si es true me vas a mostrar la contraseña y si es false no me la muestra
                                     value={password}
                                     name="password"
-                                     onFocus={() => setError('')}
+                                    onFocus={() => setError('')}
                                     onChange={(event) => {
                                         setPasword(event.target.value);
                                     } } />

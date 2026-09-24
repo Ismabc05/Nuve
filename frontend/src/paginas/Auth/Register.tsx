@@ -13,6 +13,7 @@ function Register() {
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
 
   const [formData, setFormData] = useState<{
+    //Tipado de datos del formulario
     email: string;
     password: string;
     confirmPassword: string;
@@ -109,7 +110,7 @@ function Register() {
         <form
           className="register__form"
           onSubmit={handleSubmit}
-          noValidate
+          noValidate // No hace las validacion predeterminadas
         >
 
           <div className="register__fields">
