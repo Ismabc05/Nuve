@@ -71,39 +71,36 @@ const colors = [
 
 const sizes = ['S', 'M', 'L', 'XL'];
 
-/**
- * ============================================================
- * IMÁGENES DE CLOUDINARY
- * ============================================================
- *
- * Pon aquí las URLs de tus imágenes.
- *
- * Ejemplo:
- *
- * 'Camiseta Essential': [
- *   'https://res.cloudinary.com/xxxxx/image/upload/v123/xxx.jpg',
- *   'https://res.cloudinary.com/xxxxx/image/upload/v123/yyy.jpg',
- * ],
- *
- * Si un producto no tiene imágenes todavía, simplemente
- * déjalo fuera de este objeto.
- */
 const productImages: Record<string, string[]> = {
   'Camiseta Essential': [
-    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790170562/2507699-01-L-removebg-preview.png',
-    // 'https://res.cloudinary.com/TU_CLOUD/image/upload/....jpg',
-    // 'https://res.cloudinary.com/TU_CLOUD/image/upload/....jpg',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790241898/Black-Essentials-T-Shirt-1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242034/32245964_62108060_1000-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790241970/esential_azul-removebg-preview.png',
   ],
 
   'Camiseta Oversize Street': [
-    // 'https://res.cloudinary.com/TU_CLOUD/image/upload/....jpg',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242083/camiseta-blanca-resertricted-world-tour-oversized-tee-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242146/p26-regards-r14000navy-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242218/11-removebg-preview.png',
   ],
 
-  'Camiseta Logo Classic': [],
+  'Camiseta Logo Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242318/1d3460d43ff64952981289395b1acdac-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242362/74832b3fc77f44259a31feba84401242-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242442/DM0DM22545_C63_alternate4-removebg-preview.png',
+  ],
 
-  'Camiseta Premium Cotton': [],
+  'Camiseta Premium Cotton': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242609/CMU12H132J-F-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242640/images-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242666/00773172485-o1-removebg-preview.png',
+  ],
 
-  'Camiseta Basic Fit': [],
+  'Camiseta Basic Fit': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790242919/21c979eae0a3406ab1a2ab9f9168ce23-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243000/elykt00117_element_f_grh_frt1-removebg-preview_1.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243037/out-fit-camiseta-basica-de-algodon-removebg-preview.png',
+  ],
 
   'Sudadera Essential': [],
 
