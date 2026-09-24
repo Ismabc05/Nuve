@@ -102,11 +102,23 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243037/out-fit-camiseta-basica-de-algodon-removebg-preview.png',
   ],
 
-  'Sudadera Essential': [],
+  'Sudadera Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243789/i6609230635-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243798/MECHOO50113V_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790243755/0bb9469b-1f80-4243-ab96-8d1e9bbd3a0a-removebg-preview.png',
+  ],
 
-  'Sudadera Oversize': [],
+  'Sudadera Oversize': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244107/05054314832-A6-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244074/17031278410b8c4a3469ff0e857be237fb847b4861_thumbnail_750x999-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244131/195824-2698-PECROPED_BROWNICE-WEB3-1-removebg-preview.png',
+  ],
 
-  'Sudadera Classic Hoodie': [],
+  'Sudadera Classic Hoodie': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244364/sudadera-con-capucha-the-north-face-evolution-simple-dome-regular-oscuro_887058a55e974d2cb6e76719ecd47fef_3369653601-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244399/MRSS24-602_sivasdescalzo-Martine_Rose-CLASSIC_HOODIE-1710423954-5-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244430/OFF-WHITECLASSICHOODIE_44C00_1-removebg-preview.png',
+  ],
 
   'Sudadera Urban Logo': [],
 
