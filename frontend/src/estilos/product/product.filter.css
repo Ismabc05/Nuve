@@ -1,0 +1,128 @@
+.product-filters {
+  width: 100%;
+  padding-right: 28px;
+  box-sizing: border-box;
+}
+
+
+/* SECCIÓN */
+
+.product-filters__section {
+  padding: 0 0 26px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid #e8e8e5;
+}
+
+
+/* HEADER */
+
+
+.product-filters__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+  padding: 0;
+
+  border: none;
+  background: none;
+
+  cursor: pointer;
+  text-align: left;
+}
+
+.product-filters__header h2 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+
+  color: #222;
+}
+
+.product-filters__header svg {
+  width: 17px;
+  height: 17px;
+
+  color: #555;
+}
+
+
+/* OPCIONES */
+
+.product-filters__options {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+
+/* CHECKBOX / RADIO */
+
+.product-filters__option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+  color: #555;
+
+  transition: color 0.25s ease;
+}
+
+.product-filters__option:hover {
+  color: #111;
+}
+
+
+/* INPUT */
+
+.product-filters__option input {
+  appearance: none;
+
+  width: 18px;
+  height: 18px;
+
+  margin: 0;
+
+  border: 1px solid #cfcfcb;
+  border-radius: 3px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* CHECKBOX SELECCIONADO */
+
+.product-filters__option input:checked {
+  background: #222;
+  border-color: #222;
+
+  box-shadow: inset 0 0 0 4px #fff;
+}
+
+
+/* RADIO */
+
+.product-filters__option input[type="radio"] {
+  border-radius: 50%;
+}
+
+.product-filters__option input[type="radio"]:checked {
+  background: #222;
+  border-color: #222;
+
+  box-shadow: inset 0 0 0 5px #fff;
+}

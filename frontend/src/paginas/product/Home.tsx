@@ -7,6 +7,7 @@ import '../../estilos/product/product.css';
 import type { Product } from '../../types/product';
 
 import { products } from '../../services/product.service';
+import ProductFilters from '../../componentes/ProductFilters';
 
 function Home() {
   const [productList, setProductList] = useState<Product[]>([]);
@@ -26,13 +27,16 @@ function Home() {
       <Navbar />
 
       <main className="product">
-        <div className="product__grid">
-          {productList.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
-          ))}
+        <div className='product__content'>
+          <ProductFilters/>
+          <div className="product__grid">
+            {productList.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </div>
         </div>
       </main>
 

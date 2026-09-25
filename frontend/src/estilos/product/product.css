@@ -2,54 +2,83 @@
   width: 100%;
 }
 
-.product__grid {
+/* CONTENIDO GENERAL */
+.product__content {
   width: 96%;
   max-width: 1600px;
-
   margin: 40px auto 60px;
 
   display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 32px;
 
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(240px, 1fr)
-  );
+  align-items: start;
+}
+
+/* FILTROS */
+.product-filters {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  align-self: start;
+}
+
+/* GRID DE PRODUCTOS */
+.product__grid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 45px 24px;
 }
 
+/* PRODUCT CARD */
 .product__grid .product-card {
   width: 100%;
   max-width: 300px;
-
   justify-self: center;
 }
 
-@media (max-width: 900px) {
-  .product__grid {
+/* TABLET */
+@media (max-width: 1100px) {
+  .product__content {
     width: 94%;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 24px;
+  }
 
-    grid-template-columns: repeat(
-      3,
-      minmax(0, 1fr)
-    );
+  .product-filters {
+    top: 90px;
+  }
 
+  .product__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 35px 18px;
   }
 }
 
-@media (max-width: 600px) {
-  .product__grid {
-    width: 90%;
-
-    grid-template-columns: repeat(
-      2,
-      minmax(0, 1fr)
-    );
-
-    gap: 35px 12px;
-
+/* TABLET PEQUEÑA / MÓVIL */
+@media (max-width: 800px) {
+  .product__content {
+    width: 94%;
+    display: block;
     margin-top: 30px;
+  }
+
+  /*
+    En móvil quitamos el sticky porque
+    los filtros aparecen encima de los productos.
+  */
+  .product-filters {
+    position: static;
+    margin-bottom: 35px;
+    padding-right: 0;
+  }
+
+  .product__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px 14px;
   }
 
   .product__grid .product-card {
@@ -57,10 +86,13 @@
   }
 }
 
+/* MÓVIL PEQUEÑO */
 @media (max-width: 380px) {
-  .product__grid {
+  .product__content {
     width: 92%;
+  }
 
+  .product__grid {
     grid-template-columns: 1fr;
   }
 

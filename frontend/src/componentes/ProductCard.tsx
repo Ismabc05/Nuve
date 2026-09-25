@@ -6,13 +6,15 @@ import type { Product } from '../types/product';
 
 import '../estilos/product/product-card.css';
 
+// Tipo productcard que es una objeto de tipo product
 type ProductCardProps = {
   product: Product;
 };
 
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) { // recibe un objeto product de tipo Productcard
   const [isFavorite, setIsFavorite] = useState(false);
 
+  // Funcion ue formatea el precio a euros.
   const formattedPrice = new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
