@@ -28,3 +28,15 @@ export type Product = {
     name: string;
   };
 };
+
+export type Category = {
+  id: number;
+  name: string
+  products: Product[]
+}
+
+export type Brand = {
+  id: number;
+  name: string
+  products: Product[]
+}

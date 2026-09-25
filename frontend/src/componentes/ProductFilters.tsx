@@ -1,15 +1,29 @@
 import { useState } from 'react';
+
 import {
   LuChevronUp,
   LuChevronDown
 } from 'react-icons/lu';
 
+import type { Category, Brand } from '../types/product';
+
 import '../estilos/product/product.filter.css';
 
 type Section = 'categorias' | 'marcas' | 'precio';
 
-function ProductFilters() {
-  const [openSections, setOpenSections] = useState<Record<Section, boolean>>({
+type ProductFiltersProps = {
+  categories: Category[];
+  brands: Brand[];
+};
+
+function ProductFilters({
+  categories,
+  brands
+}: ProductFiltersProps) {
+
+  const [openSections, setOpenSections] = useState<
+    Record<Section, boolean>
+  >({
     categorias: true,
     marcas: true,
     precio: true
@@ -27,6 +41,7 @@ function ProductFilters() {
 
       {/* CATEGORÍAS */}
       <section className="product-filters__section">
+
         <button
           type="button"
           className="product-filters__header"
@@ -43,41 +58,25 @@ function ProductFilters() {
 
         {openSections.categorias && (
           <div className="product-filters__options">
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Camisetas</span>
-            </label>
 
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Pantalones</span>
-            </label>
+            {categories.map((category) => (
+              <label
+                key={category.id}
+                className="product-filters__option"
+              >
+                <input type="checkbox" />
+                <span>{category.name}</span>
+              </label>
+            ))}
 
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Sudaderas</span>
-            </label>
-
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Chaquetas</span>
-            </label>
-
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Zapatillas</span>
-            </label>
-
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Accesorios</span>
-            </label>
           </div>
         )}
+
       </section>
 
       {/* MARCAS */}
       <section className="product-filters__section">
+
         <button
           type="button"
           className="product-filters__header"
@@ -94,36 +93,25 @@ function ProductFilters() {
 
         {openSections.marcas && (
           <div className="product-filters__options">
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Nike</span>
-            </label>
 
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Adidas</span>
-            </label>
+            {brands.map((brand) => (
+              <label
+                key={brand.id}
+                className="product-filters__option"
+              >
+                <input type="checkbox" />
+                <span>{brand.name}</span>
+              </label>
+            ))}
 
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Puma</span>
-            </label>
-
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>New Balance</span>
-            </label>
-
-            <label className="product-filters__option">
-              <input type="checkbox" />
-              <span>Vans</span>
-            </label>
           </div>
         )}
+
       </section>
 
       {/* PRECIO */}
       <section className="product-filters__section">
+
         <button
           type="button"
           className="product-filters__header"
@@ -140,6 +128,7 @@ function ProductFilters() {
 
         {openSections.precio && (
           <div className="product-filters__options">
+
             <label className="product-filters__option">
               <input
                 type="radio"
@@ -155,8 +144,10 @@ function ProductFilters() {
               />
               <span>Menor a mayor</span>
             </label>
+
           </div>
         )}
+
       </section>
 
     </aside>
