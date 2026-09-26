@@ -144,21 +144,53 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790415186/pantalon-gris-asimetrical-pocket-cargo-jogger-removebg-preview.png',
   ],
 
-  'Pantalón Jogger Basic': [],
+  'Pantalón Jogger Basic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420081/PA0097UOAY14_BG1_006-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420107/pantalon-de-jogging-rojo-aza41_25_hd2-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420124/pantalon-gris-basic-jogger-removebg-preview.png',
+  ],
 
-  'Pantalón Jogger Premium': [],
+  'Pantalón Jogger Premium': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420365/pantalon-jogger-gris-perla-de-microfibra-360-gary-s-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420384/pantalon-jogger-deportivo-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790420405/9468-329-7-removebg-preview.png',
+  ],
 
-  'Pantalón Relaxed Fit': [],
+  'Pantalón Relaxed Fit': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422095/62PH602900293_06_1x1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422124/00127011706-o1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422134/1785844372_b7d7a1ce66713f480abea366cafefb80-removebg-preview.png',
+  ],
 
-  'Vaquero Straight Classic': [],
+  'Vaquero Straight Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422402/5ae910f8d8ae4634a9ca8d66d605b008-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422386/pantalones-pierna-ancha-ribcage-lightweight_123-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422359/www-001051111100353-s0-removebg-preview.png',
+  ],
 
-  'Vaquero Slim Fit': [],
+  'Vaquero Slim Fit': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422629/front-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422648/P_260023899FM-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790422600/jackjones-jjieddiejjbasicsq735noos-azul-removebg-preview.png',
+  ],
 
-  'Vaquero Relaxed': [],
+  'Vaquero Relaxed': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423091/9f48f0ab726e45c5b75a2c2c7782a456-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423111/vaquero-relaxed-fit-azul-bfm18_2_hd1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423067/1-removebg-preview_1.png',
+  ],
 
-  'Vaquero Dark Denim': [],
+  'Vaquero Dark Denim': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423330/NP0A4G5RD1K-HERO-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423402/d7a0814d2abe4ae79a77b2d9a740d61f-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423410/8ba6a93fd11f46df9402d65018108924-removebg-preview.png',
+  ],
 
-  'Vaquero Vintage Wash': [],
+  'Vaquero Vintage Wash': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423617/MECJEA49942V_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423592/4b64d9a192a94dd8afe44b877179dd0e-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423578/MECJEA60009V_1-removebg-preview.png',
+  ],
 
   'Chaqueta Denim Classic': [],
 
