@@ -120,13 +120,29 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790244430/OFF-WHITECLASSICHOODIE_44C00_1-removebg-preview.png',
   ],
 
-  'Sudadera Urban Logo': [],
+  'Sudadera Urban Logo': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790412100/SU1087_55_2_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790412076/urban-white-hoodie_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790412046/CAPUCHA_NEGRA_LOGO_FRONTAL_URBANSOUL1-removebg-preview.png',
+  ],
 
-  'Sudadera Premium': [],
+  'Sudadera Premium': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414710/white-premium-embroidered-hoodie_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414754/elPulpo_Videos_web_19-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414730/sudadera-de-felpa-ligera-azul-evb29_1_hd4-removebg-preview.png',
+  ],
 
-  'Pantalón Cargo Essential': [],
+  'Pantalón Cargo Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414915/UM0UM03911_XNN_alternate4-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414933/picture-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414951/6088c1641ccd4b3484b48e9ab9c9f838-removebg-preview.png',
+  ],
 
-  'Pantalón Cargo Street': [],
+  'Pantalón Cargo Street': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790414951/6088c1641ccd4b3484b48e9ab9c9f838-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790415164/fc487399b86b4b7f8d10601d8d076706-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790415186/pantalon-gris-asimetrical-pocket-cargo-jogger-removebg-preview.png',
+  ],
 
   'Pantalón Jogger Basic': [],
 
