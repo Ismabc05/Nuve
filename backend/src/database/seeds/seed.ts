@@ -192,17 +192,41 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790423578/MECJEA60009V_1-removebg-preview.png',
   ],
 
-  'Chaqueta Denim Classic': [],
+  'Chaqueta Denim Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499412/4d7ea7fa44fc43bc80f41b4e4ddca897-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499435/8998d4bd43b940339752738d0ed4863d-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499459/d9aa11308bdd4211be81541f30251f8f-removebg-preview.png',
+  ],
 
-  'Chaqueta Bomber Urban': [],
+  'Chaqueta Bomber Urban': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499630/0be3fd5eb6974680bcec18d766378cfc-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499665/08ab7b970e9742ec8921eccf84e30b23-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790499659/7925fff54fb04fe0b01ecdd0ce8c77cc-removebg-preview.png',
+  ],
 
-  'Chaqueta Varsity': [],
+  'Chaqueta Varsity': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790519705/a70fdef02b69444fadea87ebaeda7cee-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790519732/03456ca965f7456cb8586b663cc269b6-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790519748/7fe065214c074f068342b130f2a2d13d-removebg-preview.png',
+  ],
 
-  'Chaqueta Lightweight': [],
+  'Chaqueta Lightweight': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520060/chaqueta-de-running-under-armour-launch-lightweight-hombre-blanco-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520102/9a741e6c135945879c4c9c30bd6ac1f6-removebg-preview_1.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520122/8b614dd27a10425aa8a2f6255fbd771e-removebg-preview.png',
+  ],
 
-  'Chaqueta Essential': [],
+  'Chaqueta Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520444/KS0KS00584_C1G_alternate8-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520406/chaqueta-abullonada-aislante-essentials-highloft-adidas_7a85741b8c414edfa15d8bb50f8fe7ec_1507188631-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520436/KB0KB09852_BDS_alternate4-removebg-preview.png',
+  ],
 
-  'Zapatillas Runner Classic': [],
+  'Zapatillas Runner Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520661/4f73dd51b7ef7080606397ac0810660f-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520678/9f251f0794ae4142851bbe8c360acbb6-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790520683/32e6fc52313f422e9c53d790a22c743e-removebg-preview.png',
+  ],
 
   'Zapatillas Urban Pro': [],
 
