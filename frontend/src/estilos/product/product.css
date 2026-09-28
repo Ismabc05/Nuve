@@ -34,7 +34,8 @@
 }
 
 /* PRODUCT CARD */
-.product__grid .product-card {
+.product__grid .product-card,
+.product__grid .product-skeleton {
   width: 100%;
   max-width: 300px;
   justify-self: center;
@@ -81,7 +82,8 @@
     gap: 35px 14px;
   }
 
-  .product__grid .product-card {
+  .product__grid .product-card,
+  .product__grid .product-skeleton {
     max-width: none;
   }
 }
