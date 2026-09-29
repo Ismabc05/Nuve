@@ -40,3 +40,5 @@ export type Brand = {
   name: string
   products: Product[]
 }
+
+export type PriceOrder = 'asc' | 'desc' | '';

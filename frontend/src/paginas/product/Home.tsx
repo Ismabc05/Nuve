@@ -11,7 +11,8 @@ import '../../estilos/product/product.css';
 import {
   type Category,
   type Brand,
-  type Product
+  type Product,
+  type PriceOrder
 } from '../../types/product';
 
 import {
@@ -26,8 +27,26 @@ function Home() {
   const [brandList, setBrandList] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [ valorInput, setValorInput ] = useState("");
+  const [priceOrder, setPriceOrder] = useState<PriceOrder>("");
 
-  const filteredProducts = productList.filter((product) => product.name.toLowerCase().includes(valorInput.toLowerCase()))
+  const filteredProducts = [...productList]
+    .filter((product) =>
+      product.name.toLowerCase().includes(valorInput.toLowerCase())
+    )
+    .sort((a, b) => {
+      const priceA = Number(a.price);
+      const priceB = Number(b.price);
+
+      if (priceOrder === 'asc') {
+        return priceA - priceB;
+      }
+
+      if (priceOrder === 'desc') {
+        return priceB - priceA;
+      }
+
+      return 0;
+    });
 
   useEffect(() => {
 
@@ -70,6 +89,8 @@ function Home() {
           <ProductFilters
             categories={categoryList}
             brands={brandList}
+            priceOrder={priceOrder}
+            setPriceOrder={setPriceOrder} 
           />
 
           <div className="product__grid">

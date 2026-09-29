@@ -5,7 +5,7 @@ import {
   LuChevronDown
 } from 'react-icons/lu';
 
-import type { Category, Brand } from '../types/product';
+import type { Category, Brand, PriceOrder } from '../types/product';
 
 import '../estilos/product/product.filter.css';
 
@@ -14,11 +14,15 @@ type Section = 'categorias' | 'marcas' | 'precio';
 type ProductFiltersProps = {
   categories: Category[];
   brands: Brand[];
+  priceOrder: PriceOrder
+  setPriceOrder : (value: PriceOrder) => void;
 };
 
 function ProductFilters({
   categories,
-  brands
+  brands,
+  priceOrder,
+  setPriceOrder
 }: ProductFiltersProps) {
 
   const [openSections, setOpenSections] = useState<
@@ -133,6 +137,10 @@ function ProductFilters({
               <input
                 type="radio"
                 name="price-order"
+                value="desc"
+                checked={priceOrder=== "desc"}
+                onChange={(event) => {setPriceOrder(event.target.value as PriceOrder)}}
+
               />
               <span>Mayor a menor</span>
             </label>
@@ -141,6 +149,9 @@ function ProductFilters({
               <input
                 type="radio"
                 name="price-order"
+                value="asc"
+                checked={priceOrder=== "asc"}
+                onChange={(event) => {setPriceOrder(event.target.value as PriceOrder)}}
               />
               <span>Menor a mayor</span>
             </label>
