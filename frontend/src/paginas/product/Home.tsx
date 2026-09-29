@@ -29,6 +29,7 @@ function Home() {
   const [ valorInput, setValorInput ] = useState("");
   const [priceOrder, setPriceOrder] = useState<PriceOrder>("");
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
 
 const filteredProducts = [...productList]
   .filter((product) =>
@@ -43,6 +44,10 @@ const filteredProducts = [...productList]
         (category) => category.id === categoryId
       )
     )
+  )
+  .filter((product) =>
+  selectedBrands.length === 0 || 
+  selectedBrands.some((brandId) => brandId === product.brand.id)
   )
   .sort((a, b) => {
     const priceA = Number(a.price);
@@ -103,6 +108,8 @@ const filteredProducts = [...productList]
             setPriceOrder={setPriceOrder}
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
           />
 
           <div className="product__grid">

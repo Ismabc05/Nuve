@@ -19,6 +19,8 @@ type ProductFiltersProps = {
   setPriceOrder : (value: PriceOrder) => void;
   selectedCategories: number[];
   setSelectedCategories: Dispatch<SetStateAction<number[]>>;
+  selectedBrands: number[];
+  setSelectedBrands: Dispatch<SetStateAction<number[]>>;
 };
 
 function ProductFilters({
@@ -27,7 +29,9 @@ function ProductFilters({
   priceOrder,
   setPriceOrder,
   selectedCategories,
-  setSelectedCategories
+  setSelectedCategories,
+  selectedBrands,
+  setSelectedBrands
 }: ProductFiltersProps) {
 
   const [openSections, setOpenSections] = useState<
@@ -120,7 +124,18 @@ function ProductFilters({
                 key={brand.id}
                 className="product-filters__option"
               >
-                <input type="checkbox" />
+                <input 
+                type="checkbox"
+                checked={selectedBrands.includes(brand.id)}
+                  onChange={(event) => {
+                  if (event.target.checked) {
+                    setSelectedBrands((prev) => [...prev, brand.id])
+                  } else {
+                    setSelectedBrands((prev) =>
+                    prev.filter((id) => id !== brand.id)
+                    );
+                  }}}
+                />
                 <span>{brand.name}</span>
               </label>
             ))}
