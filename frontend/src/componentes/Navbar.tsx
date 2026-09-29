@@ -7,7 +7,13 @@ import {
 
 import '../estilos/navbar/navbar.css';
 
-function Navbar() {
+type NavbarProps = {
+  valorInput: string;
+  setValorInput: (valor: string) => void;
+};
+
+function Navbar({valorInput, setValorInput}: NavbarProps) {
+
   return (
     <header className="navbar">
       <div className="navbar__container">
@@ -23,6 +29,8 @@ function Navbar() {
             type="text"
             placeholder="¿Qué estás buscando?"
             aria-label="Buscar productos"
+            value={valorInput}
+            onChange={(event) => {setValorInput(event.target.value)}}
           />
         </div>
 

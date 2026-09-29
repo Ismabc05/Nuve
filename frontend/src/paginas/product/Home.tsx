@@ -24,8 +24,10 @@ function Home() {
   const [productList, setProductList] = useState<Product[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
-
   const [loading, setLoading] = useState(true);
+  const [ valorInput, setValorInput ] = useState("");
+
+  const filteredProducts = productList.filter((product) => product.name.toLowerCase().includes(valorInput.toLowerCase()))
 
   useEffect(() => {
 
@@ -59,7 +61,7 @@ function Home() {
 
   return (
     <>
-      <Navbar />
+      <Navbar valorInput={valorInput} setValorInput={setValorInput} />
 
       <main className="product">
 
@@ -79,14 +81,16 @@ function Home() {
               ))
 
             ) : (
-
-              productList.map((product) => (
+              filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                 />
               ))
-
+            ) : (
+              <p className='product__no-results'>No se encontraron productos.</p>
+            )
             )}
 
           </div>

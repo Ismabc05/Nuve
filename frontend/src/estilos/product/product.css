@@ -88,6 +88,15 @@
   }
 }
 
+.product__no-results {
+  grid-column: 1 / -1;
+  width: 100%;
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
 /* MÓVIL PEQUEÑO */
 @media (max-width: 380px) {
   .product__content {
