@@ -367,26 +367,26 @@ const productsData = [
   },
   {
     name: 'Pantalón Cargo Street',
-    type: 'Pantalónes',
+    type: 'Pantalones',
     price: 54.99,
     description: 'Pantalón cargo inspirado en la moda urbana contemporánea.',
   },
   {
     name: 'Pantalón Jogger Basic',
-    type: 'Pantalónes',
+    type: 'Pantalones',
     price: 39.99,
     description: 'Jogger cómodo con cintura elástica y tejido suave.',
   },
   {
     name: 'Pantalón Jogger Premium',
-    type: 'Pantalónes',
+    type: 'Pantalones',
     price: 49.99,
     description:
       'Jogger premium diseñado para ofrecer comodidad durante todo el día.',
   },
   {
     name: 'Pantalón Relaxed Fit',
-    type: 'Pantalónes',
+    type: 'Pantalones',
     price: 44.99,
     description: 'Pantalón de corte relajado con diseño moderno.',
   },
