@@ -6,6 +6,7 @@ import {
 } from 'react-icons/lu';
 
 import type { Category, Brand, PriceOrder } from '../types/product';
+import type { Dispatch, SetStateAction } from 'react';
 
 import '../estilos/product/product.filter.css';
 
@@ -14,15 +15,19 @@ type Section = 'categorias' | 'marcas' | 'precio';
 type ProductFiltersProps = {
   categories: Category[];
   brands: Brand[];
-  priceOrder: PriceOrder
+  priceOrder: PriceOrder;
   setPriceOrder : (value: PriceOrder) => void;
+  selectedCategories: number[];
+  setSelectedCategories: Dispatch<SetStateAction<number[]>>;
 };
 
 function ProductFilters({
   categories,
   brands,
   priceOrder,
-  setPriceOrder
+  setPriceOrder,
+  selectedCategories,
+  setSelectedCategories
 }: ProductFiltersProps) {
 
   const [openSections, setOpenSections] = useState<
@@ -68,7 +73,19 @@ function ProductFilters({
                 key={category.id}
                 className="product-filters__option"
               >
-                <input type="checkbox" />
+                <input 
+                  type="checkbox" 
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={(event) => {
+                  if (event.target.checked) {
+                    setSelectedCategories((prev) => [...prev, category.id])
+                  } else {
+                    setSelectedCategories((prev) =>
+                    prev.filter((id) => id !== category.id)
+                    );
+                  }
+                }}
+                />
                 <span>{category.name}</span>
               </label>
             ))}

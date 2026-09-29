@@ -28,26 +28,36 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [ valorInput, setValorInput ] = useState("");
   const [priceOrder, setPriceOrder] = useState<PriceOrder>("");
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  const filteredProducts = [...productList]
-    .filter((product) =>
-      product.name.toLowerCase().includes(valorInput.toLowerCase())
+const filteredProducts = [...productList]
+  .filter((product) =>
+    product.name
+      .toLowerCase()
+      .includes(valorInput.toLowerCase())
+  )
+  .filter((product) =>
+    selectedCategories.length === 0 ||
+    selectedCategories.some((categoryId) =>
+      product.categories.some(
+        (category) => category.id === categoryId
+      )
     )
-    .sort((a, b) => {
-      const priceA = Number(a.price);
-      const priceB = Number(b.price);
+  )
+  .sort((a, b) => {
+    const priceA = Number(a.price);
+    const priceB = Number(b.price);
 
-      if (priceOrder === 'asc') {
-        return priceA - priceB;
-      }
+    if (priceOrder === 'asc') {
+      return priceA - priceB;
+    }
 
-      if (priceOrder === 'desc') {
-        return priceB - priceA;
-      }
+    if (priceOrder === 'desc') {
+      return priceB - priceA;
+    }
 
-      return 0;
-    });
-
+    return 0;
+});
   useEffect(() => {
 
     products()
@@ -90,7 +100,9 @@ function Home() {
             categories={categoryList}
             brands={brandList}
             priceOrder={priceOrder}
-            setPriceOrder={setPriceOrder} 
+            setPriceOrder={setPriceOrder}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
           />
 
           <div className="product__grid">
