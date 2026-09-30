@@ -13,10 +13,12 @@ import { addFavorite, deleteFavorite } from '../services/product.service';
 type ProductCardProps = {
   product: Product;
   setNotification: Dispatch<SetStateAction<string>>;
+  setFavoriteCount: Dispatch<SetStateAction<number>>;
+  favoriteProductIds: number[];
 };
 
-function ProductCard({ product, setNotification }: ProductCardProps) { // recibe un objeto product de tipo Productcard
-  const [isFavorite, setIsFavorite] = useState(false);
+function ProductCard({ product, setNotification, setFavoriteCount, favoriteProductIds }: ProductCardProps) { // recibe un objeto product de tipo Productcard
+  const [isFavorite, setIsFavorite] = useState(favoriteProductIds.includes(product.id));
   const navigate = useNavigate()
 
   // Funcion ue formatea el precio a euros.
@@ -59,10 +61,12 @@ function ProductCard({ product, setNotification }: ProductCardProps) { // recibe
                 if (isFavorite) {
                   await deleteFavorite(userId, product.id);
                   setIsFavorite(false);
+                  setFavoriteCount((prev) => Math.max(0, prev - 1));
                   setNotification('Producto eliminado de favoritos');
                 } else {
                   await addFavorite(userId, product.id);
                   setIsFavorite(true);
+                  setFavoriteCount((prev) => prev + 1);
                   setNotification('Producto añadido a favoritos');
                 }
               } catch (error) {

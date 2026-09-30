@@ -10,9 +10,10 @@ import '../estilos/navbar/navbar.css';
 type NavbarProps = {
   valorInput: string;
   setValorInput: (valor: string) => void;
+  favoriteCount: number;
 };
 
-function Navbar({valorInput, setValorInput}: NavbarProps) {
+function Navbar({valorInput, setValorInput, favoriteCount}: NavbarProps) {
 
   return (
     <header className="navbar">
@@ -42,6 +43,11 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             aria-label="Favoritos"
           >
             <LuHeart />
+            {favoriteCount > 0 && (
+              <span className="navbar__favorite-count">
+                {favoriteCount}
+              </span>
+            )}
           </button>
 
           <button

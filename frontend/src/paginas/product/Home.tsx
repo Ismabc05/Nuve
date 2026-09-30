@@ -20,6 +20,8 @@ import {
   brands
 } from '../../services/product.service';
 
+import { getFavorite } from '../../services/product.service';
+
 function Home() {
   const [productList, setProductList] = useState<Product[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -30,6 +32,8 @@ function Home() {
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
   const [notification, setNotification] = useState('');
+  const [favoriteCount, setFavoriteCount] = useState(0);
+  const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
 
   const filteredProducts = [...productList]
     .filter((product) =>
@@ -95,12 +99,36 @@ function Home() {
       });
   }, []);
 
+  useEffect(() => {
+  const loadFavorites = async () => {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const userId = user?.id;
+
+    if (!userId) return;
+
+    try {
+      const favorites = await getFavorite(userId);
+
+      setFavoriteCount(favorites.length);
+
+      setFavoriteProductIds(
+        favorites.map((product: Product) => product.id)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadFavorites();
+}, []);
+
 
   return (
     <>
       <Navbar
         valorInput={valorInput}
         setValorInput={setValorInput}
+        favoriteCount={favoriteCount}
       />
       {notification && (
         <div
@@ -160,6 +188,8 @@ function Home() {
                       key={product.id}
                       product={product}
                       setNotification={setNotification}
+                      setFavoriteCount={setFavoriteCount}
+                      favoriteProductIds={favoriteProductIds}
                     />
                   ))
                 ) : (
