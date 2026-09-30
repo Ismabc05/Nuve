@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
 
@@ -13,6 +14,7 @@ type ProductCardProps = {
 
 function ProductCard({ product }: ProductCardProps) { // recibe un objeto product de tipo Productcard
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate()
 
   // Funcion ue formatea el precio a euros.
   const formattedPrice = new Intl.NumberFormat('es-ES', {
@@ -42,7 +44,9 @@ function ProductCard({ product }: ProductCardProps) { // recibe un objeto produc
             className={`product-card__favorite ${
               isFavorite ? 'product-card__favorite--active' : ''
             }`}
-            onClick={() => setIsFavorite((favorite) => !favorite)}
+            onClick={(event) => {
+               event.stopPropagation();
+              setIsFavorite((favorite) => !favorite)}}
             aria-label={
               isFavorite
                 ? 'Quitar de favoritos'
@@ -78,6 +82,7 @@ function ProductCard({ product }: ProductCardProps) { // recibe un objeto produc
         <button
           type="button"
           className="product-card__quick-action"
+          onClick={() => navigate(`/products/${product.id}`)}
         >
           <LuShoppingBag size={16} />
           <span>Ver producto</span>
