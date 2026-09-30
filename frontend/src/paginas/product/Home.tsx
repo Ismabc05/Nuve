@@ -5,7 +5,6 @@ import Navbar from '../../componentes/Navbar';
 import ProductCard from '../../componentes/ProductCard';
 import ProductFilters from '../../componentes/ProductFilters';
 import ProductSkeleton from '../../componentes/ProductSkeleton';
-
 import '../../estilos/product/product.css';
 
 import {
@@ -26,45 +25,48 @@ function Home() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
-  const [ valorInput, setValorInput ] = useState("");
+  const [valorInput, setValorInput] = useState("");
   const [priceOrder, setPriceOrder] = useState<PriceOrder>("");
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
+  const [notification, setNotification] = useState('');
 
-const filteredProducts = [...productList]
-  .filter((product) =>
-    product.name
-      .toLowerCase()
-      .includes(valorInput.toLowerCase())
-  )
-  .filter((product) =>
-    selectedCategories.length === 0 ||
-    selectedCategories.some((categoryId) =>
-      product.categories.some(
-        (category) => category.id === categoryId
+  const filteredProducts = [...productList]
+    .filter((product) =>
+      product.name
+        .toLowerCase()
+        .includes(valorInput.toLowerCase())
+    )
+    .filter((product) =>
+      selectedCategories.length === 0 ||
+      selectedCategories.some((categoryId) =>
+        product.categories.some(
+          (category) => category.id === categoryId
+        )
       )
     )
-  )
-  .filter((product) =>
-  selectedBrands.length === 0 || 
-  selectedBrands.some((brandId) => brandId === product.brand.id)
-  )
-  .sort((a, b) => {
-    const priceA = Number(a.price);
-    const priceB = Number(b.price);
+    .filter((product) =>
+      selectedBrands.length === 0 ||
+      selectedBrands.some(
+        (brandId) => brandId === product.brand.id
+      )
+    )
+    .sort((a, b) => {
+      const priceA = Number(a.price);
+      const priceB = Number(b.price);
 
-    if (priceOrder === 'asc') {
-      return priceA - priceB;
-    }
+      if (priceOrder === 'asc') {
+        return priceA - priceB;
+      }
 
-    if (priceOrder === 'desc') {
-      return priceB - priceA;
-    }
+      if (priceOrder === 'desc') {
+        return priceB - priceA;
+      }
 
-    return 0;
-});
+      return 0;
+    });
+
   useEffect(() => {
-
     products()
       .then((data) => {
         setProductList(data);
@@ -93,12 +95,44 @@ const filteredProducts = [...productList]
       });
   }, []);
 
+
   return (
     <>
-      <Navbar valorInput={valorInput} setValorInput={setValorInput} />
+      <Navbar
+        valorInput={valorInput}
+        setValorInput={setValorInput}
+      />
+      {notification && (
+        <div
+          className="notification"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span className="notification__indicator" />
+
+          <div className="notification__content">
+            <span className="notification__label">
+              Actualización
+            </span>
+
+          <p className="notification__message">
+            {notification}
+          </p>
+        </div>
+
+    <button
+      type="button"
+      className="notification__close"
+      onClick={() => setNotification('')}
+      aria-label="Cerrar notificación"
+    >
+      ×
+    </button>
+  </div>
+)}
 
       <main className="product">
-
         <div className="product__content">
 
           <ProductFilters
@@ -112,31 +146,33 @@ const filteredProducts = [...productList]
             setSelectedBrands={setSelectedBrands}
           />
 
-          <div className="product__grid">
+          <div className="product__results">
 
-            {loading ? (
-
-              Array.from({ length: 6 }).map((_, index) => (
-                <ProductSkeleton key={index} />
-              ))
-
-            ) : (
-              filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
-              ))
-            ) : (
-              <p className='product__no-results'>No se encontraron productos.</p>
-            )
-            )}
+            <div className="product__grid">
+              {loading ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                  <ProductSkeleton key={index} />
+                ))
+              ) : (
+                filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      setNotification={setNotification}
+                    />
+                  ))
+                ) : (
+                  <p className="product__no-results">
+                    No se encontraron productos.
+                  </p>
+                )
+              )}
+            </div>
 
           </div>
 
         </div>
-
       </main>
 
       <Footer />

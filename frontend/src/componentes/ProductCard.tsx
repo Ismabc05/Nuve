@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { Dispatch, SetStateAction } from 'react';
 
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
 
 import type { Product } from '../types/product';
 
 import '../estilos/product/product-card.css';
+import { addFavorite, deleteFavorite } from '../services/product.service';
 
 // Tipo productcard que es una objeto de tipo product
 type ProductCardProps = {
   product: Product;
+  setNotification: Dispatch<SetStateAction<string>>;
 };
 
-function ProductCard({ product }: ProductCardProps) { // recibe un objeto product de tipo Productcard
+function ProductCard({ product, setNotification }: ProductCardProps) { // recibe un objeto product de tipo Productcard
   const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate()
 
@@ -44,9 +47,28 @@ function ProductCard({ product }: ProductCardProps) { // recibe un objeto produc
             className={`product-card__favorite ${
               isFavorite ? 'product-card__favorite--active' : ''
             }`}
-            onClick={(event) => {
-               event.stopPropagation();
-              setIsFavorite((favorite) => !favorite)}}
+            onClick={async (event) => {
+              event.stopPropagation();
+              const user = JSON.parse(localStorage.getItem('user') || 'null');
+              const userId = user?.id;
+              if (!userId) {
+                setNotification('Error al añadir el producto a favoritos');
+                return;
+              }
+              try {
+                if (isFavorite) {
+                  await deleteFavorite(userId, product.id);
+                  setIsFavorite(false);
+                  setNotification('Producto eliminado de favoritos');
+                } else {
+                  await addFavorite(userId, product.id);
+                  setIsFavorite(true);
+                  setNotification('Producto añadido a favoritos');
+                }
+              } catch (error) {
+                console.error(error);
+              }
+            }}
             aria-label={
               isFavorite
                 ? 'Quitar de favoritos'
