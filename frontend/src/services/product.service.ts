@@ -21,6 +21,25 @@ export const products = async (): Promise<Product[]> => {
   return await response.json();
 };
 
+export const productById = async (id: number): Promise<Product> => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  const response = await fetch(`${API_URL}/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al buscar el producto');
+  }
+
+  return await response.json();
+};
+
 export const categories = async (): Promise<Category[]> => {
   const token = localStorage.getItem('token');
 

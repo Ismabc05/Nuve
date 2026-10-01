@@ -1,0 +1,487 @@
+.product-detail {
+  width: 100%;
+  padding: 40px 0 100px;
+}
+
+/* =========================
+   BOTÓN VOLVER
+========================= */
+
+.product-detail__back-container {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto 25px;
+}
+
+.product-detail__back {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.product-detail__back:hover {
+  color: #171717;
+}
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
+.product-detail__container {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(380px, 0.8fr);
+
+  gap: 70px;
+  align-items: start;
+}
+
+/* =========================
+   GALERÍA
+========================= */
+
+.product-detail__gallery {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.product-detail__thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-detail__thumbnail {
+  width: 80px;
+  height: 100px;
+  padding: 0;
+
+  border: 1px solid transparent;
+  background: #f5f5f5;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  transition:
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.product-detail__thumbnail:hover {
+  border-color: #999;
+}
+
+.product-detail__thumbnail--active {
+  border-color: #171717;
+}
+
+.product-detail__thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-detail__image-section {
+  width: 100%;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.product-detail__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* =========================
+   INFORMACIÓN
+========================= */
+
+.product-detail__info {
+  padding-top: 10px;
+}
+
+.product-detail__brand {
+  margin: 0 0 10px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+
+  color: #777;
+}
+
+.product-detail__name {
+  margin: 0;
+
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 500;
+
+  color: #171717;
+}
+
+.product-detail__price {
+  margin: 20px 0 0;
+
+  font-size: 21px;
+  font-weight: 600;
+
+  color: #171717;
+}
+
+.product-detail__separator {
+  width: 100%;
+  height: 1px;
+
+  margin: 28px 0;
+
+  background: #e5e5e5;
+}
+
+.product-detail__description {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  color: #666;
+}
+
+/* =========================
+   SECCIONES
+========================= */
+
+.product-detail__section {
+  margin-top: 32px;
+}
+
+.product-detail__section h2 {
+  margin: 0 0 14px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+
+  color: #171717;
+}
+
+/* =========================
+   COLORES
+========================= */
+
+.product-detail__colors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-detail__color {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.product-detail__color:hover {
+  transform: scale(1.08);
+  border-color: #171717;
+}
+
+/* =========================
+   TALLAS
+========================= */
+
+.product-detail__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-detail__size {
+  min-width: 52px;
+  height: 42px;
+  padding: 0 14px;
+
+  background: #ffffff;
+  border: 1px solid #d5d5d5;
+
+  font-size: 13px;
+  color: #171717;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.product-detail__size:hover {
+  border-color: #171717;
+}
+
+.product-detail__size:focus {
+  outline: none;
+
+  background: #171717;
+  color: #ffffff;
+  border-color: #171717;
+}
+
+/* =========================
+   AÑADIR AL CARRITO
+========================= */
+
+.product-detail__add {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 36px;
+
+  border: none;
+  background: #171717;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.product-detail__add:hover {
+  background: #303030;
+}
+
+.product-detail__add:active {
+  transform: scale(0.99);
+}
+
+/* =========================
+   RESEÑAS
+========================= */
+
+.product-detail__reviews {
+  width: 92%;
+  max-width: 1200px;
+
+  margin: 80px auto 0;
+  padding-top: 40px;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.product-detail__reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+}
+
+.product-detail__reviews-header h2 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 500;
+
+  color: #171717;
+}
+
+.product-detail__reviews-header span {
+  font-size: 13px;
+  color: #777;
+}
+
+.product-detail__reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.product-detail__review {
+  padding-bottom: 24px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.product-detail__review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.product-detail__review-rating {
+  font-size: 14px;
+  letter-spacing: 2px;
+
+  color: #171717;
+}
+
+.product-detail__review-user {
+  font-size: 12px;
+  color: #888;
+}
+
+.product-detail__review-comment {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  color: #555;
+}
+
+.product-detail__no-reviews {
+  padding: 35px 20px;
+
+  text-align: center;
+
+  background: #fafafa;
+}
+
+.product-detail__no-reviews p {
+  margin: 0;
+
+  font-size: 14px;
+  color: #888;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .product-detail {
+    padding: 40px 0 70px;
+  }
+
+  .product-detail__container {
+    width: 94%;
+
+    grid-template-columns: 1fr;
+
+    gap: 40px;
+  }
+
+  .product-detail__gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .product-detail__thumbnails {
+    order: 2;
+
+    flex-direction: row;
+
+    overflow-x: auto;
+
+    padding-bottom: 5px;
+  }
+
+  .product-detail__thumbnail {
+    flex: 0 0 70px;
+
+    width: 70px;
+    height: 85px;
+  }
+
+  .product-detail__info {
+    padding-top: 0;
+  }
+
+  .product-detail__reviews {
+    width: 94%;
+  }
+
+  .product-detail__back-container {
+    width: 94%;
+  }
+}
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 500px) {
+  .product-detail {
+    padding: 25px 0 50px;
+  }
+
+  .product-detail__container {
+    width: 92%;
+    gap: 30px;
+  }
+
+  .product-detail__back-container {
+    width: 92%;
+    margin-bottom: 20px;
+  }
+
+  .product-detail__name {
+    font-size: 26px;
+  }
+
+  .product-detail__price {
+    font-size: 19px;
+  }
+
+  .product-detail__image {
+    aspect-ratio: 1 / 1.2;
+  }
+
+  .product-detail__thumbnail {
+    flex: 0 0 65px;
+
+    width: 65px;
+    height: 78px;
+  }
+
+  .product-detail__reviews {
+    width: 92%;
+    margin-top: 60px;
+    padding-top: 30px;
+  }
+
+  .product-detail__reviews-header h2 {
+    font-size: 18px;
+  }
+
+  .product-detail__review-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}

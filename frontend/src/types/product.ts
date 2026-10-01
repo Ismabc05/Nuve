@@ -41,4 +41,11 @@ export type Brand = {
   products: Product[]
 }
 
+export type Review = {
+  id: number;
+  rating: number;
+  userId: number;
+  comment: string;
+};
+
 export type PriceOrder = 'asc' | 'desc' | '';
