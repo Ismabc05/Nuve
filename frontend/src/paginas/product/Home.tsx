@@ -5,35 +5,41 @@ import Navbar from '../../componentes/Navbar';
 import ProductCard from '../../componentes/ProductCard';
 import ProductFilters from '../../componentes/ProductFilters';
 import ProductSkeleton from '../../componentes/ProductSkeleton';
+
 import '../../estilos/product/product.css';
 
 import {
   type Category,
   type Brand,
   type Product,
-  type PriceOrder
+  type PriceOrder,
 } from '../../types/product';
 
 import {
   products,
   categories,
-  brands
+  brands,
+  getFavorite,
+  getOrders,
 } from '../../services/product.service';
-
-import { getFavorite } from '../../services/product.service';
 
 function Home() {
   const [productList, setProductList] = useState<Product[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
-  const [valorInput, setValorInput] = useState("");
-  const [priceOrder, setPriceOrder] = useState<PriceOrder>("");
+
+  const [valorInput, setValorInput] = useState('');
+  const [priceOrder, setPriceOrder] = useState<PriceOrder>('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
+
   const [notification, setNotification] = useState('');
+
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
+
+  const [cartCount, setCartCount] = useState(0);
 
   const filteredProducts = [...productList]
     .filter((product) =>
@@ -70,6 +76,7 @@ function Home() {
       return 0;
     });
 
+  // Cargar productos, categorías y marcas
   useEffect(() => {
     products()
       .then((data) => {
@@ -99,29 +106,73 @@ function Home() {
       });
   }, []);
 
+  // Cargar favoritos
   useEffect(() => {
-  const loadFavorites = async () => {
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
-    const userId = user?.id;
-
-    if (!userId) return;
-
-    try {
-      const favorites = await getFavorite(userId);
-
-      setFavoriteCount(favorites.length);
-
-      setFavoriteProductIds(
-        favorites.map((product: Product) => product.id)
+    const loadFavorites = async () => {
+      const user = JSON.parse(
+        localStorage.getItem('user') || 'null'
       );
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  loadFavorites();
-}, []);
+      const userId = user?.id;
 
+      if (!userId) return;
+
+      try {
+        const favorites = await getFavorite(userId);
+
+        setFavoriteCount(favorites.length);
+
+        setFavoriteProductIds(
+          favorites.map((product: Product) => product.id)
+        );
+      } catch (error) {
+        console.error('Error al cargar favoritos:', error);
+      }
+    };
+
+    loadFavorites();
+  }, []);
+
+  // Cargar carrito
+  useEffect(() => {
+    const loadCart = async () => {
+      const user = JSON.parse(
+        localStorage.getItem('user') || 'null'
+      );
+
+      const userId = user?.id;
+
+      if (!userId) return;
+
+      try {
+        const orders = await getOrders(userId);
+
+        const activeOrder = orders.find(
+          (order: {
+            status: string;
+            items: { quantity: number }[];
+          }) => order.status === 'active'
+        );
+
+        if (!activeOrder) {
+          setCartCount(0);
+          return;
+        }
+
+        const totalItems = activeOrder.items.reduce(
+          (total: number, item: { quantity: number }) =>
+            total + item.quantity,
+          0
+        );
+
+        setCartCount(totalItems);
+      } catch (error) {
+        console.error('Error al cargar el carrito:', error);
+      }
+    };
+
+    loadCart();
+  }, []);
 
   return (
     <>
@@ -129,7 +180,9 @@ function Home() {
         valorInput={valorInput}
         setValorInput={setValorInput}
         favoriteCount={favoriteCount}
+        cartCount={cartCount}
       />
+
       {notification && (
         <div
           className="notification"
@@ -144,21 +197,21 @@ function Home() {
               Actualización
             </span>
 
-          <p className="notification__message">
-            {notification}
-          </p>
-        </div>
+            <p className="notification__message">
+              {notification}
+            </p>
+          </div>
 
-    <button
-      type="button"
-      className="notification__close"
-      onClick={() => setNotification('')}
-      aria-label="Cerrar notificación"
-    >
-      ×
-    </button>
-  </div>
-)}
+          <button
+            type="button"
+            className="notification__close"
+            onClick={() => setNotification('')}
+            aria-label="Cerrar notificación"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       <main className="product">
         <div className="product__content">
@@ -175,31 +228,29 @@ function Home() {
           />
 
           <div className="product__results">
-
             <div className="product__grid">
+
               {loading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <ProductSkeleton key={index} />
                 ))
+              ) : filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    setNotification={setNotification}
+                    setFavoriteCount={setFavoriteCount}
+                    favoriteProductIds={favoriteProductIds}
+                  />
+                ))
               ) : (
-                filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      setNotification={setNotification}
-                      setFavoriteCount={setFavoriteCount}
-                      favoriteProductIds={favoriteProductIds}
-                    />
-                  ))
-                ) : (
-                  <p className="product__no-results">
-                    No se encontraron productos.
-                  </p>
-                )
+                <p className="product__no-results">
+                  No se encontraron productos.
+                </p>
               )}
-            </div>
 
+            </div>
           </div>
 
         </div>

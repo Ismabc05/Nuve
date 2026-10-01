@@ -48,4 +48,10 @@ export type Review = {
   comment: string;
 };
 
+export type CreateOrderItem = {
+  quantity: number;
+  productvariantId: number;
+  orderId: number;
+};
+
 export type PriceOrder = 'asc' | 'desc' | '';

@@ -11,9 +11,10 @@ type NavbarProps = {
   valorInput: string;
   setValorInput: (valor: string) => void;
   favoriteCount: number;
+  cartCount: number;
 };
 
-function Navbar({valorInput, setValorInput, favoriteCount}: NavbarProps) {
+function Navbar({valorInput, setValorInput, favoriteCount, cartCount}: NavbarProps) {
 
   return (
     <header className="navbar">
@@ -56,6 +57,11 @@ function Navbar({valorInput, setValorInput, favoriteCount}: NavbarProps) {
             aria-label="Carrito"
           >
             <LuShoppingCart />
+            {cartCount > 0 && (
+              <span className="navbar__cart-count">
+              {cartCount}
+              </span>
+            )}
           </button>
 
           <button

@@ -1,5 +1,53 @@
-import type { Brand, Category, Product } from '../types/product'
+import type { Brand, Category, CreateOrderItem, Product } from '../types/product'
 const API_URL = 'https://nuve-miru.onrender.com';
+
+export const addOrderItem = async (
+  orderItem: CreateOrderItem
+) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  const response = await fetch(`${API_URL}/order-item`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(orderItem),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al añadir el producto al carrito');
+  }
+
+  return await response.json();
+};
+
+export const getOrders = async (userId: number) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  const response = await fetch(
+    `${API_URL}/orders?userId=${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al obtener los pedidos');
+  }
+
+  return await response.json();
+};
 
 export const products = async (): Promise<Product[]> => {
   const token = localStorage.getItem('token');

@@ -23,6 +23,8 @@ import {
   productById,
   addFavorite,
   deleteFavorite,
+  addOrderItem,
+  getOrders,
 } from '../../services/product.service';
 
 import '../../estilos/product/product-detail.css';
@@ -38,6 +40,8 @@ function Product() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cartCount, setCartCount] = useState(0);
+  const [notification, setNotification] = useState('');
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -105,6 +109,58 @@ useEffect(() => {
 
   loadFavorites();
 }, [id]);
+
+useEffect(() => {
+  const loadCart = async () => {
+    const user = JSON.parse(
+      localStorage.getItem('user') || 'null'
+    );
+
+    const userId = user?.id;
+
+    if (!userId) {
+      return;
+    }
+
+    try {
+      const orders = await getOrders(userId);
+
+      const activeOrder = orders.find(
+        (order: {
+          status: string;
+          items: { quantity: number }[];
+        }) => order.status === 'active'
+      );
+
+      if (!activeOrder) {
+        setCartCount(0);
+        return;
+      }
+
+      const totalItems = activeOrder.items.reduce(
+        (total: number, item: { quantity: number }) =>
+          total + item.quantity,
+        0
+      );
+
+      setCartCount(totalItems);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadCart();
+}, []);
+
+useEffect(() => {
+  if (!notification) return;
+
+  const timer = setTimeout(() => {
+    setNotification('');
+  }, 4500);
+
+  return () => clearTimeout(timer);
+}, [notification]);
 
   const uniqueColors = useMemo(() => {
     if (!product) {
@@ -182,18 +238,56 @@ useEffect(() => {
   }
 };
 
-  const handleAddToCart = () => {
-    if (!selectedColor || !selectedSize) {
+const handleAddToCart = async () => {
+  if (!product || !selectedColor || !selectedSize) {
+    return;
+  }
+
+  try {
+    const storedUser = localStorage.getItem('user');
+
+    if (!storedUser) {
+      console.error('No hay usuario autenticado');
       return;
     }
 
-    console.log({
-      productId: product?.id,
-      color: selectedColor,
-      size: selectedSize,
+    const user = JSON.parse(storedUser);
+    const userId = user.id;
+
+    const orders = await getOrders(userId);
+
+    const activeOrder = orders.find(
+      (order: { status: string }) =>
+        order.status === 'active'
+    );
+
+    if (!activeOrder) {
+      console.error('No existe una orden activa');
+      return;
+    }
+
+    const selectedVariant = product.variants.find(
+      (variant) =>
+        variant.color === selectedColor &&
+        variant.size === selectedSize
+    );
+
+    if (!selectedVariant) {
+      console.error('No se ha encontrado la variante seleccionada');
+      return;
+    }
+
+    await addOrderItem({
       quantity,
+      productvariantId: selectedVariant.id,
+      orderId: activeOrder.id,
     });
-  };
+    setCartCount((currentCount) => currentCount + quantity);
+    setNotification('Producto añadido al carrito');
+  } catch (error) {
+    console.error('Error al añadir al carrito:', error);
+  }
+};
 
   if (loading) {
     return (
@@ -202,6 +296,7 @@ useEffect(() => {
           valorInput={valorInput}
           setValorInput={setValorInput}
           favoriteCount={favoriteCount}
+          cartCount={cartCount}
         />
 
         <main className="product-detail product-detail--state">
@@ -223,6 +318,7 @@ useEffect(() => {
           valorInput={valorInput}
           setValorInput={setValorInput}
           favoriteCount={favoriteCount}
+          cartCount={cartCount}
         />
 
         <main className="product-detail product-detail--state">
@@ -249,7 +345,13 @@ useEffect(() => {
         valorInput={valorInput}
         setValorInput={setValorInput}
         favoriteCount={favoriteCount}
+        cartCount={cartCount}
       />
+      {notification && (
+          <div className="notification">
+            {notification}
+          </div>
+        )}
 
       <main className="product-detail">
         <div className="product-detail__back-container">

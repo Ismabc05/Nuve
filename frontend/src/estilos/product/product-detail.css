@@ -787,6 +787,39 @@
   }
 }
 
+.notification {
+  position: fixed;
+  top: 90px;
+  right: 30px;
+  z-index: 9999;
+
+  padding: 14px 20px;
+  background: #ffffff;
+  color: #171717;
+
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+  animation: notificationShow 0.25s ease-out;
+}
+
+@keyframes notificationShow {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .product-detail *,
   .product-detail *::before,
