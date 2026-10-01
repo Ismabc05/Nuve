@@ -152,16 +152,6 @@ useEffect(() => {
   loadCart();
 }, []);
 
-useEffect(() => {
-  if (!notification) return;
-
-  const timer = setTimeout(() => {
-    setNotification('');
-  }, 4500);
-
-  return () => clearTimeout(timer);
-}, [notification]);
-
   const uniqueColors = useMemo(() => {
     if (!product) {
       return [];
@@ -348,10 +338,34 @@ const handleAddToCart = async () => {
         cartCount={cartCount}
       />
       {notification && (
-          <div className="notification">
-            {notification}
+        <div
+          className="notification"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span className="notification__indicator" />
+
+          <div className="notification__content">
+            <span className="notification__label">
+              Actualización
+            </span>
+
+            <p className="notification__message">
+              {notification}
+            </p>
           </div>
-        )}
+
+          <button
+            type="button"
+            className="notification__close"
+            onClick={() => setNotification('')}
+            aria-label="Cerrar notificación"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       <main className="product-detail">
         <div className="product-detail__back-container">
