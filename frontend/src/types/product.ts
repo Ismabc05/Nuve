@@ -16,7 +16,7 @@ export type Product = {
   name: string;
   price: string;
   description: string;
-  reviews: unknown;
+  reviews: Review[];
   categories: {
     id: number;
     name: string;
