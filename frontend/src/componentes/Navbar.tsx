@@ -6,16 +6,17 @@ import {
 } from 'react-icons/lu';
 
 import '../estilos/navbar/navbar.css'
-import { useCart } from '../context/UseCart';
+import { useCart } from '../context/cart/UseCart';
+import { useFavorite } from '../context/favorites/UseFavorite';
 
 type NavbarProps = {
   valorInput: string;
   setValorInput: (valor: string) => void;
-  favoriteCount: number;
 };
 
-function Navbar({valorInput, setValorInput, favoriteCount}: NavbarProps) {
+function Navbar({valorInput, setValorInput}: NavbarProps) {
   const { cartCount } = useCart();
+  const { favoriteCount } = useFavorite();
 
   return (
     <header className="navbar">

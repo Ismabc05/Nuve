@@ -1,7 +1,11 @@
 import Navbar from '../../componentes/Navbar';
+
 import Footer from '../../componentes/Footer';
+
 import { useEffect, useMemo, useState } from 'react';
+
 import { useNavigate, useParams } from 'react-router-dom';
+
 import {
   LuChevronLeft,
   LuHeart,
@@ -18,34 +22,38 @@ import type {
   Review,
 } from '../../types/product';
 
-import {
-  getFavorite,
-  productById,
-  addFavorite,
-  deleteFavorite,
-} from '../../services/product.service';
+import { productById } from '../../services/product.service';
 
 import '../../estilos/product/product-detail.css';
+
 import { useCart } from '../../context/cart/UseCart';
+
+import { useFavorite } from '../../context/favorites/UseFavorite';
 
 function Product() {
   const [valorInput, setValorInput] = useState('');
-  const [favoriteCount, setFavoriteCount] = useState(0);
-  const [product, setProduct] = useState<ProductType | null>(null);
+  const [product, setProduct] =
+    useState<ProductType | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [notification, setNotification] = useState('');
 
   const { id } = useParams();
   const navigate = useNavigate();
+
   const { addToCart } = useCart();
 
-useEffect(() => {
+  const {
+    isFavorite,
+    addFavoriteProduct,
+    removeFavoriteProduct,
+  } = useFavorite();
+
+  useEffect(() => {
     const loadProduct = async () => {
       if (!id) {
         setError('Producto no encontrado');
@@ -61,7 +69,8 @@ useEffect(() => {
 
         setProduct(productData);
 
-        const firstVariant = productData.variants?.[0];
+        const firstVariant =
+          productData.variants?.[0];
 
         if (firstVariant) {
           setSelectedColor(firstVariant.color);
@@ -69,7 +78,9 @@ useEffect(() => {
         }
       } catch (error) {
         console.error(error);
-        setError('No se ha podido cargar el producto');
+        setError(
+          'No se ha podido cargar el producto'
+        );
       } finally {
         setLoading(false);
       }
@@ -77,37 +88,6 @@ useEffect(() => {
 
     loadProduct();
   }, [id]);
-
-useEffect(() => {
-  const loadFavorites = async () => {
-    const user = JSON.parse(
-      localStorage.getItem('user') || 'null'
-    );
-
-    const userId = user?.id;
-
-    if (!userId || !id) {
-      return;
-    }
-
-    try {
-      const favorites = await getFavorite(userId);
-
-      setFavoriteCount(favorites.length);
-
-      const isProductFavorite = favorites.some(
-        (favorite: ProductType) =>
-          favorite.id === Number(id)
-      );
-
-      setIsFavorite(isProductFavorite);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  loadFavorites();
-}, [id]);
 
   const uniqueColors = useMemo(() => {
     if (!product) {
@@ -147,76 +127,84 @@ useEffect(() => {
     setQuantity((currentQuantity) => {
       const nextQuantity = currentQuantity + amount;
 
-      return Math.max(1, Math.min(nextQuantity, 10));
+      return Math.max(
+        1,
+        Math.min(nextQuantity, 10)
+      );
     });
   };
 
   const handleFavorite = async () => {
-  const user = JSON.parse(
-    localStorage.getItem('user') || 'null'
-  );
-
-  const userId = user?.id;
-
-  if (!userId || !product) {
-    return;
-  }
-
-  try {
-    if (isFavorite) {
-      await deleteFavorite(userId, product.id);
-
-      setIsFavorite(false);
-
-      setFavoriteCount((currentCount) =>
-        Math.max(0, currentCount - 1)
-      );
-    } else {
-      await addFavorite(userId, product.id);
-
-      setIsFavorite(true);
-
-      setFavoriteCount((currentCount) =>
-        currentCount + 1
-      );
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const handleAddToCart = async () => {
-  if (!product || !selectedColor || !selectedSize) {
-    return;
-  }
-
-  try {
-    const selectedVariant = product.variants.find(
-      (variant) =>
-        variant.color === selectedColor &&
-        variant.size === selectedSize
-    );
-
-    if (!selectedVariant) {
-      console.error(
-        'No se ha encontrado la variante seleccionada'
-      );
+    if (!product) {
       return;
     }
 
-    await addToCart(
-      selectedVariant.id,
-      quantity
-    );
+    try {
+      if (isFavorite(product.id)) {
+        await removeFavoriteProduct(product.id);
 
-    setNotification('Producto añadido al carrito');
-  } catch (error) {
-    console.error(
-      'Error al añadir al carrito:',
-      error
-    );
-  }
-};
+        setNotification(
+          'Producto eliminado de favoritos'
+        );
+      } else {
+        await addFavoriteProduct(product.id);
+
+        setNotification(
+          'Producto añadido a favoritos'
+        );
+      }
+    } catch (error) {
+      console.error(
+        'Error al actualizar favoritos:',
+        error
+      );
+
+      setNotification(
+        'Error al actualizar favoritos'
+      );
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (
+      !product ||
+      !selectedColor ||
+      !selectedSize
+    ) {
+      return;
+    }
+
+    try {
+      const selectedVariant =
+        product.variants.find(
+          (variant) =>
+            variant.color === selectedColor &&
+            variant.size === selectedSize
+        );
+
+      if (!selectedVariant) {
+        console.error(
+          'No se ha encontrado la variante seleccionada'
+        );
+
+        return;
+      }
+
+      await addToCart(
+        selectedVariant.id,
+        quantity
+      );
+
+      setNotification(
+        'Producto añadido al carrito'
+      );
+    } catch (error) {
+      console.error(
+        'Error al añadir al carrito:',
+        error
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -224,12 +212,12 @@ const handleAddToCart = async () => {
         <Navbar
           valorInput={valorInput}
           setValorInput={setValorInput}
-          favoriteCount={favoriteCount}
         />
 
         <main className="product-detail product-detail--state">
           <div className="product-detail__loader">
             <span className="product-detail__loader-line" />
+
             <p>Cargando producto...</p>
           </div>
         </main>
@@ -245,12 +233,13 @@ const handleAddToCart = async () => {
         <Navbar
           valorInput={valorInput}
           setValorInput={setValorInput}
-          favoriteCount={favoriteCount}
         />
 
         <main className="product-detail product-detail--state">
           <div className="product-detail__empty">
-            <p>{error || 'Producto no encontrado'}</p>
+            <p>
+              {error || 'Producto no encontrado'}
+            </p>
 
             <button
               type="button"
@@ -266,13 +255,15 @@ const handleAddToCart = async () => {
     );
   }
 
+  const favoriteActive = isFavorite(product.id);
+
   return (
     <>
       <Navbar
         valorInput={valorInput}
         setValorInput={setValorInput}
-        favoriteCount={favoriteCount}
       />
+
       {notification && (
         <div
           className="notification"
@@ -311,6 +302,7 @@ const handleAddToCart = async () => {
             onClick={() => navigate(-1)}
           >
             <LuChevronLeft size={17} />
+
             <span>Volver a productos</span>
           </button>
         </div>
@@ -323,39 +315,50 @@ const handleAddToCart = async () => {
               </span>
 
               <span className="product-detail__gallery-count">
-                {selectedImage + 1} / {product.images.length}
+                {selectedImage + 1} /{' '}
+                {product.images.length}
               </span>
             </div>
 
             <div className="product-detail__gallery-content">
               <div className="product-detail__thumbnails">
-                {product.images.map((image, index) => (
-                  <button
-                    key={image.id}
-                    type="button"
-                    className={`product-detail__thumbnail ${
-                      selectedImage === index
-                        ? 'product-detail__thumbnail--active'
-                        : ''
-                    }`}
-                    onClick={() => setSelectedImage(index)}
-                    aria-label={`Ver imagen ${index + 1}`}
-                    aria-pressed={selectedImage === index}
-                  >
-                    <img
-                      src={image.url}
-                      alt={`${product.name} - imagen ${
+                {product.images.map(
+                  (image, index) => (
+                    <button
+                      key={image.id}
+                      type="button"
+                      className={`product-detail__thumbnail ${
+                        selectedImage === index
+                          ? 'product-detail__thumbnail--active'
+                          : ''
+                      }`}
+                      onClick={() =>
+                        setSelectedImage(index)
+                      }
+                      aria-label={`Ver imagen ${
                         index + 1
                       }`}
-                    />
-                  </button>
-                ))}
+                      aria-pressed={
+                        selectedImage === index
+                      }
+                    >
+                      <img
+                        src={image.url}
+                        alt={`${product.name} - imagen ${
+                          index + 1
+                        }`}
+                      />
+                    </button>
+                  )
+                )}
               </div>
 
               <div className="product-detail__image-section">
                 <img
                   className="product-detail__image"
-                  src={product.images[selectedImage]?.url}
+                  src={
+                    product.images[selectedImage]?.url
+                  }
                   alt={product.name}
                 />
 
@@ -375,22 +378,26 @@ const handleAddToCart = async () => {
               <button
                 type="button"
                 className={`product-detail__favorite ${
-                  isFavorite
+                  favoriteActive
                     ? 'product-detail__favorite--active'
                     : ''
                 }`}
                 onClick={handleFavorite}
                 aria-label={
-                  isFavorite
+                  favoriteActive
                     ? 'Quitar producto de favoritos'
                     : 'Añadir producto a favoritos'
                 }
-                aria-pressed={isFavorite}
+                aria-pressed={favoriteActive}
               >
                 <LuHeart
                   size={18}
                   strokeWidth={1.8}
-                  fill={isFavorite ? 'currentColor' : 'none'}
+                  fill={
+                    favoriteActive
+                      ? 'currentColor'
+                      : 'none'
+                  }
                 />
               </button>
             </div>
@@ -405,7 +412,8 @@ const handleAddToCart = async () => {
               </span>
 
               <span className="product-detail__rating-text">
-                {product.reviews?.length || 0} reseñas
+                {product.reviews?.length || 0}{' '}
+                reseñas
               </span>
             </div>
 
@@ -428,7 +436,8 @@ const handleAddToCart = async () => {
                 <h2>Color</h2>
 
                 <span>
-                  {selectedColor || 'Selecciona un color'}
+                  {selectedColor ||
+                    'Selecciona un color'}
                 </span>
               </div>
 
@@ -443,15 +452,19 @@ const handleAddToCart = async () => {
                         : ''
                     }`}
                     style={{
-                      backgroundColor: variant.colorHex,
+                      backgroundColor:
+                        variant.colorHex,
                     }}
                     title={variant.color}
                     aria-label={`Seleccionar color ${variant.color}`}
                     aria-pressed={
-                      selectedColor === variant.color
+                      selectedColor ===
+                      variant.color
                     }
                     onClick={() =>
-                      setSelectedColor(variant.color)
+                      setSelectedColor(
+                        variant.color
+                      )
                     }
                   />
                 ))}
@@ -480,8 +493,12 @@ const handleAddToCart = async () => {
                         ? 'product-detail__size--active'
                         : ''
                     }`}
-                    onClick={() => setSelectedSize(size)}
-                    aria-pressed={selectedSize === size}
+                    onClick={() =>
+                      setSelectedSize(size)
+                    }
+                    aria-pressed={
+                      selectedSize === size
+                    }
                   >
                     {size}
                   </button>
@@ -493,7 +510,9 @@ const handleAddToCart = async () => {
               <div className="product-detail__quantity">
                 <button
                   type="button"
-                  onClick={() => handleQuantityChange(-1)}
+                  onClick={() =>
+                    handleQuantityChange(-1)
+                  }
                   aria-label="Reducir cantidad"
                 >
                   <LuMinus size={15} />
@@ -503,7 +522,9 @@ const handleAddToCart = async () => {
 
                 <button
                   type="button"
-                  onClick={() => handleQuantityChange(1)}
+                  onClick={() =>
+                    handleQuantityChange(1)
+                  }
                   aria-label="Aumentar cantidad"
                 >
                   <LuPlus size={15} />
@@ -514,9 +535,13 @@ const handleAddToCart = async () => {
                 type="button"
                 className="product-detail__add"
                 onClick={handleAddToCart}
-                disabled={!selectedColor || !selectedSize}
+                disabled={
+                  !selectedColor ||
+                  !selectedSize
+                }
               >
                 <LuShoppingBag size={18} />
+
                 <span>Añadir al carrito</span>
               </button>
             </div>
@@ -527,7 +552,10 @@ const handleAddToCart = async () => {
 
                 <div>
                   <strong>Envío rápido</strong>
-                  <span>Recíbelo en 2-4 días laborables</span>
+
+                  <span>
+                    Recíbelo en 2-4 días laborables
+                  </span>
                 </div>
               </div>
 
@@ -535,8 +563,13 @@ const handleAddToCart = async () => {
                 <LuRotateCcw size={19} />
 
                 <div>
-                  <strong>Devoluciones sencillas</strong>
-                  <span>Tienes 30 días para devolverlo</span>
+                  <strong>
+                    Devoluciones sencillas
+                  </strong>
+
+                  <span>
+                    Tienes 30 días para devolverlo
+                  </span>
                 </div>
               </div>
 
@@ -545,7 +578,10 @@ const handleAddToCart = async () => {
 
                 <div>
                   <strong>Compra segura</strong>
-                  <span>Tus datos están protegidos</span>
+
+                  <span>
+                    Tus datos están protegidos
+                  </span>
                 </div>
               </div>
             </div>
@@ -559,7 +595,9 @@ const handleAddToCart = async () => {
                 Opiniones verificadas
               </span>
 
-              <h2>Lo que dicen de este producto</h2>
+              <h2>
+                Lo que dicen de este producto
+              </h2>
             </div>
 
             <span className="product-detail__reviews-count">
@@ -573,37 +611,42 @@ const handleAddToCart = async () => {
           {Array.isArray(product.reviews) &&
           product.reviews.length > 0 ? (
             <div className="product-detail__reviews-list">
-              {product.reviews.map((review: Review) => (
-                <article
-                  key={review.id}
-                  className="product-detail__review"
-                >
-                  <div className="product-detail__review-top">
-                    <div className="product-detail__review-rating">
-                      <span>
-                        {'★'.repeat(review.rating)}
-                      </span>
+              {product.reviews.map(
+                (review: Review) => (
+                  <article
+                    key={review.id}
+                    className="product-detail__review"
+                  >
+                    <div className="product-detail__review-top">
+                      <div className="product-detail__review-rating">
+                        <span>
+                          {'★'.repeat(
+                            review.rating
+                          )}
+                        </span>
 
-                      <span className="product-detail__review-date">
-                        Compra verificada
+                        <span className="product-detail__review-date">
+                          Compra verificada
+                        </span>
+                      </div>
+
+                      <span className="product-detail__review-user">
+                        Usuario #{review.userId}
                       </span>
                     </div>
 
-                    <span className="product-detail__review-user">
-                      Usuario #{review.userId}
-                    </span>
-                  </div>
-
-                  <p className="product-detail__review-comment">
-                    {review.comment}
-                  </p>
-                </article>
-              ))}
+                    <p className="product-detail__review-comment">
+                      {review.comment}
+                    </p>
+                  </article>
+                )
+              )}
             </div>
           ) : (
             <div className="product-detail__no-reviews">
               <p>
-                Todavía no hay reseñas para este producto.
+                Todavía no hay reseñas para este
+                producto.
               </p>
             </div>
           )}

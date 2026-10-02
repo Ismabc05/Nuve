@@ -8,6 +8,8 @@ import ProductSkeleton from '../../componentes/ProductSkeleton';
 
 import '../../estilos/product/product.css';
 
+import { useFavorite } from '../../context/favorites/UseFavorite';
+
 import {
   type Category,
   type Brand,
@@ -19,7 +21,6 @@ import {
   products,
   categories,
   brands,
-  getFavorite,
 } from '../../services/product.service';
 
 function Home() {
@@ -27,16 +28,19 @@ function Home() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [brandList, setBrandList] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [valorInput, setValorInput] = useState('');
   const [priceOrder, setPriceOrder] = useState<PriceOrder>('');
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
-
+  const [selectedCategories, setSelectedCategories] =
+    useState<number[]>([]);
+  const [selectedBrands, setSelectedBrands] =
+    useState<number[]>([]);
   const [notification, setNotification] = useState('');
 
-  const [favoriteCount, setFavoriteCount] = useState(0);
-  const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
+  const {
+    isFavorite,
+    addFavoriteProduct,
+    removeFavoriteProduct,
+  } = useFavorite();
 
   const filteredProducts = [...productList]
     .filter((product) =>
@@ -44,19 +48,21 @@ function Home() {
         .toLowerCase()
         .includes(valorInput.toLowerCase())
     )
-    .filter((product) =>
-      selectedCategories.length === 0 ||
-      selectedCategories.some((categoryId) =>
-        product.categories.some(
-          (category) => category.id === categoryId
+    .filter(
+      (product) =>
+        selectedCategories.length === 0 ||
+        selectedCategories.some((categoryId) =>
+          product.categories.some(
+            (category) => category.id === categoryId
+          )
         )
-      )
     )
-    .filter((product) =>
-      selectedBrands.length === 0 ||
-      selectedBrands.some(
-        (brandId) => brandId === product.brand.id
-      )
+    .filter(
+      (product) =>
+        selectedBrands.length === 0 ||
+        selectedBrands.some(
+          (brandId) => brandId === product.brand.id
+        )
     )
     .sort((a, b) => {
       const priceA = Number(a.price);
@@ -103,39 +109,19 @@ function Home() {
       });
   }, []);
 
-  // Cargar favoritos
-  useEffect(() => {
-    const loadFavorites = async () => {
-      const user = JSON.parse(
-        localStorage.getItem('user') || 'null'
-      );
-
-      const userId = user?.id;
-
-      if (!userId) return;
-
-      try {
-        const favorites = await getFavorite(userId);
-
-        setFavoriteCount(favorites.length);
-
-        setFavoriteProductIds(
-          favorites.map((product: Product) => product.id)
-        );
-      } catch (error) {
-        console.error('Error al cargar favoritos:', error);
-      }
-    };
-
-    loadFavorites();
-  }, []);
+  const handleFavorite = async (productId: number) => {
+  if (isFavorite(productId)) {
+    await removeFavoriteProduct(productId);
+  } else {
+    await addFavoriteProduct(productId);
+  }
+};
 
   return (
     <>
       <Navbar
         valorInput={valorInput}
         setValorInput={setValorInput}
-        favoriteCount={favoriteCount}
       />
 
       {notification && (
@@ -170,7 +156,6 @@ function Home() {
 
       <main className="product">
         <div className="product__content">
-
           <ProductFilters
             categories={categoryList}
             brands={brandList}
@@ -184,7 +169,6 @@ function Home() {
 
           <div className="product__results">
             <div className="product__grid">
-
               {loading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <ProductSkeleton key={index} />
@@ -195,8 +179,10 @@ function Home() {
                     key={product.id}
                     product={product}
                     setNotification={setNotification}
-                    setFavoriteCount={setFavoriteCount}
-                    favoriteProductIds={favoriteProductIds}
+                    isFavorite={isFavorite(product.id)}
+                    onToggleFavorite={() =>
+                      handleFavorite(product.id)
+                    }
                   />
                 ))
               ) : (
@@ -204,10 +190,8 @@ function Home() {
                   No se encontraron productos.
                 </p>
               )}
-
             </div>
           </div>
-
         </div>
       </main>
 

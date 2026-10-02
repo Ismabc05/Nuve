@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import type { Dispatch, SetStateAction } from 'react';
 
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
@@ -7,21 +7,23 @@ import { LuHeart, LuShoppingBag } from 'react-icons/lu';
 import type { Product } from '../types/product';
 
 import '../estilos/product/product-card.css';
-import { addFavorite, deleteFavorite } from '../services/product.service';
 
-// Tipo productcard que es una objeto de tipo product
 type ProductCardProps = {
   product: Product;
   setNotification: Dispatch<SetStateAction<string>>;
-  setFavoriteCount: Dispatch<SetStateAction<number>>;
-  favoriteProductIds: number[];
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
-function ProductCard({ product, setNotification, setFavoriteCount, favoriteProductIds }: ProductCardProps) { // recibe un objeto product de tipo Productcard
-  const [isFavorite, setIsFavorite] = useState(favoriteProductIds.includes(product.id));
-  const navigate = useNavigate()
+function ProductCard({
+  product,
+  setNotification,
+  isFavorite,
+  onToggleFavorite,
+}: ProductCardProps) {
+  const navigate = useNavigate();
 
-  // Funcion ue formatea el precio a euros.
+  // Función que formatea el precio a euros
   const formattedPrice = new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
@@ -30,9 +32,37 @@ function ProductCard({ product, setNotification, setFavoriteCount, favoriteProdu
   // Obtener únicamente un color por cada color disponible
   const uniqueColors = Array.from(
     new Map(
-      product.variants.map((variant) => [variant.color, variant])
+      product.variants.map((variant) => [
+        variant.color,
+        variant,
+      ])
     ).values()
   );
+
+  const handleFavorite = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+
+    try {
+      await onToggleFavorite();
+
+      setNotification(
+        isFavorite
+          ? 'Producto eliminado de favoritos'
+          : 'Producto añadido a favoritos'
+      );
+    } catch (error) {
+      console.error(
+        'Error al actualizar favoritos:',
+        error
+      );
+
+      setNotification(
+        'Error al actualizar favoritos'
+      );
+    }
+  };
 
   return (
     <article className="product-card">
@@ -47,32 +77,11 @@ function ProductCard({ product, setNotification, setFavoriteCount, favoriteProdu
           <button
             type="button"
             className={`product-card__favorite ${
-              isFavorite ? 'product-card__favorite--active' : ''
+              isFavorite
+                ? 'product-card__favorite--active'
+                : ''
             }`}
-            onClick={async (event) => {
-              event.stopPropagation();
-              const user = JSON.parse(localStorage.getItem('user') || 'null');
-              const userId = user?.id;
-              if (!userId) {
-                setNotification('Error al añadir el producto a favoritos');
-                return;
-              }
-              try {
-                if (isFavorite) {
-                  await deleteFavorite(userId, product.id);
-                  setIsFavorite(false);
-                  setFavoriteCount((prev) => Math.max(0, prev - 1));
-                  setNotification('Producto eliminado de favoritos');
-                } else {
-                  await addFavorite(userId, product.id);
-                  setIsFavorite(true);
-                  setFavoriteCount((prev) => prev + 1);
-                  setNotification('Producto añadido a favoritos');
-                }
-              } catch (error) {
-                console.error(error);
-              }
-            }}
+            onClick={handleFavorite}
             aria-label={
               isFavorite
                 ? 'Quitar de favoritos'
@@ -83,7 +92,11 @@ function ProductCard({ product, setNotification, setFavoriteCount, favoriteProdu
             <LuHeart
               size={18}
               strokeWidth={1.8}
-              fill={isFavorite ? 'currentColor' : 'none'}
+              fill={
+                isFavorite
+                  ? 'currentColor'
+                  : 'none'
+              }
             />
           </button>
         </div>
@@ -98,7 +111,9 @@ function ProductCard({ product, setNotification, setFavoriteCount, favoriteProdu
             <span
               key={variant.color}
               className="product-card__color"
-              style={{ backgroundColor: variant.colorHex }}
+              style={{
+                backgroundColor: variant.colorHex,
+              }}
               title={variant.color}
               aria-hidden="true"
             />
@@ -108,7 +123,9 @@ function ProductCard({ product, setNotification, setFavoriteCount, favoriteProdu
         <button
           type="button"
           className="product-card__quick-action"
-          onClick={() => navigate(`/products/${product.id}`)}
+          onClick={() =>
+            navigate(`/products/${product.id}`)
+          }
         >
           <LuShoppingBag size={16} />
           <span>Ver producto</span>

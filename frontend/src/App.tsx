@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import { CartProvider } from "./context/cart/CartProvider"
+import { FavoriteProvider } from "./context/favorites/FavoriteProvider"
 
 
 import Login from "./paginas/Auth/Login"
@@ -19,25 +20,27 @@ function App() {
   return (
     <>
       <CartProvider>
-      <Routes>
-        <Route path="/" element={<RootRedirect/>} />
+        <FavoriteProvider>
+          <Routes>
+            <Route path="/" element={<RootRedirect/>} />
 
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/register" element={<Register/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
 
-        <Route path="/products" element={<Home/>}/>
-        <Route path="/products/:id" element={<Product/>}/>
+            <Route path="/products" element={<Home/>}/>
+            <Route path="/products/:id" element={<Product/>}/>
 
-        <Route path="/carts" element={<Carrito/>}/>
-        <Route path="/favorites" element={<Favoritos/>}/>
+            <Route path="/carts" element={<Carrito/>}/>
+            <Route path="/favorites" element={<Favoritos/>}/>
 
-        <Route path="/perfil" element={<Perfil/>}/>
+            <Route path="/perfil" element={<Perfil/>}/>
 
-        <Route path="/orders" element={<Orders/>}/>
-        <Route path="/orders/:id" element={<Order/>}/>
+            <Route path="/orders" element={<Orders/>}/>
+            <Route path="/orders/:id" element={<Order/>}/>
 
-        <Route path="/admin" element={<Admin/>}/>
-      </Routes>
+            <Route path="/admin" element={<Admin/>}/>
+          </Routes>
+        </FavoriteProvider>
       </CartProvider>
     </>
   )
