@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom"
+import { CartProvider } from "./context/cart/CartProvider"
 
 
 import Login from "./paginas/Auth/Login"
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <>
+      <CartProvider>
       <Routes>
         <Route path="/" element={<RootRedirect/>} />
 
@@ -36,6 +38,7 @@ function App() {
 
         <Route path="/admin" element={<Admin/>}/>
       </Routes>
+      </CartProvider>
     </>
   )
 }

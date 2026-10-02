@@ -5,16 +5,17 @@ import {
   LuSearch
 } from 'react-icons/lu';
 
-import '../estilos/navbar/navbar.css';
+import '../estilos/navbar/navbar.css'
+import { useCart } from '../context/UseCart';
 
 type NavbarProps = {
   valorInput: string;
   setValorInput: (valor: string) => void;
   favoriteCount: number;
-  cartCount: number;
 };
 
-function Navbar({valorInput, setValorInput, favoriteCount, cartCount}: NavbarProps) {
+function Navbar({valorInput, setValorInput, favoriteCount}: NavbarProps) {
+  const { cartCount } = useCart();
 
   return (
     <header className="navbar">

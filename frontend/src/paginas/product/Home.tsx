@@ -20,7 +20,6 @@ import {
   categories,
   brands,
   getFavorite,
-  getOrders,
 } from '../../services/product.service';
 
 function Home() {
@@ -38,8 +37,6 @@ function Home() {
 
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
-
-  const [cartCount, setCartCount] = useState(0);
 
   const filteredProducts = [...productList]
     .filter((product) =>
@@ -133,54 +130,12 @@ function Home() {
     loadFavorites();
   }, []);
 
-  // Cargar carrito
-  useEffect(() => {
-    const loadCart = async () => {
-      const user = JSON.parse(
-        localStorage.getItem('user') || 'null'
-      );
-
-      const userId = user?.id;
-
-      if (!userId) return;
-
-      try {
-        const orders = await getOrders(userId);
-
-        const activeOrder = orders.find(
-          (order: {
-            status: string;
-            items: { quantity: number }[];
-          }) => order.status === 'active'
-        );
-
-        if (!activeOrder) {
-          setCartCount(0);
-          return;
-        }
-
-        const totalItems = activeOrder.items.reduce(
-          (total: number, item: { quantity: number }) =>
-            total + item.quantity,
-          0
-        );
-
-        setCartCount(totalItems);
-      } catch (error) {
-        console.error('Error al cargar el carrito:', error);
-      }
-    };
-
-    loadCart();
-  }, []);
-
   return (
     <>
       <Navbar
         valorInput={valorInput}
         setValorInput={setValorInput}
         favoriteCount={favoriteCount}
-        cartCount={cartCount}
       />
 
       {notification && (

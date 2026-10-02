@@ -23,11 +23,10 @@ import {
   productById,
   addFavorite,
   deleteFavorite,
-  addOrderItem,
-  getOrders,
 } from '../../services/product.service';
 
 import '../../estilos/product/product-detail.css';
+import { useCart } from '../../context/cart/UseCart';
 
 function Product() {
   const [valorInput, setValorInput] = useState('');
@@ -40,13 +39,13 @@ function Product() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [cartCount, setCartCount] = useState(0);
   const [notification, setNotification] = useState('');
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
-  useEffect(() => {
+useEffect(() => {
     const loadProduct = async () => {
       if (!id) {
         setError('Producto no encontrado');
@@ -109,48 +108,6 @@ useEffect(() => {
 
   loadFavorites();
 }, [id]);
-
-useEffect(() => {
-  const loadCart = async () => {
-    const user = JSON.parse(
-      localStorage.getItem('user') || 'null'
-    );
-
-    const userId = user?.id;
-
-    if (!userId) {
-      return;
-    }
-
-    try {
-      const orders = await getOrders(userId);
-
-      const activeOrder = orders.find(
-        (order: {
-          status: string;
-          items: { quantity: number }[];
-        }) => order.status === 'active'
-      );
-
-      if (!activeOrder) {
-        setCartCount(0);
-        return;
-      }
-
-      const totalItems = activeOrder.items.reduce(
-        (total: number, item: { quantity: number }) =>
-          total + item.quantity,
-        0
-      );
-
-      setCartCount(totalItems);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  loadCart();
-}, []);
 
   const uniqueColors = useMemo(() => {
     if (!product) {
@@ -234,28 +191,6 @@ const handleAddToCart = async () => {
   }
 
   try {
-    const storedUser = localStorage.getItem('user');
-
-    if (!storedUser) {
-      console.error('No hay usuario autenticado');
-      return;
-    }
-
-    const user = JSON.parse(storedUser);
-    const userId = user.id;
-
-    const orders = await getOrders(userId);
-
-    const activeOrder = orders.find(
-      (order: { status: string }) =>
-        order.status === 'active'
-    );
-
-    if (!activeOrder) {
-      console.error('No existe una orden activa');
-      return;
-    }
-
     const selectedVariant = product.variants.find(
       (variant) =>
         variant.color === selectedColor &&
@@ -263,19 +198,23 @@ const handleAddToCart = async () => {
     );
 
     if (!selectedVariant) {
-      console.error('No se ha encontrado la variante seleccionada');
+      console.error(
+        'No se ha encontrado la variante seleccionada'
+      );
       return;
     }
 
-    await addOrderItem({
-      quantity,
-      productvariantId: selectedVariant.id,
-      orderId: activeOrder.id,
-    });
-    setCartCount((currentCount) => currentCount + quantity);
+    await addToCart(
+      selectedVariant.id,
+      quantity
+    );
+
     setNotification('Producto añadido al carrito');
   } catch (error) {
-    console.error('Error al añadir al carrito:', error);
+    console.error(
+      'Error al añadir al carrito:',
+      error
+    );
   }
 };
 
@@ -286,7 +225,6 @@ const handleAddToCart = async () => {
           valorInput={valorInput}
           setValorInput={setValorInput}
           favoriteCount={favoriteCount}
-          cartCount={cartCount}
         />
 
         <main className="product-detail product-detail--state">
@@ -308,7 +246,6 @@ const handleAddToCart = async () => {
           valorInput={valorInput}
           setValorInput={setValorInput}
           favoriteCount={favoriteCount}
-          cartCount={cartCount}
         />
 
         <main className="product-detail product-detail--state">
@@ -335,7 +272,6 @@ const handleAddToCart = async () => {
         valorInput={valorInput}
         setValorInput={setValorInput}
         favoriteCount={favoriteCount}
-        cartCount={cartCount}
       />
       {notification && (
         <div
