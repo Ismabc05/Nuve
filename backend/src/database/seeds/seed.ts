@@ -252,19 +252,47 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790587666/862226s2-removebg-preview.png',
   ],
 
-  'Camisa Oxford Classic': [],
+  'Camisa Oxford Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790938835/34494380_67860954_600-removebg-preview_1.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790938802/9522799290174c43adfc5dd8c30ef1ec-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790938787/camisa-oxford-workwear-hombre-classic-fit-removebg-preview.png',
+  ],
 
-  'Camisa Linen Summer': [],
+  'Camisa Linen Summer': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939038/5896577ea4bd464b9293ebfff1ad0ada-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939055/jack_-_-jones-camisa-de-manga-corta-summer-linen-blend-resort-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939077/29089911r-removebg-preview.png',
+  ],
 
-  'Camisa Oversize Street': [],
+  'Camisa Oversize Street': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939289/camiseta-blanca-los-angeles-oversized-tee-5369768-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939305/camiseta-royal-falling-stars-oversized-tee-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939312/oversized-street-letter-print-t-shirt-8-01KM5GQBRP1DDTBD0CVCXMT910-removebg-preview.png',
+  ],
 
-  'Camisa Flannel Classic': [],
+  'Camisa Flannel Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939512/VN000TAJKIG_SXY_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939505/elywt00134_element_f_ktp2_bck1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939470/39e9728ce2654432ba379418bcab4a5d-removebg-preview.png',
+  ],
 
-  'Camisa Premium Fit': [],
+  'Camisa Premium Fit': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939692/C66_1B_BC_2LI0336UNR000-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939717/d75b2f1f4962400c8f4ff30e5731ae2a-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939735/H92350s7-removebg-preview.png',
+  ],
 
-  'Short Essential': [],
+  'Short Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940090/picture-removebg-preview_1.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940074/ec995aa4ee5d409f93cf7362a73a811f-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790939959/adidas-essentials-solid-short-green-1-removebg-preview.png',
+  ],
 
-  'Short Cargo': [],
+  'Short Cargo': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940577/31582011r-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940588/ec9b5f43d12f4e4c8e89468b74d6bda0-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940609/D262WHP210-W.CargoShorts-Red-03-removebg-preview_1.png',
+  ],
 
   'Short Sport': [],
 
