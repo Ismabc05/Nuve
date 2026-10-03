@@ -294,31 +294,83 @@ const productImages: Record<string, string[]> = {
     'https://res.cloudinary.com/nefbv7lf/image/upload/v1790940609/D262WHP210-W.CargoShorts-Red-03-removebg-preview_1.png',
   ],
 
-  'Short Sport': [],
+  'Short Sport': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791019798/florence-marinex-all-purpose-cordura-short-dark-brown-bck-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791019815/d27cfc5c67de4cb2aa09ccb0416d25eb-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791019840/9f5ef40378184fa69c2069877891e129-removebg-preview.png',
+  ],
 
-  'Short Denim': [],
+  'Short Denim': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020006/85d0f236a5dc4aee9e34e0ed9d78039a-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020007/eljds00105_element_f_crb0_frt1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020007/d60935070da04c078aba39d1dabd9570-removebg-preview.png',
+  ],
 
-  'Short Relaxed': [],
+  'Short Relaxed': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020163/1771947052_7bd6bb7316b79f81b3fc37749c0cc6d5-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020163/P_779323201D8-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020163/hbeu50557421_118_100-removebg-preview.png',
+  ],
 
-  'Polo Classic': [],
+  'Polo Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020418/polo-classic-fit-lavable-hasta-60degc-800x800-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020419/1140367_BLAC_1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020419/26884511r_1-removebg-preview.png',
+  ],
 
-  'Polo Premium': [],
+  'Polo Premium': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020724/polo-premium-hombre-removebg-preview_1.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020772/picture-removebg-preview_2.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020783/polo-premium-personalizado-removebg-preview_2.png',
+  ],
 
-  'Polo Sport': [],
+  'Polo Sport': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020947/710750444025_sivasdescalzo-Polo_Ralph_Lauren-26_1_JERSEY-SSL-TSH-1691503881-1-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020946/d50a8668eec0433fbf9f682d4008afd5-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791020946/fbe1aa2c35f242b09de176a6fa5c6b6d-removebg-preview.png',
+  ],
 
-  'Polo Urban': [],
+  'Polo Urban': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021210/0412200720684_004_a2-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021210/0417621551145_030_b-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021209/d25609f51f2b4cef85c45fed1b9fccc2-removebg-preview.png',
+  ],
 
-  'Polo Essential Fit': [],
+  'Polo Essential Fit': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021369/cd53e39fb2f04bcdaebcba502df402e5-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021370/4aa309ee02b1d7ec9f49b2711065-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021369/polo-ralph-lauren-camiseta-710671438527-marron-claro-regular-fit-0000306061385-removebg-preview.png',
+  ],
 
-  'Gorra Logo Classic': [],
+  'Gorra Logo Classic': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021678/5d390cbe8f2d46e8a40ab96aef1c635d-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021570/Gorra-gris-oscuro-Trucker-logo-nombre-blanco-classic-lateral-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021561/CASQUETTE_MARRON_BEURRE_LAURENE_1-removebg-preview.png',
+  ],
 
-  'Gorra Urban': [],
+  'Gorra Urban': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021961/nik1006_nik-1002-mm-jpg-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021961/ba-sh-gorra-henri-denim-marron-2e26henr-3324557-a-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791021963/55bb2dd534714ff7bd4db00f2b73e015-removebg-preview.png',
+  ],
 
-  'Mochila Essential': [],
+  'Mochila Essential': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022158/hyirwdYXzQD8bBLxE9bJwJY-7L52oUPalvNcajoQ0_Q-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022159/MOCHILA_ESSENTIALS_Tenth_MOCHILA_SIERRA_MOUNT_HOMBRE_6526153702-802-1_14092026101501-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022160/MOCHILA_ESSENTIALS_Tenth_SIERRA_ZIPPER_12L_WN_MUJER_5726140704-810-1_16042026124038-removebg-preview.png',
+  ],
 
-  'Riñonera Street': [],
+  'Riñonera Street': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022291/P_722083101FM-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022292/D75740001-alt1-pdp-lse-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022293/83a2bb79982c4d8795121816d6fa8a34-removebg-preview.png',
+  ],
 
-  'Bolso Crossbody Urban': [],
+  'Bolso Crossbody Urban': [
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022459/72ba9333109b43f3a26da5278d21214d-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022460/0279212b14dd4a759718afb89dcbe402-removebg-preview.png',
+    'https://res.cloudinary.com/nefbv7lf/image/upload/v1791022462/johnny_urban_lou_medium_blue_accessorie_crossbodyb_john01525_4070402003455_6-removebg-preview.png',
+  ],
 };
 
 const productsData = [
