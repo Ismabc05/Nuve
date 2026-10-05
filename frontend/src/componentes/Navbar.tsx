@@ -74,7 +74,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             type="button"
             className="navbar__action"
             aria-label="Perfil"
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('/perfil')}
           >
             <LuUser />
           </button>
