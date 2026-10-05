@@ -63,6 +63,12 @@ export class UsersService {
       where: {
         id: In(favorites),
       },
+      relations: {
+        categories: true,
+        brand: true,
+        variants: true,
+        images: true,
+      },
     });
   }
 
