@@ -54,40 +54,54 @@ function Product() {
   } = useFavorite();
 
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!id) {
-        setError('Producto no encontrado');
-        setLoading(false);
-        return;
+  const loadProduct = async () => {
+    if (!id) {
+      setError('Producto no encontrado');
+      setLoading(false);
+      return;
+    }
+
+    const startTime = Date.now();
+
+    try {
+      setLoading(true);
+      setError('');
+
+      const productData =
+        await productById(Number(id));
+
+      setProduct(productData);
+
+      const firstVariant =
+        productData.variants?.[0];
+
+      if (firstVariant) {
+        setSelectedColor(firstVariant.color);
+        setSelectedSize(firstVariant.size);
       }
+    } catch (error) {
+      console.error(error);
 
-      try {
-        setLoading(true);
-        setError('');
+      setError(
+        'No se ha podido cargar el producto'
+      );
+    } finally {
+      const elapsedTime =
+        Date.now() - startTime;
 
-        const productData = await productById(Number(id));
+      const remainingTime = Math.max(
+        1000 - elapsedTime,
+        0
+      );
 
-        setProduct(productData);
-
-        const firstVariant =
-          productData.variants?.[0];
-
-        if (firstVariant) {
-          setSelectedColor(firstVariant.color);
-          setSelectedSize(firstVariant.size);
-        }
-      } catch (error) {
-        console.error(error);
-        setError(
-          'No se ha podido cargar el producto'
-        );
-      } finally {
+      setTimeout(() => {
         setLoading(false);
-      }
-    };
+      }, remainingTime);
+    }
+  };
 
-    loadProduct();
-  }, [id]);
+  loadProduct();
+}, [id]);
 
   const uniqueColors = useMemo(() => {
     if (!product) {

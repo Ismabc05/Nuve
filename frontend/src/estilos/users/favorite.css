@@ -1,0 +1,281 @@
+.favoritos-page {
+  min-height: 100vh;
+  padding: 60px 40px 100px;
+  background: #f7f7f5;
+}
+
+.favoritos-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.favoritos-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 50px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #deded9;
+}
+
+.favoritos-label {
+  display: block;
+  margin-bottom: 12px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.favoritos-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.favoritos-back:hover {
+  color: #111;
+}
+
+.favoritos-header h1 {
+  margin: 0 0 12px;
+  color: #1d1d1b;
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.favoritos-header p {
+  max-width: 550px;
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* CONTADOR */
+
+.favoritos-count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.favoritos-count span {
+  color: #1d1d1b;
+  font-size: 38px;
+  font-weight: 500;
+}
+
+.favoritos-count small {
+  color: #777;
+  font-size: 13px;
+}
+
+/* GRID */
+
+.favoritos-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    minmax(0, 1fr)
+  );
+  gap: 28px;
+}
+
+/*
+  Este contenedor permite añadir estilos
+  propios de Favoritos sin modificar ProductCard.
+*/
+
+.favoritos-card {
+  min-width: 0;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.favoritos-card:hover {
+  transform: translateY(-5px);
+}
+
+/* LOADING */
+
+.favoritos-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: #666;
+}
+
+.favoritos-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid #deded9;
+  border-top-color: #1d1d1b;
+  border-radius: 50%;
+  animation: favoritos-spin 0.8s linear infinite;
+}
+
+@keyframes favoritos-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ERROR */
+
+.favoritos-error {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.favoritos-error-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  border: 1px solid #d6d6d1;
+  border-radius: 50%;
+  color: #555;
+  font-size: 22px;
+}
+
+.favoritos-error h2 {
+  margin: 0 0 10px;
+  color: #1d1d1b;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.favoritos-error p {
+  margin: 0;
+  color: #777;
+}
+
+/* SIN FAVORITOS */
+
+.favoritos-empty {
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  border: 1px solid #deded9;
+  background: #fff;
+  text-align: center;
+}
+
+.favoritos-empty-icon {
+  margin-bottom: 20px;
+  color: #222;
+  font-size: 58px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.favoritos-empty h2 {
+  margin: 0 0 12px;
+  color: #1d1d1b;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.favoritos-empty p {
+  max-width: 450px;
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* TABLET */
+
+@media (max-width: 1100px) {
+  .favoritos-page {
+    padding: 50px 30px 80px;
+  }
+
+  .favoritos-grid {
+    grid-template-columns: repeat(
+      3,
+      minmax(0, 1fr)
+    );
+  }
+}
+
+/* MÓVIL */
+
+@media (max-width: 800px) {
+  .favoritos-page {
+    padding: 40px 20px 70px;
+  }
+
+  .favoritos-header {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 35px;
+  }
+
+  .favoritos-header h1 {
+    font-size: 34px;
+  }
+
+  .favoritos-count {
+    padding: 0;
+  }
+
+  .favoritos-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+    gap: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .favoritos-page {
+    padding: 30px 15px 60px;
+  }
+
+  .favoritos-header h1 {
+    font-size: 30px;
+  }
+
+  .favoritos-header p {
+    font-size: 14px;
+  }
+
+  .favoritos-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .favoritos-empty {
+    min-height: 350px;
+  }
+}

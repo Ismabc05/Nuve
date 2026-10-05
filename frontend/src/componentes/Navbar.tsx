@@ -8,6 +8,7 @@ import {
 import '../estilos/navbar/navbar.css'
 import { useCart } from '../context/cart/UseCart';
 import { useFavorite } from '../context/favorites/UseFavorite';
+import { useNavigate } from 'react-router-dom';
 
 type NavbarProps = {
   valorInput: string;
@@ -17,6 +18,7 @@ type NavbarProps = {
 function Navbar({valorInput, setValorInput}: NavbarProps) {
   const { cartCount } = useCart();
   const { favoriteCount } = useFavorite();
+  const navigate = useNavigate();
 
   return (
     <header className="navbar">
@@ -44,6 +46,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             type="button"
             className="navbar__action"
             aria-label="Favoritos"
+            onClick={() => navigate('/favorites')}
           >
             <LuHeart />
             {favoriteCount > 0 && (
@@ -57,6 +60,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             type="button"
             className="navbar__action"
             aria-label="Carrito"
+            onClick={() => navigate('/carts')}
           >
             <LuShoppingCart />
             {cartCount > 0 && (
@@ -70,6 +74,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             type="button"
             className="navbar__action"
             aria-label="Perfil"
+            onClick={() => navigate('/profile')}
           >
             <LuUser />
           </button>
