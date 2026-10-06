@@ -55,7 +55,9 @@ export class OrdersService {
       relations: {
         items: {
           productvariant: {
-            product: true,
+            product: {
+              images: true,
+            },
           },
         },
         user: true,
