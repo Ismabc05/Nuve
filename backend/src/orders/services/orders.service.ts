@@ -30,7 +30,9 @@ export class OrdersService {
           user: true,
           items: {
             productvariant: {
-              product: true,
+              product: {
+                images: true,
+              },
             },
           },
         },
