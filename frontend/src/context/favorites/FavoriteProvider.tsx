@@ -12,6 +12,7 @@ import {
 
 import { FavoriteContext } from './FavoriteContext';
 
+// Estamos tipando ppara que cualquier componente hijo que use este provider tenga acceso a las funciones y estados que definimos en el contexto. Esto nos permite tener un control centralizado de los favoritos y compartirlo entre diferentes componentes de la aplicación.
 type FavoriteProviderProps = {
   children: ReactNode;
 };
@@ -19,8 +20,8 @@ type FavoriteProviderProps = {
 export function FavoriteProvider({
   children,
 }: FavoriteProviderProps) {
-  const [favoriteCount, setFavoriteCount] = useState(0);
-  const [favoriteIds, setFavoriteIds] = useState<number[]>(
+  const [favoriteCount, setFavoriteCount] = useState(0); // Estado para almacenar la cantidad de productos favoritos
+  const [favoriteIds, setFavoriteIds] = useState<number[]>( // Estado para almacenar los IDs de los productos favoritos
     []
   );
 

@@ -17,6 +17,7 @@ import Orders from "./paginas/Orders/Orders"
 
 function App() {
 
+  // Englobamos las rutas de la aplicación dentro de los providers de carrito y favoritos para que estén disponibles en toda la app.
   return (
     <>
       <CartProvider>
