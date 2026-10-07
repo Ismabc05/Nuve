@@ -6,6 +6,7 @@ type CartContextType = {
     productVariantId: number,
     quantity: number
   ) => Promise<void>;
+  deleteFromCart: (orderItemId: number, quantity: number) => Promise<void>;
 };
 
 export const CartContext = createContext<

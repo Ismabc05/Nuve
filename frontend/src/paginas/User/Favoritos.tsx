@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { Product } from '../../types/product';
 
-import { getFavorite } from '../../services/product.service';
+import { getFavorite } from '../../services/favorite.service';
 
 import { useFavorite } from '../../context/favorites/UseFavorite';
 

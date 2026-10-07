@@ -8,7 +8,7 @@ import {
   getFavorite,
   addFavorite,
   deleteFavorite,
-} from '../../services/product.service';
+} from '../../services/favorite.service';
 
 import { FavoriteContext } from './FavoriteContext';
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { getOrders } from '../../services/product.service';
+import { getOrders } from '../../services/cart.service';
 
 import Navbar from '../../componentes/Navbar';
 import Footer from '../../componentes/Footer';
 import { useNavigate } from 'react-router-dom';
 
 import '../../estilos/users/carrito.css';
+import { useCart } from '../../context/cart/UseCart';
 
 type CartItem = {
   id: number;
@@ -44,7 +45,11 @@ function Carrito() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [valorInput, setValorInput] = useState('');
+  const [notification, setNotification] = useState('');
   const navigate = useNavigate();
+
+  const { deleteFromCart } = useCart();
+
 
   useEffect(() => {
     const loadCart = async () => {
@@ -162,6 +167,35 @@ function Carrito() {
         valorInput={valorInput}
         setValorInput={setValorInput}
       />
+      {notification && (
+        <div
+          className="notification"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span className="notification__indicator" />
+
+          <div className="notification__content">
+            <span className="notification__label">
+              Actualización
+            </span>
+
+            <p className="notification__message">
+              {notification}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="notification__close"
+            onClick={() => setNotification('')}
+            aria-label="Cerrar notificación"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       <main className="carrito-page">
         <section className="carrito-container">
@@ -344,7 +378,24 @@ function Carrito() {
                         <button
                           type="button"
                           className="carrito-remove-button"
-                          onClick={() => {}}
+                          onClick={async () => {
+                            await deleteFromCart(item.id, item.quantity);
+
+                            setOrder((currentOrder) => {
+                              if (!currentOrder) return null;
+
+                            return {
+                              ...currentOrder,
+                              items: currentOrder.items.filter(
+                                (cartItem) => cartItem.id !== item.id
+                                ),
+                              };
+                            });
+
+                            setNotification(
+                             `Producto "${product.name}" eliminado del carrito`
+                            );
+                          }}
                         >
                           Eliminar
                         </button>
