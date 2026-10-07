@@ -6,6 +6,11 @@ type CartContextType = {
     productVariantId: number,
     quantity: number
   ) => Promise<void>;
+  updateCartItem: (
+    orderItemId: number,
+    oldQuantity: number,
+    newQuantity: number
+  ) => Promise<void>;
   deleteFromCart: (orderItemId: number, quantity: number) => Promise<void>;
 };
 

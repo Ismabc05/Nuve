@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { getOrders } from '../../services/cart.service';
+import { getOrders } from "../../services/cart.service";
 
-import Navbar from '../../componentes/Navbar';
-import Footer from '../../componentes/Footer';
-import { useNavigate } from 'react-router-dom';
+import Navbar from "../../componentes/Navbar";
+import Footer from "../../componentes/Footer";
+import { useNavigate } from "react-router-dom";
 
-import '../../estilos/users/carrito.css';
-import { useCart } from '../../context/cart/UseCart';
+import "../../estilos/users/carrito.css";
+import { useCart } from "../../context/cart/UseCart";
 
 type CartItem = {
   id: number;
@@ -25,7 +25,7 @@ type CartItem = {
       images: {
         id: number;
         url: string;
-      }[]
+      }[];
     };
   };
 };
@@ -38,25 +38,22 @@ type Order = {
 };
 
 function Carrito() {
-  const [order, setOrder] = useState<Order | null>(
-    null
-  );
+  const [order, setOrder] = useState<Order | null>(null);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [valorInput, setValorInput] = useState('');
-  const [notification, setNotification] = useState('');
+  const [error, setError] = useState("");
+  const [valorInput, setValorInput] = useState("");
+  const [notification, setNotification] = useState("");
   const navigate = useNavigate();
 
-  const { deleteFromCart } = useCart();
-
+  const { deleteFromCart, updateCartItem } = useCart();
 
   useEffect(() => {
     const loadCart = async () => {
-      const storedUser = localStorage.getItem('user');
+      const storedUser = localStorage.getItem("user");
 
       if (!storedUser) {
-        setError('No hay usuario autenticado');
+        setError("No hay usuario autenticado");
         setLoading(false);
         return;
       }
@@ -65,7 +62,7 @@ function Carrito() {
       const userId = user?.id;
 
       if (!userId) {
-        setError('No hay usuario autenticado');
+        setError("No hay usuario autenticado");
         setLoading(false);
         return;
       }
@@ -74,41 +71,28 @@ function Carrito() {
 
       try {
         setLoading(true);
-        setError('');
+        setError("");
 
         const orders = await getOrders(userId);
 
         console.log(
-  'PRODUCT VARIANT:',
-  JSON.stringify(
-    orders[0]?.items[0]?.productvariant,
-    null,
-    2
-  )
-);
+          "PRODUCT VARIANT:",
+          JSON.stringify(orders[0]?.items[0]?.productvariant, null, 2),
+        );
 
         const activeOrder = orders.find(
-          (order: Order) =>
-            order.status === 'active'
+          (order: Order) => order.status === "active",
         );
 
         setOrder(activeOrder ?? null);
       } catch (error) {
-        console.error(
-          'Error al cargar el carrito:',
-          error
-        );
+        console.error("Error al cargar el carrito:", error);
 
-        setError(
-          'No se ha podido cargar el carrito'
-        );
+        setError("No se ha podido cargar el carrito");
       } finally {
         const elapsedTime = Date.now() - startTime;
 
-        const remainingTime = Math.max(
-          1000 - elapsedTime,
-          0
-        );
+        const remainingTime = Math.max(1000 - elapsedTime, 0);
 
         setTimeout(() => {
           setLoading(false);
@@ -120,17 +104,12 @@ function Carrito() {
   }, []);
 
   const totalItems =
-    order?.items.reduce(
-      (total, item) => total + item.quantity,
-      0
-    ) ?? 0;
+    order?.items.reduce((total, item) => total + item.quantity, 0) ?? 0;
 
   const total =
     order?.items.reduce(
-      (total, item) =>
-        total +
-        Number(item.unitPrice) * item.quantity,
-      0
+      (total, item) => total + Number(item.unitPrice) * item.quantity,
+      0,
     ) ?? 0;
 
   if (loading) {
@@ -149,9 +128,7 @@ function Carrito() {
     return (
       <main className="carrito-page">
         <div className="carrito-error">
-          <span className="carrito-error-icon">
-            !
-          </span>
+          <span className="carrito-error-icon">!</span>
 
           <h2>Ups...</h2>
 
@@ -163,10 +140,7 @@ function Carrito() {
 
   return (
     <>
-      <Navbar
-        valorInput={valorInput}
-        setValorInput={setValorInput}
-      />
+      <Navbar valorInput={valorInput} setValorInput={setValorInput} />
       {notification && (
         <div
           className="notification"
@@ -177,19 +151,15 @@ function Carrito() {
           <span className="notification__indicator" />
 
           <div className="notification__content">
-            <span className="notification__label">
-              Actualización
-            </span>
+            <span className="notification__label">Actualización</span>
 
-            <p className="notification__message">
-              {notification}
-            </p>
+            <p className="notification__message">{notification}</p>
           </div>
 
           <button
             type="button"
             className="notification__close"
-            onClick={() => setNotification('')}
+            onClick={() => setNotification("")}
             aria-label="Cerrar notificación"
           >
             ×
@@ -201,91 +171,64 @@ function Carrito() {
         <section className="carrito-container">
           <button
             className="carrito-back"
-            onClick={() => navigate('/products')}
+            onClick={() => navigate("/products")}
           >
             ← Volver a productos
           </button>
           <header className="carrito-header">
             <div>
-              <span className="carrito-label">
-                TU COMPRA
-              </span>
+              <span className="carrito-label">TU COMPRA</span>
 
               <h1>Mi carrito</h1>
 
               <p>
-                Revisa los productos que has añadido
-                antes de finalizar tu compra.
+                Revisa los productos que has añadido antes de finalizar tu
+                compra.
               </p>
             </div>
 
             <div className="carrito-count">
               <span>{totalItems}</span>
 
-              <small>
-                {totalItems === 1
-                  ? 'producto'
-                  : 'productos'}
-              </small>
+              <small>{totalItems === 1 ? "producto" : "productos"}</small>
             </div>
           </header>
 
-          {!order ||
-          !order.items ||
-          order.items.length === 0 ? (
+          {!order || !order.items || order.items.length === 0 ? (
             <div className="carrito-empty">
-              <div className="carrito-empty-icon">
-                🛒
-              </div>
+              <div className="carrito-empty-icon">🛒</div>
 
               <h2>Tu carrito está vacío</h2>
 
-              <p>
-                Añade algún producto y aparecerá aquí.
-              </p>
+              <p>Añade algún producto y aparecerá aquí.</p>
 
               <button
                 className="carrito-empty-button"
-                onClick={() =>
-                  (window.location.href =
-                    '/products')
-                }
+                onClick={() => (window.location.href = "/products")}
               >
                 Ver productos
               </button>
             </div>
           ) : (
             <div className="carrito-content">
-
               <div className="carrito-items">
                 {order.items.map((item) => {
-                  const product =
-                    item.productvariant.product;
+                  const product = item.productvariant.product;
 
-                  const subtotal =
-                    Number(item.unitPrice) *
-                    item.quantity;
+                  const subtotal = Number(item.unitPrice) * item.quantity;
 
                   return (
-                    <article
-                      className="carrito-item"
-                      key={item.id}
-                    >
+                    <article className="carrito-item" key={item.id}>
                       <div className="carrito-item-info">
-
                         <div className="carrito-item-image">
-                            {product.images?.[0]?.url ? (
-                                <img
-                                    src={product.images[0].url}
-                                    alt={product.name}
-                                />
-                            ) : (
-                                <span>
-                                    {product.name
-                                        .charAt(0)
-                                        .toUpperCase()}
-                                </span>
-                            )}
+                          {product.images?.[0]?.url ? (
+                            <img
+                              src={product.images[0].url}
+                              alt={product.name}
+                            />
+                          ) : (
+                            <span>{product.name.charAt(0).toUpperCase()}</span>
+                          )}
                         </div>
 
                         <div className="carrito-item-details">
@@ -297,25 +240,18 @@ function Carrito() {
 
                           <div className="carrito-item-options">
                             <span>
-                              Talla:{' '}
-                              <strong>
-                                {item.productvariant.size}
-                              </strong>
+                              Talla: <strong>{item.productvariant.size}</strong>
                             </span>
 
                             <span>
-                              Color:{' '}
-                              <strong>
-                                {item.productvariant.color}
-                              </strong>
+                              Color:{" "}
+                              <strong>{item.productvariant.color}</strong>
                             </span>
 
                             <span className="carrito-color">
                               <i
                                 style={{
-                                  backgroundColor:
-                                    item.productvariant
-                                      .colorHex,
+                                  backgroundColor: item.productvariant.colorHex,
                                 }}
                               />
                             </span>
@@ -327,11 +263,9 @@ function Carrito() {
                         <span>Precio</span>
 
                         <strong>
-                          {Number(
-                            item.unitPrice
-                          ).toLocaleString('es-ES', {
-                            style: 'currency',
-                            currency: 'EUR',
+                          {Number(item.unitPrice).toLocaleString("es-ES", {
+                            style: "currency",
+                            currency: "EUR",
                           })}
                         </strong>
                       </div>
@@ -343,19 +277,67 @@ function Carrito() {
                           <button
                             type="button"
                             className="carrito-quantity-button"
-                            onClick={() => {}}
+                            onClick={async () => {
+                              if (item.quantity <= 1) return;
+
+                              const newQuantity = item.quantity - 1;
+
+                              await updateCartItem(
+                                item.id,
+                                item.quantity,
+                                newQuantity,
+                              );
+
+                              setOrder((currentOrder) => {
+                                if (!currentOrder) return null;
+
+                                return {
+                                  ...currentOrder,
+                                  items: currentOrder.items.map((cartItem) =>
+                                    cartItem.id === item.id
+                                      ? {
+                                          ...cartItem,
+                                          quantity: newQuantity,
+                                        }
+                                      : cartItem,
+                                  ),
+                                };
+                              });
+                            }}
                           >
                             −
                           </button>
 
-                          <strong>
-                            {item.quantity}
-                          </strong>
+                          <strong>{item.quantity}</strong>
 
                           <button
                             type="button"
                             className="carrito-quantity-button"
-                            onClick={() => {}}
+                            onClick={async () => {
+                              const newQuantity = item.quantity + 1;
+
+                              await updateCartItem(
+                                item.id,
+                                item.quantity,
+                                newQuantity,
+                              );
+
+                              setOrder((currentOrder) => {
+                                if (!currentOrder) return null;
+
+                                return {
+                                  ...currentOrder,
+                                  items: currentOrder.items.map((cartItem) =>
+                                    cartItem.id === item.id
+                                      ? {
+                                          ...cartItem,
+                                          quantity: newQuantity,
+                                        }
+                                      : cartItem,
+                                  ),
+                                };
+                              });
+                            }}
                           >
                             +
                           </button>
@@ -366,13 +348,10 @@ function Carrito() {
                         <span>Subtotal</span>
 
                         <strong>
-                          {subtotal.toLocaleString(
-                            'es-ES',
-                            {
-                              style: 'currency',
-                              currency: 'EUR',
-                            }
-                          )}
+                          {subtotal.toLocaleString("es-ES", {
+                            style: "currency",
+                            currency: "EUR",
+                          })}
                         </strong>
 
                         <button
@@ -384,16 +363,16 @@ function Carrito() {
                             setOrder((currentOrder) => {
                               if (!currentOrder) return null;
 
-                            return {
-                              ...currentOrder,
-                              items: currentOrder.items.filter(
-                                (cartItem) => cartItem.id !== item.id
+                              return {
+                                ...currentOrder,
+                                items: currentOrder.items.filter(
+                                  (cartItem) => cartItem.id !== item.id,
                                 ),
                               };
                             });
 
                             setNotification(
-                             `Producto "${product.name}" eliminado del carrito`
+                              `Producto "${product.name}" eliminado del carrito`,
                             );
                           }}
                         >
@@ -406,9 +385,7 @@ function Carrito() {
               </div>
 
               <aside className="carrito-summary">
-                <span className="carrito-summary-label">
-                  RESUMEN
-                </span>
+                <span className="carrito-summary-label">RESUMEN</span>
 
                 <h2>Resumen del pedido</h2>
 
@@ -422,13 +399,10 @@ function Carrito() {
                   <span>Subtotal</span>
 
                   <span>
-                    {total.toLocaleString(
-                      'es-ES',
-                      {
-                        style: 'currency',
-                        currency: 'EUR',
-                      }
-                    )}
+                    {total.toLocaleString("es-ES", {
+                      style: "currency",
+                      currency: "EUR",
+                    })}
                   </span>
                 </div>
 
@@ -444,13 +418,10 @@ function Carrito() {
                   <span>Total</span>
 
                   <strong>
-                    {total.toLocaleString(
-                      'es-ES',
-                      {
-                        style: 'currency',
-                        currency: 'EUR',
-                      }
-                    )}
+                    {total.toLocaleString("es-ES", {
+                      style: "currency",
+                      currency: "EUR",
+                    })}
                   </strong>
                 </div>
 
@@ -462,7 +433,6 @@ function Carrito() {
                   Finalizar compra
                 </button>
               </aside>
-
             </div>
           )}
         </section>

@@ -8,6 +8,7 @@ import {
   getOrders,
   addOrderItem,
   removeOrderItem,
+  updateOrderItem,
 } from '../../services/cart.service';
 
 import { CartContext } from './CartContext';
@@ -117,12 +118,27 @@ export function CartProvider({ children }: CartProviderProps) {
     );
   };
 
+  const updateCartItem = async (
+    orderItemId: number,
+    oldQuantity: number,
+    newQuantity: number,
+  ) => {
+    await updateOrderItem(orderItemId, newQuantity);
+
+    const difference = newQuantity - oldQuantity;
+
+    setCartCount((currentCount) =>
+      Math.max(0, currentCount + difference)
+    );
+  };
+
   return (
     <CartContext.Provider
       value={{
         cartCount,
         addToCart,
         deleteFromCart,
+        updateCartItem,
       }}
     >
       {children}

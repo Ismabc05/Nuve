@@ -49,6 +49,32 @@ export const addOrderItem = async (
   return await response.json();
 };
 
+export const updateOrderItem = async (
+  orderItemId: number,
+  quantity: number
+) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  const response = await fetch(`${API_URL}/order-item/${orderItemId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ quantity }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al actualizar el producto en el carrito');
+  }
+
+  return await response.json();
+};
+
 export const removeOrderItem = async (
   orderItemId: number
 ) => {
