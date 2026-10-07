@@ -17,7 +17,7 @@ function Favoritos() {
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [, setNotification] = useState('');
+  const [notification, setNotification] = useState('');
   const [valorInput, setValorInput] = useState('');
   const navigate = useNavigate();
 
@@ -84,6 +84,7 @@ function Favoritos() {
     try {
       if (isFavorite(productId)) {
         await removeFavoriteProduct(productId);
+        setNotification('Producto eliminado de favoritos');
 
         setFavorites((currentFavorites) =>
           currentFavorites.filter(
@@ -92,6 +93,7 @@ function Favoritos() {
         );
       } else {
         await addFavoriteProduct(productId);
+        setNotification('Producto agregado a favoritos');
       }
     } catch (error) {
       console.error(
@@ -138,6 +140,35 @@ function Favoritos() {
           valorInput={valorInput}
           setValorInput={setValorInput}
         />
+    {notification && (
+        <div
+          className="notification"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span className="notification__indicator" />
+
+          <div className="notification__content">
+            <span className="notification__label">
+              Actualización
+            </span>
+
+            <p className="notification__message">
+              {notification}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="notification__close"
+            onClick={() => setNotification('')}
+            aria-label="Cerrar notificación"
+          >
+            ×
+          </button>
+        </div>
+      )}
     <main className="favoritos-page">
       <section className="favoritos-container">
         <button

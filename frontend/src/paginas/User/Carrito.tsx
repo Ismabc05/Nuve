@@ -4,6 +4,7 @@ import { getOrders } from '../../services/product.service';
 
 import Navbar from '../../componentes/Navbar';
 import Footer from '../../componentes/Footer';
+import { useNavigate } from 'react-router-dom';
 
 import '../../estilos/users/carrito.css';
 
@@ -43,6 +44,7 @@ function Carrito() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [valorInput, setValorInput] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadCart = async () => {
@@ -163,7 +165,12 @@ function Carrito() {
 
       <main className="carrito-page">
         <section className="carrito-container">
-
+          <button
+            className="carrito-back"
+            onClick={() => navigate('/products')}
+          >
+            ← Volver a productos
+          </button>
           <header className="carrito-header">
             <div>
               <span className="carrito-label">
