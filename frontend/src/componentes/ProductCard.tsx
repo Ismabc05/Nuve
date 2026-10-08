@@ -9,10 +9,10 @@ import type { Product } from '../types/product';
 import '../estilos/product/product-card.css';
 
 type ProductCardProps = {
-  product: Product;
-  setNotification: Dispatch<SetStateAction<string>>;
-  isFavorite: boolean;
-  onToggleFavorite: () => void;
+  product: Product; // El producto a mostrar en la tarjeta
+  setNotification: Dispatch<SetStateAction<string>>; // Función para establecer la notificación
+  isFavorite: boolean; // Indica si el producto es favorito o no
+  onToggleFavorite: () => void; // Función para alternar el estado de favorito del producto
 };
 
 function ProductCard({
@@ -39,6 +39,7 @@ function ProductCard({
     ).values()
   );
 
+  // Función para manejar la acción de favorito
   const handleFavorite = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {

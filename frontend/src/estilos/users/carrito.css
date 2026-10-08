@@ -397,7 +397,7 @@
 
 .carrito-summary {
   position: sticky;
-  top: 25px;
+  top: 100px;
   padding: 30px;
   border: 1px solid #deded9;
   background: #fff;
