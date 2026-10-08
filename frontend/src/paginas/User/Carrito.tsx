@@ -8,34 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../../estilos/users/carrito.css";
 import { useCart } from "../../context/cart/UseCart";
-
-type CartItem = {
-  id: number;
-  quantity: number;
-  unitPrice: number;
-  productvariant: {
-    id: number;
-    size: string;
-    color: string;
-    colorHex: string;
-    product: {
-      id: number;
-      name: string;
-      price: number;
-      images: {
-        id: number;
-        url: string;
-      }[];
-    };
-  };
-};
-
-type Order = {
-  id: number;
-  status: string;
-  total: number;
-  items: CartItem[];
-};
+import type { Order } from "../../types/carrito";
 
 function Carrito() {
   const [order, setOrder] = useState<Order | null>(null);

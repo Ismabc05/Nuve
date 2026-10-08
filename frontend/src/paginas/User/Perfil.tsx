@@ -1,48 +1,15 @@
 import { useEffect, useState } from "react";
-
 import Navbar from "../../componentes/Navbar";
 import Footer from "../../componentes/Footer";
-
 import {
   getUser,
   getAddresses,
   updateUser,
 } from "../../services/user.service";
-
 import { uploadImage } from "../../services/auth.service";
-
 import "../../estilos/users/perfil.css";
-
 import { useNavigate } from "react-router-dom";
-
-type Address = {
-  id: number;
-  street?: string;
-  city?: string;
-  postalCode?: string;
-  country?: string;
-};
-
-type User = {
-  id: number;
-  email: string;
-  role: string;
-  profile: {
-    id: number;
-    name: string;
-    lastname: string;
-    phone: string;
-    zip_code: string;
-    image: string;
-    addresses: Address[] | null;
-    favorites: number[];
-  };
-  orders: {
-    id: number;
-    status: string;
-    total: string;
-  }[];
-};
+import type { Address, User } from "../../types/perfil";
 
 const getOrderStatus = (status: string) => {
   switch (status.toLowerCase()) {
@@ -99,10 +66,6 @@ function Perfil() {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const navigate = useNavigate();
-
-  // =========================
-  // CARGAR PERFIL
-  // =========================
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -170,10 +133,6 @@ function Perfil() {
     loadProfile();
   }, []);
 
-  // =========================
-  // CAMBIAR DATOS DEL FORMULARIO
-  // =========================
-
   const handleProfileChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -184,10 +143,6 @@ function Perfil() {
       [name]: value,
     }));
   };
-
-  // =========================
-  // CAMBIAR IMAGEN
-  // =========================
 
   const handleImageChange = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -220,10 +175,6 @@ function Perfil() {
       setUploadingImage(false);
     }
   };
-
-  // =========================
-  // GUARDAR PERFIL
-  // =========================
 
   const handleSaveProfile = async () => {
     if (!user) return;
@@ -269,10 +220,6 @@ function Perfil() {
     }
   };
 
-  // =========================
-  // LOADING
-  // =========================
-
   if (loading) {
     return (
       <>
@@ -293,10 +240,6 @@ function Perfil() {
       </>
     );
   }
-
-  // =========================
-  // ERROR
-  // =========================
 
   if (error || !user) {
     return (
@@ -327,10 +270,6 @@ function Perfil() {
       </>
     );
   }
-
-  // =========================
-  // PERFIL
-  // =========================
 
   return (
     <>
@@ -371,21 +310,12 @@ function Perfil() {
 
       <main className="perfil-page">
         <div className="perfil-container">
-
-          {/* =========================
-              VOLVER
-              ========================= */}
-
           <button
             className="favoritos-back"
             onClick={() => navigate("/products")}
           >
             ← Volver a productos
           </button>
-
-          {/* =========================
-              HEADER
-              ========================= */}
 
           <header className="perfil-header">
             <div>
@@ -401,10 +331,6 @@ function Perfil() {
               </p>
             </div>
           </header>
-
-          {/* =========================
-              INFORMACIÓN PERSONAL
-              ========================= */}
 
           <section className="perfil-section">
 
@@ -453,10 +379,6 @@ function Perfil() {
 
             <div className="perfil-personal">
 
-              {/* =========================
-                  IMAGEN
-                  ========================= */}
-
               <div className="perfil-avatar-container">
 
                 <div className="perfil-avatar">
@@ -499,10 +421,6 @@ function Perfil() {
                 )}
 
               </div>
-
-              {/* =========================
-                  DATOS NORMALES
-                  ========================= */}
 
               {!editingProfile ? (
 
@@ -555,10 +473,6 @@ function Perfil() {
                 </div>
 
               ) : (
-
-                /* =========================
-                   FORMULARIO EDICIÓN
-                   ========================= */
 
                 <div className="perfil-info-grid perfil-info-edit">
 
@@ -671,10 +585,6 @@ function Perfil() {
 
           </section>
 
-          {/* =========================
-              DIRECCIONES
-              ========================= */}
-
           <section className="perfil-section">
 
             <div className="perfil-section-header">
@@ -770,10 +680,6 @@ function Perfil() {
             )}
 
           </section>
-
-          {/* =========================
-              PEDIDOS
-              ========================= */}
 
           <section className="perfil-section">
 

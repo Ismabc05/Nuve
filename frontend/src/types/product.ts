@@ -48,26 +48,4 @@ export type Review = {
   comment: string;
 };
 
-export type CreateOrderItem = {
-  quantity: number;
-  productvariantId: number;
-  orderId: number;
-};
-
-export type UserData = {
-  name?: string;
-  lastname?: string;
-  phone?: string;
-  zip_code?: string;
-  image?: string;
-};
-
-export type AddressData = {
-  name?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-};
-
 export type PriceOrder = 'asc' | 'desc' | '';

@@ -1,5 +1,5 @@
 const API_URL = 'https://nuve-miru.onrender.com';
-import type { CreateOrderItem } from '../types/product';
+import type { CreateOrderItem } from '../types/carrito';
 
 export const getOrders = async (userId: number) => {
   const token = localStorage.getItem('token');

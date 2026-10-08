@@ -1,4 +1,4 @@
-import type { AddressData, UserData } from "../types/product";
+import type { AddressData, UserData } from "../types/perfil";
 
 const API_URL = 'https://nuve-miru.onrender.com';
 
