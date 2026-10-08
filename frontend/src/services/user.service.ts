@@ -94,6 +94,7 @@ export const updateUser = async (
 
   return await response.json();
 };
+
 export const createAddress = async (userId: number, addressData: AddressData) => {
   const token = localStorage.getItem('token');
 
@@ -142,6 +143,31 @@ export const updateAddress = async (userId: number, addressId: number, addressDa
   if (!response.ok) {
     throw new Error('Error al actualizar la dirección');
   }
+  return await response.json();
+}
+
+export const deleteAddress = async (userId: number, addressId: number) => {
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  const response = await fetch(
+    `${API_URL}/users/${userId}/addresses/${addressId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );  
+
+  if (!response.ok) {
+    throw new Error('Error al eliminar la dirección');
+  }
+
   return await response.json();
 }
 
