@@ -46,6 +46,7 @@ export type Review = {
   rating: number;
   userId: number;
   comment: string;
+  userName?: string;
 };
 
 export type PriceOrder = 'asc' | 'desc' | '';

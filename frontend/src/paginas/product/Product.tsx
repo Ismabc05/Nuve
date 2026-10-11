@@ -645,7 +645,7 @@ function Product() {
                       </div>
 
                       <span className="product-detail__review-user">
-                        Usuario #{review.userId}
+                        {review.userName || `Usuario #${review.userId}`}
                       </span>
                     </div>
 
