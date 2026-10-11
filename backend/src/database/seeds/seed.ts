@@ -7,6 +7,9 @@ import { Category } from '../../products/entities/category.entity';
 import { Product } from '../../products/entities/product.entity';
 import { ProductVariant } from '../../products/entities/product-variant.entity';
 import { ProductImage } from '../../products/entities/product-image.entity';
+import { User } from '../../users/entities/user.entity';
+import { UserRole } from '../../users/models/user.role';
+import * as bcrypt from 'bcrypt';
 
 const brands = [
   'Nike',
@@ -710,6 +713,7 @@ async function seed() {
   const productRepository = dataSource.getRepository(Product);
   const variantRepository = dataSource.getRepository(ProductVariant);
   const imageRepository = dataSource.getRepository(ProductImage);
+  const userRepository = dataSource.getRepository(User);
 
   try {
     // ============================================================
@@ -720,16 +724,11 @@ async function seed() {
 
     for (const brandName of brands) {
       let brand = await brandRepository.findOne({
-        where: {
-          name: brandName,
-        },
+        where: { name: brandName },
       });
 
       if (!brand) {
-        brand = brandRepository.create({
-          name: brandName,
-        });
-
+        brand = brandRepository.create({ name: brandName });
         brand = await brandRepository.save(brand);
 
         console.log(`✅ Marca creada: ${brand.name}`);
@@ -748,9 +747,7 @@ async function seed() {
 
     for (const categoryName of categories) {
       let category = await categoryRepository.findOne({
-        where: {
-          name: categoryName,
-        },
+        where: { name: categoryName },
       });
 
       if (!category) {
@@ -769,6 +766,77 @@ async function seed() {
     }
 
     // ============================================================
+    // USUARIOS DE PRUEBA
+    // ============================================================
+
+    const seedUsers = [
+      {
+        email: 'ana.seed@ejemplo.com',
+        name: 'Ana',
+        lastname: 'García',
+      },
+      {
+        email: 'carlos.seed@ejemplo.com',
+        name: 'Carlos',
+        lastname: 'Martínez',
+      },
+      {
+        email: 'lucia.seed@ejemplo.com',
+        name: 'Lucía',
+        lastname: 'López',
+      },
+      {
+        email: 'pablo.seed@ejemplo.com',
+        name: 'Pablo',
+        lastname: 'Sánchez',
+      },
+      {
+        email: 'marta.seed@ejemplo.com',
+        name: 'Marta',
+        lastname: 'Fernández',
+      },
+    ];
+
+    const reviewUsers: User[] = [];
+    const passwordHash = await bcrypt.hash('Seed1234!', 10);
+
+    for (const userData of seedUsers) {
+      let user = await userRepository.findOne({
+        where: { email: userData.email },
+        relations: { profile: true },
+      });
+
+      if (!user) {
+        user = userRepository.create({
+          email: userData.email,
+          password: passwordHash,
+          role: UserRole.USER,
+          profile: {
+            name: userData.name,
+            lastname: userData.lastname,
+          },
+        });
+
+        user = await userRepository.save(user);
+
+        console.log(`👤 Usuario creado: ${userData.name}`);
+      } else {
+        console.log(`↪️ Usuario existente: ${user.email}`);
+      }
+
+      reviewUsers.push(user);
+    }
+
+    // IDs reales de todos los usuarios existentes en la base de datos.
+    const existingUsers = await userRepository.find({
+      select: { id: true },
+    });
+
+    const existingUserIds = new Set(
+      existingUsers.map((user) => Number(user.id)),
+    );
+
+    // ============================================================
     // PRODUCTOS
     // ============================================================
 
@@ -785,25 +853,46 @@ async function seed() {
       // CATEGORÍA
       // ----------------------------------------------------------
 
-      const category =
-        categoryEntities.find(
-          (categoryEntity) =>
-            categoryEntity.name.toLowerCase() ===
-            productData.type.toLowerCase(),
-        ) ?? getRandomItem(categoryEntities);
+      // Normalizamos los acentos para evitar fallos como
+      // "Pantalónes" frente a "Pantalones".
+      const normalizeText = (value: string) =>
+        value
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
+          .toLowerCase();
+
+      const productType = normalizeText(productData.type);
+
+      let category = categoryEntities.find((categoryEntity) => {
+        const categoryName = normalizeText(categoryEntity.name);
+
+        return (
+          categoryName === productType ||
+          (productType === 'vaquero' && categoryName === 'vaqueros')
+        );
+      });
+
+      if (!category) {
+        category = getRandomItem(categoryEntities);
+        console.warn(
+          `⚠️ No se encontró la categoría "${productData.type}". ` +
+            `Se utilizará "${category.name}".`,
+        );
+      }
 
       const productCategories = [category];
 
-      // Los vaqueros también pertenecen a Pantalones
-      if (
-        productData.type === 'Vaquero' &&
-        !productCategories.some((item) => item.name === 'Pantalones')
-      ) {
+      // Los vaqueros también pertenecen a Pantalones.
+      if (productType === 'vaquero' || productType === 'vaqueros') {
         const pantalones = categoryEntities.find(
-          (item) => item.name === 'Pantalones',
+          (item) => normalizeText(item.name) === 'pantalones',
         );
 
-        if (pantalones) {
+        if (
+          pantalones &&
+          !productCategories.some((item) => item.id === pantalones.id)
+        ) {
           productCategories.push(pantalones);
         }
       }
@@ -813,34 +902,17 @@ async function seed() {
       // ----------------------------------------------------------
 
       let product = await productRepository.findOne({
-        where: {
-          name: productData.name,
-        },
+        where: { name: productData.name },
       });
 
       if (!product) {
-        const reviews = [
-          {
-            id: 1,
-            userId: getRandomNumber(1, 5),
-            rating: getRandomNumber(4, 5),
-            comment: getRandomItem(reviewComments),
-          },
-          {
-            id: 2,
-            userId: getRandomNumber(1, 5),
-            rating: getRandomNumber(3, 5),
-            comment: getRandomItem(reviewComments),
-          },
-        ];
-
         product = productRepository.create({
           name: productData.name,
           price: productData.price,
           description: productData.description,
           brand,
           categories: productCategories,
-          reviews,
+          reviews: [],
         });
 
         product = await productRepository.save(product);
@@ -848,6 +920,67 @@ async function seed() {
         console.log(`🛍️ Producto creado: ${product.name}`);
       } else {
         console.log(`↪️ Producto existente: ${product.name}`);
+      }
+
+      // ----------------------------------------------------------
+      // RESEÑAS
+      // ----------------------------------------------------------
+
+      const currentReviews = product.reviews ?? [];
+      let updatedReviews = [...currentReviews];
+
+      if (updatedReviews.length === 0) {
+        // Si no hay reseñas, creamos dos con usuarios reales.
+        updatedReviews = [
+          {
+            id: 1,
+            userId: reviewUsers[index % reviewUsers.length].id,
+            rating: getRandomNumber(4, 5),
+            comment: getRandomItem(reviewComments),
+          },
+          {
+            id: 2,
+            userId: reviewUsers[(index + 1) % reviewUsers.length].id,
+            rating: getRandomNumber(3, 5),
+            comment: getRandomItem(reviewComments),
+          },
+        ];
+      } else {
+        // Si hay reseñas, conservamos las existentes cuando su
+        // usuario sigue existiendo y reparamos los IDs inválidos.
+        updatedReviews = updatedReviews.map((review, reviewIndex) => {
+          const userId = Number(review.userId);
+
+          if (Number.isInteger(userId) && existingUserIds.has(userId)) {
+            return {
+              ...review,
+              userId,
+            };
+          }
+
+          const replacementUser = reviewUsers[reviewIndex % reviewUsers.length];
+
+          return {
+            ...review,
+            userId: replacementUser.id,
+          };
+        });
+      }
+
+      // Solo guardamos si las reseñas han cambiado.
+      const reviewsChanged =
+        JSON.stringify(currentReviews) !== JSON.stringify(updatedReviews);
+
+      if (reviewsChanged) {
+        product.reviews = updatedReviews;
+        product = await productRepository.save(product);
+
+        console.log(
+          `⭐ Reseñas actualizadas: ${product.name} ` +
+            `(${updatedReviews.length})`,
+        );
+      } else {
+        console.log(`↪️ Reseñas correctas: ${product.name}`);
       }
 
       // ============================================================
@@ -864,14 +997,12 @@ async function seed() {
         const existingImage = await imageRepository.findOne({
           where: {
             url,
-            product: {
-              id: product.id,
-            },
+            product: { id: product.id },
           },
         });
 
         if (existingImage) {
-          console.log(`   ↪️ Imagen existente`);
+          console.log('   ↪️ Imagen existente');
           continue;
         }
 
@@ -882,19 +1013,16 @@ async function seed() {
 
         await imageRepository.save(image);
 
-        console.log(`   🖼️ Imagen añadida`);
+        console.log('   🖼️ Imagen añadida');
       }
 
       // ============================================================
       // VARIANTES
       // ============================================================
 
-      /*
-       * Cada producto tendrá 3 colores y 4 tallas.
-       *
-       * Gracias al @Unique(['product', 'size', 'color'])
-       * de ProductVariant, cada combinación es única.
-       */
+      // Cada producto tendrá 3 colores y las tallas configuradas.
+      // @Unique(['product', 'size', 'color']) evita combinaciones
+      // duplicadas en la base de datos.
 
       const startColorIndex = index % colors.length;
 
@@ -910,9 +1038,7 @@ async function seed() {
         for (const size of sizes) {
           const existingVariant = await variantRepository.findOne({
             where: {
-              product: {
-                id: product.id,
-              },
+              product: { id: product.id },
               size,
               color: color.name,
             },
@@ -939,9 +1065,13 @@ async function seed() {
       if (variantsCreated > 0) {
         console.log(`   🎨 ${variantsCreated} variantes creadas`);
       } else {
-        console.log(`   ↪️ Variantes existentes`);
+        console.log('   ↪️ Variantes existentes');
       }
     }
+
+    // ============================================================
+    // RESUMEN
+    // ============================================================
 
     console.log('');
     console.log('==========================================');
@@ -950,6 +1080,7 @@ async function seed() {
     console.log(`Productos procesados: ${productsData.length}`);
     console.log(`Marcas: ${brandEntities.length}`);
     console.log(`Categorías: ${categoryEntities.length}`);
+    console.log(`Usuarios de reseñas: ${reviewUsers.length}`);
     console.log('==========================================');
   } catch (error) {
     console.error('❌ Error ejecutando el seed:', error);
@@ -958,7 +1089,6 @@ async function seed() {
     await dataSource.destroy();
   }
 }
-
 seed()
   .then(() => {
     console.log('✅ Seed finalizado correctamente');
