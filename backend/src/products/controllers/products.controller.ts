@@ -55,8 +55,9 @@ export class ProductsController {
     description: 'Producto no encontrado',
   })
   @Get(':id')
+  @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.findOne(id);
+    return this.productService.getProductWithReviewAuthors(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
