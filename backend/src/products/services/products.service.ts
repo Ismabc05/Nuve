@@ -10,6 +10,7 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import { Category } from '../entities/category.entity';
 import { Brand } from '../entities/brand.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -17,6 +18,7 @@ export class ProductsService {
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
     @InjectRepository(Brand) private brandRepo: Repository<Brand>,
+    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
   async findAll() {
@@ -40,10 +42,49 @@ export class ProductsService {
         brand: true,
       },
     });
+
     if (!product) {
       throw new NotFoundException('Product no encontrado');
     }
+
     return product;
+  }
+
+  async getProductWithReviewAuthors(id: number) {
+    const product = await this.findOne(id);
+
+    const reviews = product.reviews ?? [];
+
+    if (reviews.length === 0) {
+      return {
+        ...product,
+        reviews: [],
+      };
+    }
+
+    const userIds = [...new Set(reviews.map((review) => review.userId))];
+
+    const users = await this.userRepo.find({
+      where: userIds.map((userId) => ({ id: userId })),
+      relations: {
+        profile: true,
+      },
+    });
+
+    const usersById = new Map(
+      users.map((user) => [
+        user.id,
+        `${user.profile?.name ?? ''} ${user.profile?.lastname ?? ''}`.trim(),
+      ]),
+    );
+
+    return {
+      ...product,
+      reviews: reviews.map((review) => ({
+        ...review,
+        userName: usersById.get(review.userId) || 'Usuario',
+      })),
+    };
   }
 
   async create(body: CreateProductDto) {
@@ -144,11 +185,8 @@ export class ProductsService {
   }
 
   async getReviews(productId: number) {
-    const product = await this.findOne(productId);
-    if (!product) {
-      throw new NotFoundException('Producto no encontrado');
-    }
-    return product.reviews ?? [];
+    const product = await this.getProductWithReviewAuthors(productId);
+    return product.reviews;
   }
 
   async deleteReview(productId: number, reviewId: number, userId: number) {

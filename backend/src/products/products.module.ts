@@ -16,6 +16,7 @@ import { Category } from './entities/category.entity';
 import { ProductImage } from './entities/product-image.entity';
 import { ProductVariant } from './entities/product-variant.entity';
 import { Product } from './entities/product.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Product } from './entities/product.entity';
       ProductImage,
       ProductVariant,
       Product,
+      User,
     ]),
   ],
   controllers: [
