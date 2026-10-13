@@ -227,7 +227,6 @@ function Perfil() {
 
     // Si hay errores en el frontend, no llamamos al backend.
     if (Object.keys(errors).length > 0) {
-      setProfileError("Revisa los campos marcados antes de guardar.");
       return;
     }
 
@@ -257,10 +256,7 @@ function Perfil() {
       setProfileFieldErrors({});
       setEditingProfile(false);
       setProfileSuccess("Perfil actualizado correctamente");
-    } catch (error) {
-      // El detalle técnico queda en la consola, no en la interfaz.
-      console.error("Error al actualizar el perfil:", error);
-
+    } catch {
       setProfileError(
         "No se ha podido actualizar la información. Comprueba los datos e inténtalo de nuevo.",
       );
@@ -329,7 +325,6 @@ function Perfil() {
     setAddressSuccess("");
 
     if (Object.keys(errors).length > 0) {
-      setAddressError("Revisa los campos marcados antes de guardar.");
       return;
     }
     if (!user) return;
@@ -649,7 +644,14 @@ function Perfil() {
                   </div>
                 </div>
               ) : (
-                <div className="perfil-info-grid perfil-info-edit">
+                <form
+                  noValidate
+                  className="perfil-info-grid perfil-info-edit"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSaveProfile();
+                  }}
+                >
                   <div className="perfil-info-item">
                     <span>Nombre</span>
 
@@ -754,7 +756,7 @@ function Perfil() {
                     </button>
 
                     <button
-                      type="button"
+                      type="submit"
                       className="perfil-edit-save"
                       onClick={handleSaveProfile}
                       disabled={savingProfile || uploadingImage}
@@ -762,7 +764,7 @@ function Perfil() {
                       {savingProfile ? "Guardando..." : "Guardar cambios"}
                     </button>
                   </div>
-                </div>
+                </form>
               )}
             </div>
           </section>
@@ -787,7 +789,14 @@ function Perfil() {
             </div>
 
             {showAddressForm ? (
-              <div className="perfil-address-form">
+              <form
+                noValidate
+                className="perfil-address-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSaveAddress();
+                }}
+              >
                 <div className="perfil-address-form-header">
                   <div>
                     <span className="perfil-section-label">
@@ -924,7 +933,7 @@ function Perfil() {
                   </button>
 
                   <button
-                    type="button"
+                    type="submit"
                     className="perfil-edit-save"
                     onClick={handleSaveAddress}
                     disabled={savingAddress}
@@ -932,7 +941,7 @@ function Perfil() {
                     {savingAddress ? "Guardando..." : "Guardar dirección"}
                   </button>
                 </div>
-              </div>
+              </form>
             ) : (
               <>
                 {addressError && (

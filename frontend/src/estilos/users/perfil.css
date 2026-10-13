@@ -1029,6 +1029,13 @@
   margin-left: auto;
 }
 
+.perfil-field-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin: 2px 0 0;
+  line-height: 1.2;
+}
+
 .perfil-section-actions .perfil-edit-button,
 .perfil-section-actions .perfil-logout-button {
   min-height: 46px;

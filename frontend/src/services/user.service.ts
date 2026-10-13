@@ -79,18 +79,8 @@ export const updateUser = async (
   );
 
   if (!response.ok) {
-    const errorData = await response.text();
-
-    console.error(
-      "Error del backend:",
-      response.status,
-      errorData
-    );
-
-    throw new Error(
-      `Error al actualizar el usuario: ${response.status} ${errorData}`
-    );
-  }
+  throw new Error("No se ha podido actualizar el usuario");
+}
 
   return await response.json();
 };
