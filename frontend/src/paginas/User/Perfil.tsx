@@ -18,6 +18,14 @@ import "../../estilos/users/perfil.css";
 
 import { useNavigate } from "react-router-dom";
 
+import {
+  validateProfile,
+  validateAddress,
+  validateProfileImage,
+  type ProfileErrors,
+  type AddressErrors,
+} from "../../paginas/User/Validation";
+
 import type { Address, User } from "../../types/perfil";
 
 const getOrderStatus = (status: string) => {
@@ -56,10 +64,6 @@ function Perfil() {
 
   const [valorInput, setValorInput] = useState("");
 
-  // =========================
-  // PERFIL
-  // =========================
-
   const [editingProfile, setEditingProfile] = useState(false);
 
   const [profileForm, setProfileForm] = useState({
@@ -77,10 +81,6 @@ function Perfil() {
   const [profileSuccess, setProfileSuccess] = useState("");
 
   const [uploadingImage, setUploadingImage] = useState(false);
-
-  // =========================
-  // DIRECCIONES
-  // =========================
 
   const [addressForm, setAddressForm] = useState({
     name: "",
@@ -100,11 +100,15 @@ function Perfil() {
 
   const [addressSuccess, setAddressSuccess] = useState("");
 
-  const navigate = useNavigate();
+  const [profileFieldErrors, setProfileFieldErrors] = useState<ProfileErrors>(
+    {},
+  );
 
-  // =========================
-  // CARGAR PERFIL
-  // =========================
+  const [addressFieldErrors, setAddressFieldErrors] = useState<AddressErrors>(
+    {},
+  );
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -167,10 +171,6 @@ function Perfil() {
     loadProfile();
   }, []);
 
-  // =========================
-  // CAMBIAR DATOS PERFIL
-  // =========================
-
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -178,20 +178,30 @@ function Perfil() {
       ...prev,
       [name]: value,
     }));
-  };
 
-  // =========================
-  // SUBIR IMAGEN
-  // =========================
+    setProfileFieldErrors((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
+
+    setProfileError("");
+  };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
+    const imageError = validateProfileImage(file);
+
+    if (imageError) {
+      setProfileError(imageError);
+      e.target.value = "";
+      return;
+    }
+
     try {
       setUploadingImage(true);
-
       setProfileError("");
 
       const imageUrl = await uploadImage(file);
@@ -202,28 +212,37 @@ function Perfil() {
       }));
     } catch (error) {
       console.error("Error al subir la imagen:", error);
-
       setProfileError("No se ha podido subir la imagen");
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // =========================
-  // GUARDAR PERFIL
-  // =========================
-
   const handleSaveProfile = async () => {
+    const errors = validateProfile(profileForm);
+
+    setProfileFieldErrors(errors);
+    setProfileError("");
+    setProfileSuccess("");
+
+    // Si hay errores en el frontend, no llamamos al backend.
+    if (Object.keys(errors).length > 0) {
+      setProfileError("Revisa los campos marcados antes de guardar.");
+      return;
+    }
+
     if (!user) return;
 
     try {
       setSavingProfile(true);
 
-      setProfileError("");
-
-      setProfileSuccess("");
-
-      const updatedUser = await updateUser(user.id, profileForm);
+      const updatedUser = await updateUser(user.id, {
+        ...profileForm,
+        name: profileForm.name.trim(),
+        lastname: profileForm.lastname.trim(),
+        phone: profileForm.phone.trim(),
+        zipCode: profileForm.zipCode.trim(),
+      });
 
       setUser(updatedUser);
 
@@ -235,21 +254,20 @@ function Perfil() {
         image: updatedUser.profile.image || "",
       });
 
+      setProfileFieldErrors({});
       setEditingProfile(false);
-
       setProfileSuccess("Perfil actualizado correctamente");
     } catch (error) {
+      // El detalle técnico queda en la consola, no en la interfaz.
       console.error("Error al actualizar el perfil:", error);
 
-      setProfileError("No se ha podido actualizar la información");
+      setProfileError(
+        "No se ha podido actualizar la información. Comprueba los datos e inténtalo de nuevo.",
+      );
     } finally {
       setSavingProfile(false);
     }
   };
-
-  // =========================
-  // CAMBIAR DATOS DIRECCIÓN
-  // =========================
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -258,11 +276,14 @@ function Perfil() {
       ...prev,
       [name]: value,
     }));
-  };
 
-  // =========================
-  // NUEVA DIRECCIÓN
-  // =========================
+    setAddressFieldErrors((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
+
+    setAddressError("");
+  };
 
   const handleNewAddress = () => {
     setAddressForm({
@@ -282,10 +303,6 @@ function Perfil() {
     setShowAddressForm(true);
   };
 
-  // =========================
-  // EDITAR DIRECCIÓN
-  // =========================
-
   const handleEditAddress = (address: Address) => {
     setAddressForm({
       name: address.name || "",
@@ -304,11 +321,17 @@ function Perfil() {
     setShowAddressForm(true);
   };
 
-  // =========================
-  // GUARDAR DIRECCIÓN
-  // =========================
-
   const handleSaveAddress = async () => {
+    const errors = validateAddress(addressForm);
+
+    setAddressFieldErrors(errors);
+    setAddressError("");
+    setAddressSuccess("");
+
+    if (Object.keys(errors).length > 0) {
+      setAddressError("Revisa los campos marcados antes de guardar.");
+      return;
+    }
     if (!user) return;
 
     try {
@@ -356,10 +379,6 @@ function Perfil() {
     }
   };
 
-  // =========================
-  // ELIMINAR DIRECCIÓN
-  // =========================
-
   const handleDeleteAddress = async (addressId: number) => {
     if (!user) return;
 
@@ -381,10 +400,6 @@ function Perfil() {
     }
   };
 
-  // =========================
-  // CANCELAR DIRECCIÓN
-  // =========================
-
   const handleCancelAddress = () => {
     setShowAddressForm(false);
 
@@ -401,9 +416,12 @@ function Perfil() {
     });
   };
 
-  // =========================
-  // LOADING
-  // =========================
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    navigate("/login", { replace: true });
+  };
 
   if (loading) {
     return (
@@ -422,10 +440,6 @@ function Perfil() {
       </>
     );
   }
-
-  // =========================
-  // ERROR
-  // =========================
 
   if (error || !user) {
     return (
@@ -447,17 +461,9 @@ function Perfil() {
     );
   }
 
-  // =========================
-  // RENDER
-  // =========================
-
   return (
     <>
       <Navbar valorInput={valorInput} setValorInput={setValorInput} />
-
-      {/* =========================
-          NOTIFICACIÓN PERFIL
-          ========================= */}
 
       {profileSuccess && (
         <div
@@ -484,10 +490,6 @@ function Perfil() {
           </button>
         </div>
       )}
-
-      {/* =========================
-          NOTIFICACIÓN DIRECCIÓN
-          ========================= */}
 
       {addressSuccess && (
         <div
@@ -517,10 +519,6 @@ function Perfil() {
 
       <main className="perfil-page">
         <div className="perfil-container">
-          {/* =========================
-              VOLVER
-              ========================= */}
-
           <button
             type="button"
             className="favoritos-back"
@@ -528,10 +526,6 @@ function Perfil() {
           >
             ← Volver a productos
           </button>
-
-          {/* =========================
-              HEADER
-              ========================= */}
 
           <header className="perfil-header">
             <div>
@@ -546,10 +540,6 @@ function Perfil() {
             </div>
           </header>
 
-          {/* =========================
-              INFORMACIÓN PERSONAL
-              ========================= */}
-
           <section className="perfil-section">
             <div className="perfil-section-header">
               <div>
@@ -560,32 +550,39 @@ function Perfil() {
                 <h2>Datos personales</h2>
               </div>
 
-              {!editingProfile && (
+              <div className="perfil-section-actions">
+                {!editingProfile && (
+                  <button
+                    type="button"
+                    className="perfil-edit-button"
+                    onClick={() => {
+                      setProfileForm({
+                        name: user.profile.name || "",
+                        lastname: user.profile.lastname || "",
+                        phone: user.profile.phone || "",
+                        zipCode: user.profile.zip_code || "",
+                        image: user.profile.image || "",
+                      });
+
+                      setProfileError("");
+                      setEditingProfile(true);
+                    }}
+                  >
+                    Editar información
+                  </button>
+                )}
+
                 <button
                   type="button"
-                  className="perfil-edit-button"
-                  onClick={() => {
-                    setProfileForm({
-                      name: user.profile.name || "",
-                      lastname: user.profile.lastname || "",
-                      phone: user.profile.phone || "",
-                      zipCode: user.profile.zip_code || "",
-                      image: user.profile.image || "",
-                    });
-
-                    setProfileError("");
-
-                    setEditingProfile(true);
-                  }}
+                  className="perfil-logout-button"
+                  onClick={handleLogout}
                 >
-                  Editar información
+                  Cerrar sesión
                 </button>
-              )}
+              </div>
             </div>
 
             <div className="perfil-personal">
-              {/* AVATAR */}
-
               <div className="perfil-avatar-container">
                 <div className="perfil-avatar">
                   {profileForm.image ? (
@@ -618,8 +615,6 @@ function Perfil() {
                   </>
                 )}
               </div>
-
-              {/* DATOS */}
 
               {!editingProfile ? (
                 <div className="perfil-info-grid">
@@ -664,6 +659,15 @@ function Perfil() {
                       value={profileForm.name}
                       onChange={handleProfileChange}
                     />
+                    {profileFieldErrors.name && (
+                      <p
+                        id="profile-name-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {profileFieldErrors.name}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -675,6 +679,15 @@ function Perfil() {
                       value={profileForm.lastname}
                       onChange={handleProfileChange}
                     />
+                    {profileFieldErrors.lastname && (
+                      <p
+                        id="profile-lastname-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {profileFieldErrors.lastname}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -692,6 +705,15 @@ function Perfil() {
                       value={profileForm.phone}
                       onChange={handleProfileChange}
                     />
+                    {profileFieldErrors.phone && (
+                      <p
+                        id="profile-phone-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {profileFieldErrors.phone}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -703,6 +725,15 @@ function Perfil() {
                       value={profileForm.zipCode}
                       onChange={handleProfileChange}
                     />
+                    {profileFieldErrors.zipCode && (
+                      <p
+                        id="profile-zipCode-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {profileFieldErrors.zipCode}
+                      </p>
+                    )}
                   </div>
 
                   {profileError && (
@@ -736,10 +767,6 @@ function Perfil() {
             </div>
           </section>
 
-          {/* =========================
-              DIRECCIONES
-              ========================= */}
-
           <section className="perfil-section">
             <div className="perfil-section-header">
               <div>
@@ -758,8 +785,6 @@ function Perfil() {
                 </button>
               )}
             </div>
-
-            {/* FORMULARIO */}
 
             {showAddressForm ? (
               <div className="perfil-address-form">
@@ -788,6 +813,15 @@ function Perfil() {
                       onChange={handleAddressChange}
                       placeholder="Ej. Casa"
                     />
+                    {addressFieldErrors.name && (
+                      <p
+                        id="address-name-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {addressFieldErrors.name}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -800,6 +834,15 @@ function Perfil() {
                       onChange={handleAddressChange}
                       placeholder="Calle y número"
                     />
+                    {addressFieldErrors.street && (
+                      <p
+                        id="address-street-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {addressFieldErrors.street}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -812,6 +855,15 @@ function Perfil() {
                       onChange={handleAddressChange}
                       placeholder="Ciudad"
                     />
+                    {addressFieldErrors.city && (
+                      <p
+                        id="address-city-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {addressFieldErrors.city}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -824,6 +876,15 @@ function Perfil() {
                       onChange={handleAddressChange}
                       placeholder="Provincia"
                     />
+                    {addressFieldErrors.state && (
+                      <p
+                        id="address-state-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {addressFieldErrors.state}
+                      </p>
+                    )}
                   </div>
 
                   <div className="perfil-info-item">
@@ -836,6 +897,15 @@ function Perfil() {
                       onChange={handleAddressChange}
                       placeholder="País"
                     />
+                    {addressFieldErrors.country && (
+                      <p
+                        id="address-country-error"
+                        className="perfil-field-error"
+                        role="alert"
+                      >
+                        {addressFieldErrors.country}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -865,15 +935,11 @@ function Perfil() {
               </div>
             ) : (
               <>
-                {/* ERROR DE DIRECCIÓN */}
-
                 {addressError && (
                   <p className="perfil-form-error perfil-address-message">
                     {addressError}
                   </p>
                 )}
-
-                {/* LISTADO */}
 
                 {addresses.length === 0 ? (
                   <div className="perfil-empty">
@@ -926,10 +992,6 @@ function Perfil() {
               </>
             )}
           </section>
-
-          {/* =========================
-              PEDIDOS
-              ========================= */}
 
           <section className="perfil-section">
             <div className="perfil-section-header">

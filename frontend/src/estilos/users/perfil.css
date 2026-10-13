@@ -971,10 +971,6 @@
   }
 }
 
-/* =========================
-   IMAGEN PERFIL
-   ========================= */
-
 .perfil-avatar-container {
   display: flex;
 
@@ -1021,8 +1017,53 @@
 }
 
 /* =========================
-   TABLET
+   ACCIONES PERFIL
    ========================= */
+
+.perfil-section-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.perfil-section-actions .perfil-edit-button,
+.perfil-section-actions .perfil-logout-button {
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
+.perfil-section-actions .perfil-logout-button {
+  border: 1px solid #d5d5d5;
+  background: #fff;
+  color: #b42318;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.perfil-section-actions .perfil-logout-button:hover {
+  background: #fff1f0;
+  border-color: #b42318;
+}
+
+.perfil-logout-button {
+  padding: 11px 16px;
+  border: 1px solid #d5d5d5;
+  background: #fff;
+  color: #b42318;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.perfil-logout-button:hover {
+  background: #fff1f0;
+}
 
 @media (max-width: 900px) {
   .perfil-page {
@@ -1050,10 +1091,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* =========================
-   MÓVIL
-   ========================= */
 
 @media (max-width: 600px) {
   .perfil-page {
@@ -1086,6 +1123,16 @@
     flex-direction: column;
 
     gap: 15px;
+  }
+
+  .perfil-section-actions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .perfil-section-actions .perfil-edit-button {
+    width: auto;
   }
 
   .perfil-edit-button {
@@ -1190,10 +1237,6 @@
     right: 16px;
   }
 }
-
-/* =========================
-   MÓVIL PEQUEÑO
-   ========================= */
 
 @media (max-width: 400px) {
   .perfil-header h1 {

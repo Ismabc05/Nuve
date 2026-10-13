@@ -33,7 +33,7 @@ export type UserData = {
   name?: string;
   lastname?: string;
   phone?: string;
-  zip_code?: string;
+  zipCode?: string;
   image?: string;
 };
 
