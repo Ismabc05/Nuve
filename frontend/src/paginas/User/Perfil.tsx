@@ -55,17 +55,11 @@ const getOrderStatus = (status: string) => {
 
 function Perfil() {
   const [user, setUser] = useState<User | null>(null);
-
   const [addresses, setAddresses] = useState<Address[]>([]);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
-
   const [valorInput, setValorInput] = useState("");
-
   const [editingProfile, setEditingProfile] = useState(false);
-
   const [profileForm, setProfileForm] = useState({
     name: "",
     lastname: "",
@@ -73,15 +67,10 @@ function Perfil() {
     zipCode: "",
     image: "",
   });
-
   const [savingProfile, setSavingProfile] = useState(false);
-
   const [profileError, setProfileError] = useState("");
-
   const [profileSuccess, setProfileSuccess] = useState("");
-
   const [uploadingImage, setUploadingImage] = useState(false);
-
   const [addressForm, setAddressForm] = useState({
     name: "",
     street: "",
@@ -89,26 +78,19 @@ function Perfil() {
     state: "",
     country: "",
   });
-
   const [editingAddress, setEditingAddress] = useState<number | null>(null);
-
   const [showAddressForm, setShowAddressForm] = useState(false);
-
   const [savingAddress, setSavingAddress] = useState(false);
-
   const [addressError, setAddressError] = useState("");
-
   const [addressSuccess, setAddressSuccess] = useState("");
-
   const [profileFieldErrors, setProfileFieldErrors] = useState<ProfileErrors>(
     {},
   );
-
   const [addressFieldErrors, setAddressFieldErrors] = useState<AddressErrors>(
     {},
   );
-
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -418,6 +400,20 @@ function Perfil() {
     navigate("/login", { replace: true });
   };
 
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
+
+  const handleViewOrder = (status: string) => {
+    if (status === "active") {
+      navigate("/carts");
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -570,7 +566,7 @@ function Perfil() {
                 <button
                   type="button"
                   className="perfil-logout-button"
-                  onClick={handleLogout}
+                  onClick={handleLogoutClick}
                 >
                   Cerrar sesión
                 </button>
@@ -1061,7 +1057,7 @@ function Perfil() {
                       </strong>
                     </div>
 
-                    <button type="button" className="perfil-order-button">
+                    <button type="button" className="perfil-order-button" onClick = {() => handleViewOrder(order.status)}>
                       Ver pedido
                     </button>
                   </article>
@@ -1071,6 +1067,38 @@ function Perfil() {
           </section>
         </div>
       </main>
+      {showLogoutModal && (
+        <div className="logout-modal-overlay">
+          <div
+            className="logout-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-modal-title"
+          >
+            <h2 id="logout-modal-title">¿Cerrar sesión?</h2>
+
+            <p>¿Estás seguro de que quieres cerrar sesión?</p>
+
+            <div className="logout-modal-buttons">
+              <button
+                type="button"
+                className="logout-cancel-button"
+                onClick={handleCancelLogout}
+              >
+                Seguir en mi cuenta
+              </button>
+
+              <button
+                type="button"
+                className="logout-confirm-button"
+                onClick={handleLogout}
+              >
+                Sí, cerrar sesión
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

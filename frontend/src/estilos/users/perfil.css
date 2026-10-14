@@ -1072,6 +1072,201 @@
   background: #fff1f0;
 }
 
+
+/* =========================
+   MODAL CERRAR SESIÓN
+   ========================= */
+
+.logout-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  background: rgba(29, 29, 27, 0.48);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  animation: logout-overlay-in 0.25s ease both;
+}
+
+.logout-modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+
+  padding: 30px;
+
+  border: 1px solid #deded9;
+  border-radius: 2px;
+
+  background: #fff;
+
+  box-shadow:
+    0 24px 70px rgba(29, 29, 27, 0.16),
+    0 4px 14px rgba(29, 29, 27, 0.05);
+
+  text-align: center;
+
+  animation: logout-modal-in 0.35s
+    cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Encabezado */
+
+.logout-modal h2 {
+  margin: 0 0 12px;
+
+  color: #1d1d1b;
+
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+
+.logout-modal p {
+  margin: 0 0 28px;
+
+  color: #777770;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* Botones */
+
+.logout-modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logout-modal-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+
+  padding: 12px 18px;
+
+  border: 1px solid transparent;
+  border-radius: 0;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Confirmar */
+
+.logout-confirm-button {
+  border-color: #1d1d1b !important;
+  background: #1d1d1b !important;
+  color: #fff !important;
+}
+
+.logout-confirm-button:hover {
+  border-color: #3a3a36 !important;
+  background: #3a3a36 !important;
+}
+
+/* Cancelar */
+
+.logout-cancel-button {
+  border-color: #deded9 !important;
+  background: #fff !important;
+  color: #1d1d1b !important;
+}
+
+.logout-cancel-button:hover {
+  border-color: #1d1d1b !important;
+  background: #f7f7f5 !important;
+}
+
+/* Accesibilidad */
+
+.logout-modal-buttons button:focus-visible {
+  outline: 2px solid #777770;
+  outline-offset: 3px;
+}
+
+/* Animaciones */
+
+@keyframes logout-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes logout-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Móvil */
+
+@media (max-width: 480px) {
+  .logout-modal {
+    max-width: 100%;
+    padding: 26px 22px;
+  }
+
+  .logout-modal h2 {
+    font-size: 23px;
+  }
+
+  .logout-modal p {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+}
+
+/* Respeta las preferencias de movimiento */
+
+@media (prefers-reduced-motion: reduce) {
+  .logout-modal-overlay,
+  .logout-modal {
+    animation: none;
+  }
+
+  .logout-modal-buttons button {
+    transition: none;
+  }
+}
+
+
 @media (max-width: 900px) {
   .perfil-page {
     padding: 45px 25px 80px;
