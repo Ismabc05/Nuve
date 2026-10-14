@@ -1267,6 +1267,90 @@
 }
 
 
+/* =========================
+   SEGURIDAD Y CONTRASEÑA
+   ========================= */
+
+.perfil-password-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 20px;
+
+  border: 1px solid #deded9;
+  background: #fafaf8;
+}
+
+.perfil-password-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+
+  border: 1px solid #deded9;
+  background: #fff;
+
+  font-size: 18px;
+}
+
+.perfil-password-content {
+  min-width: 0;
+}
+
+.perfil-password-content strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #1d1d1b;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.perfil-password-content p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================
+   SEGURIDAD DE LA CUENTA
+   ========================= */
+
+.perfil-security-section {
+  margin-top: 45px;
+  margin-bottom: 45px;
+}
+
+.perfil-security-section .perfil-section-header {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .perfil-password-info {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .perfil-password-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+
 @media (max-width: 900px) {
   .perfil-page {
     padding: 45px 25px 80px;
