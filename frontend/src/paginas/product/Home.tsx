@@ -24,17 +24,17 @@ import {
 } from '../../services/product.service';
 
 function Home() {
-  const [productList, setProductList] = useState<Product[]>([]);
-  const [categoryList, setCategoryList] = useState<Category[]>([]);
-  const [brandList, setBrandList] = useState<Brand[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [valorInput, setValorInput] = useState('');
-  const [priceOrder, setPriceOrder] = useState<PriceOrder>('');
-  const [selectedCategories, setSelectedCategories] =
+  const [productList, setProductList] = useState<Product[]>([]); // Estado que contiene el listado de productos
+  const [categoryList, setCategoryList] = useState<Category[]>([]); // Estado que contiene listado de categorias
+  const [brandList, setBrandList] = useState<Brand[]>([]); // Estado que contiene listado de marcas
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [valorInput, setValorInput] = useState(''); // Estado que contiene el valor del buscador para listar todos los productos 
+  const [priceOrder, setPriceOrder] = useState<PriceOrder>(''); // El estado que contiene el orden de precio (menor o mayor)
+  const [selectedCategories, setSelectedCategories] = // Estado que contiene las categorias seleccionadas
     useState<number[]>([]);
-  const [selectedBrands, setSelectedBrands] =
+  const [selectedBrands, setSelectedBrands] = // // Estado que contiene las marcas seleccionadas
     useState<number[]>([]);
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState(''); // Estado de notificacion
 
   const {
     isFavorite,
@@ -43,12 +43,14 @@ function Home() {
   } = useFavorite();
 
   const filteredProducts = [...productList]
+  // Filtra la lista solo con los productos que contenga valorInput
     .filter((product) =>
       product.name
         .toLowerCase()
         .includes(valorInput.toLowerCase())
     )
     .filter(
+  // Filtra la lista mostrando solo los productos qur contenga esas categorias
       (product) =>
         selectedCategories.length === 0 ||
         selectedCategories.some((categoryId) =>
@@ -57,6 +59,7 @@ function Home() {
           )
         )
     )
+  //Filtra la lista mostrando solo los producto que contenga esas marcas
     .filter(
       (product) =>
         selectedBrands.length === 0 ||
@@ -64,6 +67,7 @@ function Home() {
           (brandId) => brandId === product.brand.id
         )
     )
+  // Orderna la lista segun sea ascendente o descendente
     .sort((a, b) => {
       const priceA = Number(a.price);
       const priceB = Number(b.price);
@@ -79,7 +83,7 @@ function Home() {
       return 0;
     });
 
-  // Cargar productos, categorías y marcas
+  // Cargar productos, categorías y marcas una vez cuando se renderiza el componente
   useEffect(() => {
     products()
       .then((data) => {
@@ -156,6 +160,7 @@ function Home() {
 
       <main className="product">
         <div className="product__content">
+        {/* LE PASAMOS TODAS LAS PROPS NECESARIAS A PRODUCTFILTER PARA PINTAR */}
           <ProductFilters
             categories={categoryList}
             brands={brandList}

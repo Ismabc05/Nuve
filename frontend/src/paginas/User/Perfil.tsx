@@ -763,27 +763,25 @@ function Perfil() {
                 </form>
               )}
             </div>
-
-            {/* SEGURIDAD DE LA CUENTA */}
-            <section className="perfil-section perfil-security-section">
-              <div className="perfil-section-header">
-                <div>
-                  <span className="perfil-section-label">SEGURIDAD</span>
-
-                  <h2>Contraseña</h2>
-                </div>
-
-                <button
-                  type="button"
-                  className="perfil-edit-button"
-                  onClick={() => {}}
-                >
-                  Cambiar contraseña
-                </button>
-              </div>
-            </section>
           </section>
+          {/* SEGURIDAD DE LA CUENTA */}
+          <section className="perfil-section perfil-security-section">
+            <div className="perfil-section-header">
+              <div>
+                <span className="perfil-section-label">SEGURIDAD</span>
 
+                <h2>Contraseña</h2>
+              </div>
+
+              <button
+                type="button"
+                className="perfil-edit-button"
+                onClick={() => {}}
+              >
+                Cambiar contraseña
+              </button>
+            </div>
+          </section>
           <section className="perfil-section">
             <div className="perfil-section-header">
               <div>

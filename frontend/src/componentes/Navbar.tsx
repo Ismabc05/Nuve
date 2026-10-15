@@ -10,14 +10,15 @@ import { useCart } from '../context/cart/UseCart';
 import { useFavorite } from '../context/favorites/UseFavorite';
 import { useNavigate } from 'react-router-dom';
 
+// Recibe estas dos props del componente Home que es el que renderiza product
 type NavbarProps = {
-  valorInput: string;
-  setValorInput: (valor: string) => void;
+  valorInput: string; // Contiene el texto del buscador
+  setValorInput: (valor: string) => void; // Funcion que actualiza el texto del buscador
 };
 
 function Navbar({valorInput, setValorInput}: NavbarProps) {
-  const { cartCount } = useCart();
-  const { favoriteCount } = useFavorite();
+  const { cartCount } = useCart(); // Nos traemos de useCart el contador de productos de el carrito
+  const { favoriteCount } = useFavorite(); // Nos traemos de useCart el contador de productos de favoritos
   const navigate = useNavigate();
 
   return (
@@ -49,6 +50,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             onClick={() => navigate('/favorites')}
           >
             <LuHeart />
+            { /* MOSTRAMOS LA CANTIDAD*/}
             {favoriteCount > 0 && (
               <span className="navbar__favorite-count">
                 {favoriteCount}
@@ -63,6 +65,7 @@ function Navbar({valorInput, setValorInput}: NavbarProps) {
             onClick={() => navigate('/carts')}
           >
             <LuShoppingCart />
+            { /* MOSTRAMOS LA CANTIDAD*/}
             {cartCount > 0 && (
               <span className="navbar__cart-count">
               {cartCount}

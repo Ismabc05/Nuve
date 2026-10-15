@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { FavoriteContext } from './FavoriteContext';
-
+// Funcion que usamos para utilizar el contexto de favoritos
 export function useFavorite() {
   const context = useContext(FavoriteContext);
 

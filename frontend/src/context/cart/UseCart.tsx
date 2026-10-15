@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { CartContext } from './CartContext';
-
+// Funcion que usamos para utilizar el contexto del carrito
 export function useCart() {
   const context = useContext(CartContext);
 
