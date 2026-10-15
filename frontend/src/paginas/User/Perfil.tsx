@@ -27,6 +27,8 @@ import {
 } from "../../paginas/User/Validation";
 
 import type { Address, User } from "../../types/perfil";
+import { useCart } from "../../context/cart/UseCart";
+import { useFavorite } from "../../context/favorites/UseFavorite";
 
 const getOrderStatus = (status: string) => {
   switch (status.toLowerCase()) {
@@ -91,6 +93,8 @@ function Perfil() {
   );
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { clearCart } = useCart()
+  const { clearFavorite } = useFavorite()
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -394,6 +398,9 @@ function Perfil() {
   };
 
   const handleLogout = () => {
+    clearCart()
+    clearFavorite()
+    
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 

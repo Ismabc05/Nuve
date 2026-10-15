@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { findByEmail, login } from '../../services/auth.service';
 import { useNavigate} from 'react-router-dom';
 import { Spinner } from './Spinner';
+import { useCart } from '../../context/cart/UseCart';
+import { useFavorite } from '../../context/favorites/UseFavorite';
 
 function Login() {
 
@@ -14,6 +16,8 @@ function Login() {
     const [ loading, setLoading] = useState(false);
     const [ error, setError] = useState('');
     const navigate = useNavigate()
+    const { refreshCart } = useCart();
+    const { refreshFavorites } = useFavorite();
 
     const handleContinue = async (event: React.SubmitEvent) => {
 
@@ -53,6 +57,10 @@ function Login() {
 
                     localStorage.setItem('token', data.access_token);
                     localStorage.setItem('user', JSON.stringify(data.user));
+                    await Promise.all([
+                    refreshCart(),
+                    refreshFavorites(),
+                    ]);
                     navigate('/products')
 
                 } catch {

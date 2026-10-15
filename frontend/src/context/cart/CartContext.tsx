@@ -13,6 +13,8 @@ type CartContextType = {
     newQuantity: number
   ) => Promise<void>;
   deleteFromCart: (orderItemId: number, quantity: number) => Promise<void>; // funcion que elimina
+  clearCart: () => void;
+  refreshCart: () => Promise<void>;
 };
 
 export const CartContext = createContext< // Carcontext va a ser un contexto de el tipo que hemos definido

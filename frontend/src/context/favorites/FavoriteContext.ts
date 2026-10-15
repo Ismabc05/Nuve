@@ -6,6 +6,8 @@ type FavoriteContextType = {
   isFavorite: (productId: number) => boolean; // Funcion que permite saber si ese producto es favorito o no
   addFavoriteProduct: (productId: number) => Promise<void>; // Funcion para añadir un favorito
   removeFavoriteProduct: (productId: number) => Promise<void>; // Funcion para eliminar un favorito
+  clearFavorite: () => void;
+  refreshFavorites: () => Promise<void>;
 };
 
 // Aquí creamos el contexto de favoritos, que será utilizado por el provider y los componentes que necesiten acceder a la información de favoritos.

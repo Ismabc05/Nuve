@@ -8,6 +8,7 @@ import type { Product } from '../types/product';
 
 import '../estilos/product/product-card.css';
 
+// Recibe todas las props
 type ProductCardProps = {
   product: Product; // El producto a mostrar en la tarjeta
   setNotification: Dispatch<SetStateAction<string>>; // Función para establecer la notificación
