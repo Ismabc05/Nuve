@@ -401,7 +401,7 @@ function Carrito() {
                 <button
                   type="button"
                   className="carrito-checkout"
-                  onClick={() => {}}
+                  onClick={() => {navigate(`/orders/${order.id}`)}}
                 >
                   Finalizar compra
                 </button>
