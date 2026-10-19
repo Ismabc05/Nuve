@@ -6,10 +6,9 @@
   width: 100%;
   min-height: 100vh;
 
-  padding: 65px 0 100px;
+  padding: 65px 40px 100px;
 
   background: #f7f7f5;
-  box-sizing: border-box;
 }
 
 
@@ -18,8 +17,8 @@
    ========================================================= */
 
 .order-page__container {
-  width: 92%;
-  max-width: 1180px;
+  width: 100%;
+  max-width: 1400px;
 
   margin: 0 auto;
 }
@@ -405,7 +404,7 @@
 .order-summary {
   position: sticky;
 
-  top: 30px;
+  top: 100px;
 
   padding: 30px;
 
