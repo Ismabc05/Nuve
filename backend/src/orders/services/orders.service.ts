@@ -180,6 +180,10 @@ export class OrdersService {
   }
 
   async handleStripeWebhook(session: Stripe.Checkout.Session) {
+    if (session.payment_status !== 'paid') {
+      return { message: 'El pago todavía no está confirmado' };
+    }
+
     const orderId = Number(session.metadata?.orderId);
 
     if (!orderId) {
@@ -195,19 +199,25 @@ export class OrdersService {
       throw new NotFoundException('Orden no encontrada');
     }
 
-    if (order.paid) {
-      return { message: 'La orden ya fue procesada' };
+    // Comprueba que la sesión corresponde al pedido.
+    if (order.stripeSessionId && order.stripeSessionId !== session.id) {
+      throw new BadRequestException(
+        'La sesión de Stripe no corresponde a este pedido',
+      );
     }
 
-    order.paid = true;
-    order.status = OrderStatus.COMPLETED;
+    // Marca el pedido como completado solo si aún no se procesó.
+    if (!order.paid) {
+      order.paid = true;
+      order.status = OrderStatus.COMPLETED;
+      await this.orderRepo.save(order);
+    }
 
-    await this.orderRepo.save(order);
-
+    // También se ejecuta si Stripe reenvía el evento.
     await this.createEmptyActiveOrder(order.user.id);
 
     return {
-      message: 'Pago procesado y nueva orden activa creada',
+      message: 'Pago procesado y carrito activo comprobado',
     };
   }
 
