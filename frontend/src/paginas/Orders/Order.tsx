@@ -1,6 +1,7 @@
 import Navbar from "../../componentes/Navbar";
 import Footer from "../../componentes/Footer";
 import { useNavigate } from "react-router-dom";
+import { payOrder } from "../../services/pay.service";
 
 import { useEffect, useState } from "react";
 
@@ -16,6 +17,8 @@ import "../../estilos/order/order.css";
 function Order() {
   const [valorInput, setValorInput] = useState("");
   const navigate = useNavigate();
+  const [paying, setPaying] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
 
   const [order, setOrder] = useState<OrderType | null>(null);
 
@@ -32,37 +35,51 @@ function Order() {
   };
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadOrder = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "null");
-
-      const userId = user?.id;
-
-      if (!userId) {
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
-
-        return;
-      }
-
       try {
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        const userId = user?.id;
+
+        if (!userId) {
+          if (!cancelled) setOrder(null);
+          return;
+        }
+
         const orders = await getOrders(userId);
 
-        const activeOrder = orders.find(
-          (order: OrderType) => order.status === "active",
+        console.log(
+          "Pedidos recibidos del backend:",
+          orders.map((o: OrderType) => ({
+            id: o.id,
+            status: o.status,
+            items: o.items?.length ?? 0,
+          })),
         );
 
-        setOrder(activeOrder || null);
+        const activeOrder = orders.find(
+          (o: OrderType) => String(o.status).toUpperCase() === "ACTIVE",
+        );
+
+        console.log("Carrito activo seleccionado:", activeOrder);
+
+        if (!cancelled) {
+          setOrder(activeOrder ?? null);
+        }
       } catch (error) {
         console.error("Error al obtener el pedido:", error);
+        if (!cancelled) setOrder(null);
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 3000);
+        if (!cancelled) setLoading(false);
       }
     };
 
     loadOrder();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -98,6 +115,30 @@ function Order() {
 
   const total = subtotal + shipping;
 
+  const handlePay = async () => {
+    if (!order || paying) return;
+
+    if (!selectedAddress) {
+      setPaymentError("Selecciona una dirección de envío.");
+      return;
+    }
+
+    try {
+      setPaying(true);
+      setPaymentError("");
+
+      await payOrder(order.id);
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error
+          ? error.message
+          : "No se ha podido iniciar el pago.",
+      );
+
+      setPaying(false);
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -105,10 +146,10 @@ function Order() {
 
         <main className="order-page">
           <div className="carrito-loading">
-          <div className="carrito-spinner"></div>
+            <div className="carrito-spinner"></div>
 
-          <p>Cargando tu pedido...</p>
-        </div>
+            <p>Cargando tu pedido...</p>
+          </div>
         </main>
 
         <Footer />
@@ -118,6 +159,24 @@ function Order() {
 
   return (
     <>
+      {paying && (
+        <div className="payment-overlay" role="status" aria-live="polite">
+          <div className="payment-overlay__content">
+            <div className="payment-spinner" />
+
+            <p className="payment-overlay__eyebrow">PAGO SEGURO</p>
+
+            <h1>Preparando tu pedido</h1>
+
+            <p>
+              Estamos conectando con Stripe para que puedas completar tu compra
+              de forma segura.
+            </p>
+
+            <span>No cierres esta página.</span>
+          </div>
+        </div>
+      )}
       <Navbar valorInput={valorInput} setValorInput={setValorInput} />
 
       <main className="order-page">
@@ -274,10 +333,20 @@ function Order() {
                 <button
                   type="button"
                   className="order-summary__button"
-                  disabled={!selectedAddress}
+                  onClick={handlePay}
+                  disabled={!selectedAddress || paying}
                 >
-                  Pagar pedido
+                  {paying ? "Conectando con Stripe..." : "Pagar pedido"}
                 </button>
+
+                {paymentError && (
+                  <p
+                    className="order-summary__warning order-summary__error"
+                    role="alert"
+                  >
+                    {paymentError}
+                  </p>
+                )}
 
                 {!selectedAddress && (
                   <p className="order-summary__warning">

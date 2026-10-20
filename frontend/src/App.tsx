@@ -9,11 +9,11 @@ import Home from "./paginas/Product/Home"
 import Carrito from "./paginas/User/Carrito"
 import Favoritos from "./paginas/User/Favoritos"
 import Perfil from "./paginas/User/Perfil"
-import Order from "./paginas/Orders/Order"
+import OrderSuccess from "./paginas/Orders/OrderSuccess"
 import Product from "./paginas/Product/Product"
 import Admin from "./paginas/Admin/Admin"
 import RootRedirect from "./paginas/Root/RootRedirect"
-import Orders from "./paginas/Orders/Orders"
+import Orders from "./paginas/Orders/Order"
 
 function App() {
 
@@ -36,8 +36,8 @@ function App() {
 
             <Route path="/perfil" element={<Perfil/>}/>
 
-            <Route path="/orders" element={<Orders/>}/>
-            <Route path="/orders/:id" element={<Order/>}/>
+            <Route path="/orders/success" element={<OrderSuccess/>}/>
+            <Route path="/orders/:id" element={<Orders/>}/>
 
             <Route path="/admin" element={<Admin/>}/>
           </Routes>

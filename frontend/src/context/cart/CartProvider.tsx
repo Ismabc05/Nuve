@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useState, useEffect, type ReactNode } from "react";
 
 import {
   getOrders,
@@ -56,6 +56,48 @@ export function CartProvider({ children }: CartProviderProps) {
       console.error("Error al cargar el carrito:", error);
       setCartCount(0);
     }
+  }, []);
+
+  useEffect(() => {
+    const loadCart = async () => {
+      const storedUser = localStorage.getItem("user");
+
+      if (!storedUser) {
+        return;
+      }
+
+      const user = JSON.parse(storedUser);
+      const userId = user?.id;
+
+      if (!userId) {
+        return;
+      }
+
+      try {
+        const orders = await getOrders(userId);
+
+        const activeOrder = orders.find(
+          (order: { status: string; items: { quantity: number }[] }) =>
+            order.status === "active",
+        );
+
+        if (!activeOrder) {
+          setCartCount(0);
+          return;
+        }
+
+        const totalItems = activeOrder.items.reduce(
+          (total: number, item: { quantity: number }) => total + item.quantity,
+          0,
+        );
+
+        setCartCount(totalItems);
+      } catch (error) {
+        console.error("Error al cargar el carrito:", error);
+      }
+    };
+
+    loadCart();
   }, []);
 
   const addToCart = async (productVariantId: number, quantity: number) => {

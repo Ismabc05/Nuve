@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useState, useEffect, type ReactNode } from "react";
 
 import {
   getFavorite,
@@ -47,6 +47,36 @@ export function FavoriteProvider({ children }: FavoriteProviderProps) {
       setFavoriteCount(0);
       setFavoriteIds([]);
     }
+  }, []);
+
+  useEffect(() => {
+    const loadFavorites = async () => {
+      const storedUser = localStorage.getItem("user");
+
+      if (!storedUser) {
+        return;
+      }
+
+      const user = JSON.parse(storedUser);
+      const userId = user?.id;
+
+      if (!userId) {
+        return;
+      }
+
+      try {
+        const favorites = await getFavorite(userId);
+
+        const ids = favorites.map((favorite: { id: number }) => favorite.id);
+
+        setFavoriteIds(ids);
+        setFavoriteCount(ids.length);
+      } catch (error) {
+        console.error("Error al cargar favoritos:", error);
+      }
+    };
+
+    loadFavorites();
   }, []);
 
   // Funcion que retorna un boolena (si o no) en funcion que si dentro de el array incluye se producto
