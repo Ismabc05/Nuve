@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import {
   Get,
   Put,
@@ -7,7 +7,10 @@ import {
   ParseIntPipe,
   Body,
   Request,
+  Headers,
   ForbiddenException,
+  type RawBodyRequest,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -25,6 +28,8 @@ import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/models/user.role';
 import { RolesGuard } from '../../auth/guards/role.guard';
+import { Request as ExpressRequest } from 'express';
+import Stripe from 'stripe';
 
 @Controller('orders')
 export class OrdersController {
@@ -143,5 +148,43 @@ export class OrdersController {
       );
     }
     return this.orderService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
+  @Post(':id/pay')
+  @ApiOperation({ summary: 'Crea una sesión de pago de Stripe para la orden.' })
+  payOrder(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: { user: { sub: number; role: UserRole } },
+  ) {
+    return this.orderService.createCheckoutSession(id, req.user.sub);
+  }
+
+  @Post('webhook')
+  @ApiOperation({ summary: 'Recibe eventos de Stripe.' })
+  async stripeWebhook(
+    @Req() req: RawBodyRequest<ExpressRequest>,
+    @Headers('stripe-signature') signature: string,
+  ) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+
+    let event: Stripe.Event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.rawBody as Buffer,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET as string,
+      );
+    } catch {
+      throw new BadRequestException('Firma de webhook inválida');
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      await this.orderService.handleStripeWebhook(event.data.object);
+    }
+
+    return { received: true };
   }
 }

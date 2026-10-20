@@ -25,6 +25,12 @@ export class Order {
   @Column({ type: 'decimal', scale: 2 })
   total!: number;
 
+  @Column({ nullable: true })
+  stripeSessionId?: string;
+
+  @Column({ default: false })
+  paid!: boolean;
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
