@@ -39,15 +39,7 @@ function Order() {
 
     const loadOrder = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        const userId = user?.id;
-
-        if (!userId) {
-          if (!cancelled) setOrder(null);
-          return;
-        }
-
-        const orders = await getOrders(userId);
+        const orders: OrderType[] = await getOrders();
 
         console.log(
           "Pedidos recibidos del backend:",

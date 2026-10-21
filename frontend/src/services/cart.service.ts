@@ -1,21 +1,18 @@
 const API_URL = 'https://nuve-miru.onrender.com';
 import type { CreateOrderItem } from '../types/carrito';
 
-export const getOrders = async (userId: number) => {
+export const getOrders = async () => {
   const token = localStorage.getItem('token');
 
   if (!token) {
     throw new Error('No hay token de autenticación');
   }
 
-  const response = await fetch(
-    `${API_URL}/orders?userId=${userId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`${API_URL}/orders`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (!response.ok) {
     throw new Error('Error al obtener los pedidos');

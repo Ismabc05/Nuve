@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getOrders } from "../../services/cart.service";
@@ -18,11 +17,12 @@ export default function OrderSuccess() {
 
   useEffect(() => {
     let cancelled = false;
+    const startTime = Date.now();
 
     const verifyPayment = async () => {
-      const sessionId = new URLSearchParams(
-        window.location.search
-      ).get("session_id");
+      const sessionId = new URLSearchParams(window.location.search).get(
+        "session_id",
+      );
 
       const userRaw = localStorage.getItem("user");
 
@@ -51,23 +51,31 @@ export default function OrderSuccess() {
         for (let attempt = 0; attempt < 15; attempt++) {
           if (cancelled) return;
 
-          const orders = (await getOrders(userId)) as OrderWithPayment[];
+          const orders = (await getOrders()) as OrderWithPayment[];
 
           const paidOrder = orders.find(
             (order) =>
-              order.stripeSessionId === sessionId &&
-              order.paid === true
+              order.stripeSessionId === sessionId && order.paid === true,
           );
 
           if (paidOrder) {
-            if (!cancelled) setState("confirmed");
+            // Mantener la pantalla de carga al menos 4 segundos
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, 4000 - elapsed);
+
+            if (remaining > 0) {
+              await new Promise((resolve) => setTimeout(resolve, remaining));
+            }
+
+            if (!cancelled) {
+              setState("confirmed");
+            }
+
             return;
           }
 
           if (attempt < 14) {
-            await new Promise((resolve) =>
-              setTimeout(resolve, 2000)
-            );
+            await new Promise((resolve) => setTimeout(resolve, 2000));
           }
         }
 
@@ -92,8 +100,8 @@ export default function OrderSuccess() {
           <div className="success-spinner" />
           <h1>Verificando tu pago</h1>
           <p>
-            El pago se ha realizado. Estamos esperando la
-            confirmación de tu pedido.
+            El pago se ha realizado. Estamos esperando la confirmación de tu
+            pedido.
           </p>
         </>
       )}
@@ -102,10 +110,7 @@ export default function OrderSuccess() {
         <>
           <div className="success-icon">✓</div>
           <h1>¡Pedido confirmado!</h1>
-          <p>
-            Tu pago se ha verificado correctamente.
-            Gracias por tu compra.
-          </p>
+          <p>Tu pago se ha verificado correctamente. Gracias por tu compra.</p>
           <Link to="/products" className="success-button">
             Seguir comprando
           </Link>
@@ -116,9 +121,9 @@ export default function OrderSuccess() {
         <>
           <h1>Pago recibido</h1>
           <p>
-            Stripe ha procesado tu pago, pero todavía no hemos
-            recibido la confirmación final de tu pedido.
-            Espera un momento y consulta tus pedidos más tarde.
+            Stripe ha procesado tu pago, pero todavía no hemos recibido la
+            confirmación final de tu pedido. Espera un momento y consulta tus
+            pedidos más tarde.
           </p>
           <Link to="/perfil" className="success-button">
             Ir a mi perfil
@@ -130,8 +135,8 @@ export default function OrderSuccess() {
         <>
           <h1>No hemos podido verificar el pedido</h1>
           <p>
-            No significa necesariamente que el pago haya fallado.
-            Comprueba tus pedidos antes de volver a pagar.
+            No significa necesariamente que el pago haya fallado. Comprueba tus
+            pedidos antes de volver a pagar.
           </p>
           <Link to="/perfil" className="success-button">
             Consultar mis pedidos
