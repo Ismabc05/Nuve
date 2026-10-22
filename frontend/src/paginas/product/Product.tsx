@@ -1,10 +1,10 @@
-import Navbar from '../../componentes/Navbar';
+import Navbar from "../../componentes/Navbar";
 
-import Footer from '../../componentes/Footer';
+import Footer from "../../componentes/Footer";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   LuChevronLeft,
@@ -15,93 +15,78 @@ import {
   LuShieldCheck,
   LuShoppingBag,
   LuTruck,
-} from 'react-icons/lu';
+} from "react-icons/lu";
 
-import type {
-  Product as ProductType,
-  Review,
-} from '../../types/product';
+import type { Product as ProductType, Review } from "../../types/product";
 
-import { productById } from '../../services/product.service';
+import { productById } from "../../services/product.service";
 
-import '../../estilos/product/product-detail.css';
+import "../../estilos/product/product-detail.css";
 
-import { useCart } from '../../context/cart/UseCart';
+import { useCart } from "../../context/cart/UseCart";
 
-import { useFavorite } from '../../context/favorites/UseFavorite';
+import { useFavorite } from "../../context/favorites/UseFavorite";
 
 function Product() {
-  const [valorInput, setValorInput] = useState('');
-  const [product, setProduct] =
-    useState<ProductType | null>(null);
+  const [valorInput, setValorInput] = useState("");
+  const [product, setProduct] = useState<ProductType | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [notification, setNotification] = useState('');
+  const [error, setError] = useState("");
+  const [notification, setNotification] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { addToCart } = useCart();
 
-  const {
-    isFavorite,
-    addFavoriteProduct,
-    removeFavoriteProduct,
-  } = useFavorite();
+  const { isFavorite, addFavoriteProduct, removeFavoriteProduct } =
+    useFavorite();
 
   useEffect(() => {
-  const loadProduct = async () => {
-    if (!id) {
-      setError('Producto no encontrado');
-      setLoading(false);
-      return;
-    }
-
-    const startTime = Date.now();
-
-    try {
-      setLoading(true);
-      setError('');
-
-      const productData =
-        await productById(Number(id));
-
-      setProduct(productData);
-
-      const firstVariant =
-        productData.variants?.[0];
-
-      if (firstVariant) {
-        setSelectedColor(firstVariant.color);
-        setSelectedSize(firstVariant.size);
-      }
-    } catch (error) {
-      console.error(error);
-
-      setError(
-        'No se ha podido cargar el producto'
-      );
-    } finally {
-      const elapsedTime =
-        Date.now() - startTime;
-
-      const remainingTime = Math.max(
-        1000 - elapsedTime,
-        0
-      );
-
-      setTimeout(() => {
+    const loadProduct = async () => {
+      if (!id) {
+        setError("Producto no encontrado");
         setLoading(false);
-      }, remainingTime);
-    }
-  };
+        return;
+      }
 
-  loadProduct();
-}, [id]);
+      const startTime = Date.now();
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const productData = await productById(Number(id));
+
+        setProduct(productData);
+
+        const firstVariant = productData.variants?.[0];
+
+        if (firstVariant) {
+          setSelectedColor(firstVariant.color);
+          setSelectedSize(firstVariant.size);
+        }
+      } catch (error) {
+        console.error(error);
+
+        setError("No se ha podido cargar el producto");
+      } finally {
+        const elapsedTime = Date.now() - startTime;
+
+        const remainingTime = Math.max(1000 - elapsedTime, 0);
+
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
+      }
+    };
+
+    loadProduct();
+  }, [id]);
 
   const uniqueColors = useMemo(() => {
     if (!product) {
@@ -110,11 +95,8 @@ function Product() {
 
     return Array.from(
       new Map(
-        product.variants.map((variant) => [
-          variant.color,
-          variant,
-        ])
-      ).values()
+        product.variants.map((variant) => [variant.color, variant]),
+      ).values(),
     );
   }, [product]);
 
@@ -123,28 +105,21 @@ function Product() {
       return [];
     }
 
-    return Array.from(
-      new Set(
-        product.variants.map((variant) => variant.size)
-      )
-    );
+    return Array.from(new Set(product.variants.map((variant) => variant.size)));
   }, [product]);
 
   const formattedPrice = product
-    ? new Intl.NumberFormat('es-ES', {
-        style: 'currency',
-        currency: 'EUR',
+    ? new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: "EUR",
       }).format(Number(product.price))
-    : '';
+    : "";
 
   const handleQuantityChange = (amount: number) => {
     setQuantity((currentQuantity) => {
       const nextQuantity = currentQuantity + amount;
 
-      return Math.max(
-        1,
-        Math.min(nextQuantity, 10)
-      );
+      return Math.max(1, Math.min(nextQuantity, 10));
     });
   };
 
@@ -157,76 +132,48 @@ function Product() {
       if (isFavorite(product.id)) {
         await removeFavoriteProduct(product.id);
 
-        setNotification(
-          'Producto eliminado de favoritos'
-        );
+        setNotification("Producto eliminado de favoritos");
       } else {
         await addFavoriteProduct(product.id);
 
-        setNotification(
-          'Producto añadido a favoritos'
-        );
+        setNotification("Producto añadido a favoritos");
       }
     } catch (error) {
-      console.error(
-        'Error al actualizar favoritos:',
-        error
-      );
+      console.error("Error al actualizar favoritos:", error);
 
-      setNotification(
-        'Error al actualizar favoritos'
-      );
+      setNotification("Error al actualizar favoritos");
     }
   };
 
   const handleAddToCart = async () => {
-    if (
-      !product ||
-      !selectedColor ||
-      !selectedSize
-    ) {
+    if (!product || !selectedColor || !selectedSize) {
       return;
     }
 
     try {
-      const selectedVariant =
-        product.variants.find(
-          (variant) =>
-            variant.color === selectedColor &&
-            variant.size === selectedSize
-        );
+      const selectedVariant = product.variants.find(
+        (variant) =>
+          variant.color === selectedColor && variant.size === selectedSize,
+      );
 
       if (!selectedVariant) {
-        console.error(
-          'No se ha encontrado la variante seleccionada'
-        );
+        console.error("No se ha encontrado la variante seleccionada");
 
         return;
       }
 
-      await addToCart(
-        selectedVariant.id,
-        quantity
-      );
+      await addToCart(selectedVariant.id, quantity);
 
-      setNotification(
-        'Producto añadido al carrito'
-      );
+      setNotification("Producto añadido al carrito");
     } catch (error) {
-      console.error(
-        'Error al añadir al carrito:',
-        error
-      );
+      console.error("Error al añadir al carrito:", error);
     }
   };
 
   if (loading) {
     return (
       <>
-        <Navbar
-          valorInput={valorInput}
-          setValorInput={setValorInput}
-        />
+        <Navbar valorInput={valorInput} setValorInput={setValorInput} />
 
         <main className="product-detail product-detail--state">
           <div className="product-detail__loader">
@@ -244,21 +191,13 @@ function Product() {
   if (error || !product) {
     return (
       <>
-        <Navbar
-          valorInput={valorInput}
-          setValorInput={setValorInput}
-        />
+        <Navbar valorInput={valorInput} setValorInput={setValorInput} />
 
         <main className="product-detail product-detail--state">
           <div className="product-detail__empty">
-            <p>
-              {error || 'Producto no encontrado'}
-            </p>
+            <p>{error || "Producto no encontrado"}</p>
 
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-            >
+            <button type="button" onClick={() => navigate(-1)}>
               Volver
             </button>
           </div>
@@ -273,10 +212,7 @@ function Product() {
 
   return (
     <>
-      <Navbar
-        valorInput={valorInput}
-        setValorInput={setValorInput}
-      />
+      <Navbar valorInput={valorInput} setValorInput={setValorInput} />
 
       {notification && (
         <div
@@ -288,19 +224,15 @@ function Product() {
           <span className="notification__indicator" />
 
           <div className="notification__content">
-            <span className="notification__label">
-              Actualización
-            </span>
+            <span className="notification__label">Actualización</span>
 
-            <p className="notification__message">
-              {notification}
-            </p>
+            <p className="notification__message">{notification}</p>
           </div>
 
           <button
             type="button"
             className="notification__close"
-            onClick={() => setNotification('')}
+            onClick={() => setNotification("")}
             aria-label="Cerrar notificación"
           >
             ×
@@ -329,50 +261,37 @@ function Product() {
               </span>
 
               <span className="product-detail__gallery-count">
-                {selectedImage + 1} /{' '}
-                {product.images.length}
+                {selectedImage + 1} / {product.images.length}
               </span>
             </div>
 
             <div className="product-detail__gallery-content">
               <div className="product-detail__thumbnails">
-                {product.images.map(
-                  (image, index) => (
-                    <button
-                      key={image.id}
-                      type="button"
-                      className={`product-detail__thumbnail ${
-                        selectedImage === index
-                          ? 'product-detail__thumbnail--active'
-                          : ''
-                      }`}
-                      onClick={() =>
-                        setSelectedImage(index)
-                      }
-                      aria-label={`Ver imagen ${
-                        index + 1
-                      }`}
-                      aria-pressed={
-                        selectedImage === index
-                      }
-                    >
-                      <img
-                        src={image.url}
-                        alt={`${product.name} - imagen ${
-                          index + 1
-                        }`}
-                      />
-                    </button>
-                  )
-                )}
+                {product.images.map((image, index) => (
+                  <button
+                    key={image.id}
+                    type="button"
+                    className={`product-detail__thumbnail ${
+                      selectedImage === index
+                        ? "product-detail__thumbnail--active"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedImage(index)}
+                    aria-label={`Ver imagen ${index + 1}`}
+                    aria-pressed={selectedImage === index}
+                  >
+                    <img
+                      src={image.url}
+                      alt={`${product.name} - imagen ${index + 1}`}
+                    />
+                  </button>
+                ))}
               </div>
 
               <div className="product-detail__image-section">
                 <img
                   className="product-detail__image"
-                  src={
-                    product.images[selectedImage]?.url
-                  }
+                  src={product.images[selectedImage]?.url}
                   alt={product.name}
                 />
 
@@ -385,74 +304,52 @@ function Product() {
 
           <section className="product-detail__info">
             <div className="product-detail__topline">
-              <p className="product-detail__brand">
-                {product.brand.name}
-              </p>
+              <p className="product-detail__brand">{product.brand.name}</p>
 
               <button
                 type="button"
                 className={`product-detail__favorite ${
-                  favoriteActive
-                    ? 'product-detail__favorite--active'
-                    : ''
+                  favoriteActive ? "product-detail__favorite--active" : ""
                 }`}
                 onClick={handleFavorite}
                 aria-label={
                   favoriteActive
-                    ? 'Quitar producto de favoritos'
-                    : 'Añadir producto a favoritos'
+                    ? "Quitar producto de favoritos"
+                    : "Añadir producto a favoritos"
                 }
                 aria-pressed={favoriteActive}
               >
                 <LuHeart
                   size={18}
                   strokeWidth={1.8}
-                  fill={
-                    favoriteActive
-                      ? 'currentColor'
-                      : 'none'
-                  }
+                  fill={favoriteActive ? "currentColor" : "none"}
                 />
               </button>
             </div>
 
-            <h1 className="product-detail__name">
-              {product.name}
-            </h1>
+            <h1 className="product-detail__name">{product.name}</h1>
 
             <div className="product-detail__rating">
-              <span className="product-detail__stars">
-                ★★★★★
-              </span>
+              <span className="product-detail__stars">★★★★★</span>
 
               <span className="product-detail__rating-text">
-                {product.reviews?.length || 0}{' '}
-                reseñas
+                {product.reviews?.length || 0} reseñas
               </span>
             </div>
 
-            <p className="product-detail__price">
-              {formattedPrice}
-            </p>
+            <p className="product-detail__price">{formattedPrice}</p>
 
-            <p className="product-detail__taxes">
-              Impuestos incluidos
-            </p>
+            <p className="product-detail__taxes">Impuestos incluidos</p>
 
             <div className="product-detail__separator" />
 
-            <p className="product-detail__description">
-              {product.description}
-            </p>
+            <p className="product-detail__description">{product.description}</p>
 
             <div className="product-detail__section">
               <div className="product-detail__section-heading">
                 <h2>Color</h2>
 
-                <span>
-                  {selectedColor ||
-                    'Selecciona un color'}
-                </span>
+                <span>{selectedColor || "Selecciona un color"}</span>
               </div>
 
               <div className="product-detail__colors">
@@ -462,24 +359,16 @@ function Product() {
                     type="button"
                     className={`product-detail__color ${
                       selectedColor === variant.color
-                        ? 'product-detail__color--active'
-                        : ''
+                        ? "product-detail__color--active"
+                        : ""
                     }`}
                     style={{
-                      backgroundColor:
-                        variant.colorHex,
+                      backgroundColor: variant.colorHex,
                     }}
                     title={variant.color}
                     aria-label={`Seleccionar color ${variant.color}`}
-                    aria-pressed={
-                      selectedColor ===
-                      variant.color
-                    }
-                    onClick={() =>
-                      setSelectedColor(
-                        variant.color
-                      )
-                    }
+                    aria-pressed={selectedColor === variant.color}
+                    onClick={() => setSelectedColor(variant.color)}
                   />
                 ))}
               </div>
@@ -489,12 +378,14 @@ function Product() {
               <div className="product-detail__section-heading">
                 <h2>Talla</h2>
 
-                <button
-                  type="button"
+                <a
+                  href="/guia_general_tallas.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="product-detail__size-guide"
                 >
                   Guía de tallas
-                </button>
+                </a>
               </div>
 
               <div className="product-detail__sizes">
@@ -504,15 +395,11 @@ function Product() {
                     type="button"
                     className={`product-detail__size ${
                       selectedSize === size
-                        ? 'product-detail__size--active'
-                        : ''
+                        ? "product-detail__size--active"
+                        : ""
                     }`}
-                    onClick={() =>
-                      setSelectedSize(size)
-                    }
-                    aria-pressed={
-                      selectedSize === size
-                    }
+                    onClick={() => setSelectedSize(size)}
+                    aria-pressed={selectedSize === size}
                   >
                     {size}
                   </button>
@@ -524,9 +411,7 @@ function Product() {
               <div className="product-detail__quantity">
                 <button
                   type="button"
-                  onClick={() =>
-                    handleQuantityChange(-1)
-                  }
+                  onClick={() => handleQuantityChange(-1)}
                   aria-label="Reducir cantidad"
                 >
                   <LuMinus size={15} />
@@ -536,9 +421,7 @@ function Product() {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    handleQuantityChange(1)
-                  }
+                  onClick={() => handleQuantityChange(1)}
                   aria-label="Aumentar cantidad"
                 >
                   <LuPlus size={15} />
@@ -549,10 +432,7 @@ function Product() {
                 type="button"
                 className="product-detail__add"
                 onClick={handleAddToCart}
-                disabled={
-                  !selectedColor ||
-                  !selectedSize
-                }
+                disabled={!selectedColor || !selectedSize}
               >
                 <LuShoppingBag size={18} />
 
@@ -567,9 +447,7 @@ function Product() {
                 <div>
                   <strong>Envío rápido</strong>
 
-                  <span>
-                    Recíbelo en 2-4 días laborables
-                  </span>
+                  <span>Recíbelo en 2-4 días laborables</span>
                 </div>
               </div>
 
@@ -577,13 +455,9 @@ function Product() {
                 <LuRotateCcw size={19} />
 
                 <div>
-                  <strong>
-                    Devoluciones sencillas
-                  </strong>
+                  <strong>Devoluciones sencillas</strong>
 
-                  <span>
-                    Tienes 30 días para devolverlo
-                  </span>
+                  <span>Tienes 30 días para devolverlo</span>
                 </div>
               </div>
 
@@ -593,9 +467,7 @@ function Product() {
                 <div>
                   <strong>Compra segura</strong>
 
-                  <span>
-                    Tus datos están protegidos
-                  </span>
+                  <span>Tus datos están protegidos</span>
                 </div>
               </div>
             </div>
@@ -609,59 +481,42 @@ function Product() {
                 Opiniones verificadas
               </span>
 
-              <h2>
-                Lo que dicen de este producto
-              </h2>
+              <h2>Lo que dicen de este producto</h2>
             </div>
 
             <span className="product-detail__reviews-count">
-              {product.reviews?.length || 0}{' '}
-              {product.reviews?.length === 1
-                ? 'reseña'
-                : 'reseñas'}
+              {product.reviews?.length || 0}{" "}
+              {product.reviews?.length === 1 ? "reseña" : "reseñas"}
             </span>
           </div>
 
-          {Array.isArray(product.reviews) &&
-          product.reviews.length > 0 ? (
+          {Array.isArray(product.reviews) && product.reviews.length > 0 ? (
             <div className="product-detail__reviews-list">
-              {product.reviews.map(
-                (review: Review) => (
-                  <article
-                    key={review.id}
-                    className="product-detail__review"
-                  >
-                    <div className="product-detail__review-top">
-                      <div className="product-detail__review-rating">
-                        <span>
-                          {'★'.repeat(
-                            review.rating
-                          )}
-                        </span>
+              {product.reviews.map((review: Review) => (
+                <article key={review.id} className="product-detail__review">
+                  <div className="product-detail__review-top">
+                    <div className="product-detail__review-rating">
+                      <span>{"★".repeat(review.rating)}</span>
 
-                        <span className="product-detail__review-date">
-                          Compra verificada
-                        </span>
-                      </div>
-
-                      <span className="product-detail__review-user">
-                        {review.userName || `Usuario #${review.userId}`}
+                      <span className="product-detail__review-date">
+                        Compra verificada
                       </span>
                     </div>
 
-                    <p className="product-detail__review-comment">
-                      {review.comment}
-                    </p>
-                  </article>
-                )
-              )}
+                    <span className="product-detail__review-user">
+                      {review.userName || `Usuario #${review.userId}`}
+                    </span>
+                  </div>
+
+                  <p className="product-detail__review-comment">
+                    {review.comment}
+                  </p>
+                </article>
+              ))}
             </div>
           ) : (
             <div className="product-detail__no-reviews">
-              <p>
-                Todavía no hay reseñas para este
-                producto.
-              </p>
+              <p>Todavía no hay reseñas para este producto.</p>
             </div>
           )}
         </section>

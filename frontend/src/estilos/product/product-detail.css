@@ -648,6 +648,18 @@
   outline-offset: 3px;
 }
 
+.product-detail__size-guide {
+  display: inline-block;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #555;
+  font-family: inherit;
+  font-size: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Animaciones */
 
 @keyframes favorite-pop {
