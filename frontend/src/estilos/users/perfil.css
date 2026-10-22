@@ -1431,14 +1431,16 @@
   }
 
   .perfil-section-actions {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .perfil-section-actions .perfil-edit-button {
-    width: auto;
-  }
+.perfil-section-actions .perfil-edit-button,
+.perfil-section-actions .perfil-logout-button {
+  width: 100%;
+}
 
   .perfil-edit-button {
     width: 100%;

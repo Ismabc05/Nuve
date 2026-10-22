@@ -61,7 +61,7 @@ export default function OrderSuccess() {
           if (paidOrder) {
             // Mantener la pantalla de carga al menos 4 segundos
             const elapsed = Date.now() - startTime;
-            const remaining = Math.max(0, 4000 - elapsed);
+            const remaining = Math.max(0, 7000 - elapsed);
 
             if (remaining > 0) {
               await new Promise((resolve) => setTimeout(resolve, remaining));

@@ -93,8 +93,8 @@ function Perfil() {
   );
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { clearCart } = useCart()
-  const { clearFavorite } = useFavorite()
+  const { clearCart } = useCart();
+  const { clearFavorite } = useFavorite();
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -398,9 +398,9 @@ function Perfil() {
   };
 
   const handleLogout = () => {
-    clearCart()
-    clearFavorite()
-    
+    clearCart();
+    clearFavorite();
+
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 
@@ -1063,13 +1063,11 @@ function Perfil() {
 
                       <strong>{index + 1}</strong>
                     </div>
-
                     <div className="perfil-order-info">
                       <span>ESTADO</span>
 
                       <strong>{getOrderStatus(order.status)}</strong>
                     </div>
-
                     <div className="perfil-order-info">
                       <span>TOTAL</span>
 
@@ -1080,13 +1078,14 @@ function Perfil() {
                         }).format(Number(order.total))}
                       </strong>
                     </div>
-
                     <button
                       type="button"
                       className="perfil-order-button"
                       onClick={() => handleViewOrder(order.status)}
                     >
-                      Ver pedido
+                      {order.status.toLowerCase() === "completed"
+                        ? "Ver seguimiento"
+                        : "Ver pedido"}
                     </button>
                   </article>
                 ))}

@@ -249,66 +249,45 @@
   border-radius: 50%;
 }
 
+
 .register__notification {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   width: 100%;
-  z-index: 9999;
+  max-width: none;
+  margin: 0;
   box-sizing: border-box;
-
-  padding: 18px 40px;
-
-  display: flex;
-  align-items: center;
-
-  animation: registerNotificationSlideDown 0.4s ease-out;
-}
-
-.register__notification--success {
+  z-index: 999999;
+  padding: 16px 20px;
   background: #eef9f1;
   border-bottom: 1px solid #cfe8d5;
-  box-shadow: 0 4px 15px rgba(30, 100, 50, 0.08);
+  box-shadow: 0 4px 18px rgba(30, 100, 50, 0.12);
+  animation: registerNotificationSlideDown 0.35s ease-out;
 }
 
 .register__notification-content {
   width: 100%;
-
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.register__notification-icon {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-
+  max-width: none;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
-  background: #d9f2df;
-  color: #23863d;
-
-  font-size: 20px;
-  font-weight: 700;
+  box-sizing: border-box;
 }
 
 .register__notification-text {
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  width: 100%;
+  text-align: center;
 }
 
 .register__notification-text p {
   margin: 0;
-
-  font-size: 14px;
-  color: #4d6b55;
+  color: #315d3c;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 @keyframes registerNotificationSlideDown {
@@ -316,10 +295,24 @@
     transform: translateY(-100%);
     opacity: 0;
   }
-
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+
+/* Adaptación para móviles */
+@media (max-width: 600px) {
+  .register__notification {
+    padding: 16px 18px;
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+
+  .register__notification-text p {
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -367,10 +360,16 @@
   }
 
   .register__notification {
-    top: 1rem;
-    right: 1rem;
-    left: 1rem;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 14px 16px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    border-radius: 0;
+  }
 
-    min-width: auto;
+  .register__notification-text p {
+    font-size: 14px;
+    line-height: 1.45;
   }
 }

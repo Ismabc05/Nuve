@@ -95,6 +95,16 @@ function Register() {
 
   return (
     <main className="register">
+      {success && (
+            <div className="register__notification register__notification--success">
+              <div className="register__notification-content">
+
+                <div className="register__notification-text">
+                  <p>Tu cuenta se ha creado correctamente. Redirigiendo al inicio de sesión...</p>
+                </div>
+              </div>
+            </div>
+          )}
       <section className="register__container">
 
         <img
@@ -400,17 +410,6 @@ function Register() {
           >
             {loading ? <Spinner /> : 'CREAR CUENTA'}
           </button>
-          {success && (
-            <div className="register__notification register__notification--success">
-              <div className="register__notification-content">
-                <span className="register__notification-icon">✓</span>
-
-                <div className="register__notification-text">
-                  <p>Tu cuenta se ha creado correctamente. Redirigiendo al inicio de sesión...</p>
-                </div>
-              </div>
-            </div>
-          )}
 
           {serverError && ( <p className="error error--visible">{serverError}</p>)}
 
