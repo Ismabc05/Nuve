@@ -25,6 +25,7 @@
     "migration:show": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:show"
   },
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",

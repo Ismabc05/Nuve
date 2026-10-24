@@ -314,4 +314,46 @@ export class UsersService {
       favorites: user.profile.favorites,
     };
   }
+
+  async findByEmailForPasswordReset(email: string) {
+    return this.userRepo.findOne({
+      where: { email: email.trim().toLowerCase() },
+    });
+  }
+
+  async savePasswordResetToken(
+    userId: number,
+    tokenHash: string,
+    expiresAt: Date,
+  ) {
+    await this.userRepo.update(userId, {
+      passwordResetToken: tokenHash,
+      passwordResetExpires: expiresAt,
+    });
+  }
+
+  async resetPassword(userId: number, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.userRepo.update(userId, {
+      password: hashedPassword,
+      passwordResetToken: null,
+      passwordResetExpires: null,
+    });
+  }
+
+  async clearPasswordResetToken(userId: number) {
+    await this.userRepo.update(userId, {
+      passwordResetToken: null,
+      passwordResetExpires: null,
+    });
+  }
+
+  async findByPasswordResetToken(tokenHash: string) {
+    return this.userRepo.findOne({
+      where: {
+        passwordResetToken: tokenHash,
+      },
+    });
+  }
 }

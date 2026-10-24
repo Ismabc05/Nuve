@@ -27,6 +27,21 @@ export class User {
   password!: string;
 
   @Column({
+    type: 'varchar',
+    length: 64,
+    nullable: true,
+    name: 'password_reset_token',
+  })
+  passwordResetToken!: string | null;
+
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    name: 'password_reset_expires',
+  })
+  passwordResetExpires!: Date | null;
+
+  @Column({
     type: 'enum',
     enum: UserRole,
     default: UserRole.USER,
