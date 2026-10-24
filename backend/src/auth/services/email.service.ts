@@ -26,10 +26,15 @@ export class EmailService {
         },
       );
     } catch (error: unknown) {
-      console.error(
-        'Error enviando email de recuperación:',
-        error instanceof Error ? error.message : 'Error desconocido',
-      );
+      console.error('Error enviando email de recuperación:', error);
+
+      if (error instanceof Error) {
+        console.error('Nombre:', error.name);
+        console.error('Mensaje:', error.message);
+        console.error('Stack:', error.stack);
+      } else {
+        console.error('Detalles del error:', String(error));
+      }
 
       throw new InternalServerErrorException(
         'No se pudo enviar el correo de recuperación',
