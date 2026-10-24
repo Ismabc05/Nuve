@@ -14,6 +14,7 @@ import Admin from "./paginas/Admin/Admin";
 import RootRedirect from "./paginas/Root/RootRedirect";
 import Orders from "./paginas/Orders/Order";
 import ProtectedRoute from "./paginas/Root/RootRedirect";
+import ForgotPassword from "./paginas/Auth/ForgotPassword";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />}/>
 
           {/* Todas las demás rutas requieren iniciar sesión */}
           <Route element={<ProtectedRoute />}>
