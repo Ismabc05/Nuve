@@ -23,6 +23,9 @@ export class EmailService {
         {
           publicKey:
             this.configService.getOrThrow<string>('EMAILJS_PUBLIC_KEY'),
+          privateKey: this.configService.getOrThrow<string>(
+            'EMAILJS_PRIVATE_KEY',
+          ),
         },
       );
     } catch (error: unknown) {
