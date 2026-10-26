@@ -15,6 +15,7 @@ import RootRedirect from "./paginas/Root/RootRedirect";
 import Orders from "./paginas/Orders/Order";
 import ProtectedRoute from "./paginas/Root/RootRedirect";
 import ForgotPassword from "./paginas/Auth/ForgotPassword";
+import ResetPassword from "./paginas/Auth/ResetPassword";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />}/>
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Todas las demás rutas requieren iniciar sesión */}
           <Route element={<ProtectedRoute />}>
