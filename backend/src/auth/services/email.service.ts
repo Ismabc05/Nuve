@@ -26,14 +26,19 @@ export class EmailService {
         },
       );
     } catch (error: unknown) {
-      console.error('Error enviando email de recuperación:', error);
+      console.error('Error enviando email de recuperación:');
 
       if (error instanceof Error) {
         console.error('Nombre:', error.name);
         console.error('Mensaje:', error.message);
         console.error('Stack:', error.stack);
+      } else if (typeof error === 'object' && error !== null) {
+        console.error(
+          'Detalles:',
+          JSON.stringify(error, Object.getOwnPropertyNames(error)),
+        );
       } else {
-        console.error('Detalles del error:', String(error));
+        console.error('Detalles:', error);
       }
 
       throw new InternalServerErrorException(
