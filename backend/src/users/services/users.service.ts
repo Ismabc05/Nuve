@@ -315,12 +315,14 @@ export class UsersService {
     };
   }
 
+  // Busca al usuario que contiene ese email
   async findByEmailForPasswordReset(email: string) {
     return this.userRepo.findOne({
       where: { email: email.trim().toLowerCase() },
     });
   }
 
+  // Guarda el token y la fecha de expiracion en la base de datos
   async savePasswordResetToken(
     userId: number,
     tokenHash: string,
@@ -332,6 +334,7 @@ export class UsersService {
     });
   }
 
+  // Actualiza el usuario con su nueva contraseña y vacia la recuperacion de contraseña
   async resetPassword(userId: number, newPassword: string) {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -342,13 +345,7 @@ export class UsersService {
     });
   }
 
-  async clearPasswordResetToken(userId: number) {
-    await this.userRepo.update(userId, {
-      passwordResetToken: null,
-      passwordResetExpires: null,
-    });
-  }
-
+  // Busca el usuario mediante token
   async findByPasswordResetToken(tokenHash: string) {
     return this.userRepo.findOne({
       where: {

@@ -11,16 +11,20 @@ export class EmailService {
     name: string,
     resetLink: string,
   ): Promise<void> {
+    // Es una promesa ya que puede tardar un poco su funcionamiento
     try {
+      // Envío de correo electronico
       await emailjs.send(
-        this.configService.getOrThrow<string>('EMAILJS_SERVICE_ID'),
-        this.configService.getOrThrow<string>('EMAILJS_TEMPLATE_ID'),
+        this.configService.getOrThrow<string>('EMAILJS_SERVICE_ID'), // Recibe el id del servicio (servicio de correo)
+        this.configService.getOrThrow<string>('EMAILJS_TEMPLATE_ID'), // Id de la plantilla (la plantilla de correo)
+        // Las variables que tiene esa plantilla
         {
           email,
           name,
           reset_link: resetLink,
         },
         {
+          // Las claves de autenticacion para poder enviar el correo de recuperacion
           publicKey:
             this.configService.getOrThrow<string>('EMAILJS_PUBLIC_KEY'),
           privateKey: this.configService.getOrThrow<string>(
@@ -29,20 +33,7 @@ export class EmailService {
         },
       );
     } catch (error: unknown) {
-      console.error('Error enviando email de recuperación:');
-
-      if (error instanceof Error) {
-        console.error('Nombre:', error.name);
-        console.error('Mensaje:', error.message);
-        console.error('Stack:', error.stack);
-      } else if (typeof error === 'object' && error !== null) {
-        console.error(
-          'Detalles:',
-          JSON.stringify(error, Object.getOwnPropertyNames(error)),
-        );
-      } else {
-        console.error('Detalles:', error);
-      }
+      console.error('Error enviando email de recuperación:', error);
 
       throw new InternalServerErrorException(
         'No se pudo enviar el correo de recuperación',

@@ -1,3 +1,7 @@
+// Este archivo se creo porque TypeScript no estaba reconociendo correctamente los tipos del paquete. Entonces aparecían errores relacionados con el módulo y con emailjs.send().
+
+// Su funcion es ayudar a TypeScript a entender emailjs
+
 declare module '@emailjs/nodejs' {
   export interface EmailJSResponseStatus {
     status: number;

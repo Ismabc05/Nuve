@@ -26,6 +26,7 @@ export class User {
   @Column({ type: 'varchar', length: 100 })
   password!: string;
 
+  // Columna donde guardamos el token de recuperacion
   @Column({
     type: 'varchar',
     length: 64,
@@ -34,6 +35,7 @@ export class User {
   })
   passwordResetToken!: string | null;
 
+  // Columna donde está la fecha de expiracion del token
   @Column({
     type: 'timestamptz',
     nullable: true,

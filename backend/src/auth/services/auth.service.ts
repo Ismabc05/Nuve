@@ -39,8 +39,10 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
+    // Guardamos el email sin espacios y sin mayusculas
     const normalizedEmail = email.trim().toLowerCase();
 
+    // Busca el usuario que contenga ese email
     const user =
       await this.userService.findByEmailForPasswordReset(normalizedEmail);
 
@@ -52,32 +54,39 @@ export class AuthService {
       };
     }
 
+    // Crea un token de 65 bits aleatorios
     const token = randomBytes(32).toString('hex');
 
+    // Hasehamos el token para que no sepa cual es
     const tokenHash = createHash('sha256').update(token).digest('hex');
 
+    // Generamos una url incluido el token para que el usuario pueda cambiar su contraseña
+
+    // Obtenemos la url del frontend
     const frontendUrl = this.configService
       .getOrThrow<string>('FRONTEND_URL')
       .replace(/\/$/, '');
 
     const resetLink = `${frontendUrl}/reset-password?token=${encodeURIComponent(token)}`;
 
+    // Así seria la url final https://miweb.com/reset-password?token=abc123...
+
+    // Llamamos al metodo que envia el correoi de recuperacion
     await this.emailService.sendPasswordResetEmail(
       user.email,
       user.profile?.name ?? 'cliente',
       resetLink,
     );
 
+    // Creamos una fecha de expiracion de 15 minutos
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
+    // LLamamos al metodo que guarda el token y la fecha del usuario en la base de datos
     await this.userService.savePasswordResetToken(
       user.id,
       tokenHash,
       expiresAt,
     );
-
-    // Aquí conectaremos el envío del correo.
-    // No devuelvas el token en la respuesta HTTP en producción.
 
     return {
       message:
@@ -86,11 +95,13 @@ export class AuthService {
   }
 
   async resetPassword(token: string, newPassword: string) {
+    // Hasheamos el token por seguridad
     const tokenHash = createHash('sha256').update(token).digest('hex');
 
-    // Se busca por el hash del token y se valida la caducidad.
+    // LLamos al metodo que buscar el usuario mediante el token hasheado
     const user = await this.userService.findByPasswordResetToken(tokenHash);
 
+    // Validamos que el usuario exista, que existe una fecha de expiracion y que no esté caducada
     if (
       !user ||
       !user.passwordResetExpires ||
@@ -101,6 +112,7 @@ export class AuthService {
       );
     }
 
+    // Llamamos al metodo que actualiza la contraseña del usuario
     await this.userService.resetPassword(user.id, newPassword);
 
     return {
