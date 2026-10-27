@@ -2,6 +2,7 @@ import { useState } from "react";
 import type React from "react";
 import { forgotPassword } from "../../services/password.service";
 import "../../estilos/auth/forgot-password.css";
+import { Spinner } from "./Spinner";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -20,6 +21,9 @@ export default function ForgotPassword() {
 
     try {
       await forgotPassword(email.trim());
+
+      // Mantener el spinner visible 2 segundos más
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       setMessage(
         "Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.",
@@ -53,14 +57,13 @@ export default function ForgotPassword() {
             type="email"
             name="email"
             autoComplete="email"
-            placeholder="tu@email.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "Enviando..." : "Enviar enlace"}
+            {loading ? <Spinner /> : "Enviar enlace"}
           </button>
         </form>
 
@@ -75,8 +78,9 @@ export default function ForgotPassword() {
             {error}
           </p>
         )}
-
-        <a href="/login">Volver a iniciar sesión</a>
+        <div className="back-to-login">
+          <a href="/login">Volver a iniciar sesión</a>
+        </div>
       </section>
     </main>
   );
