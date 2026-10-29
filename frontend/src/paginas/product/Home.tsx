@@ -1,35 +1,24 @@
-import { useEffect, useState } from 'react';
-
 import Footer from '../../componentes/Footer';
 import Navbar from '../../componentes/Navbar';
 import ProductCard from '../../componentes/ProductCard';
 import ProductFilters from '../../componentes/ProductFilters';
 import ProductSkeleton from '../../componentes/ProductSkeleton';
-
 import '../../estilos/product/product.css';
-
 import { useFavorite } from '../../context/favorites/UseFavorite';
+import { type Category, type Brand, type Product, type PriceOrder } from '../../types/product';
+import { products, categories, brands } from '../../services/product.service';
 
-import {
-  type Category,
-  type Brand,
-  type Product,
-  type PriceOrder,
-} from '../../types/product';
+import { useEffect, useState } from 'react';
 
-import {
-  products,
-  categories,
-  brands,
-} from '../../services/product.service';
+// El componente home es el que gestiona estados, carga lo datos y filtra los productos
 
 function Home() {
   const [productList, setProductList] = useState<Product[]>([]); // Estado que contiene el listado de productos
   const [categoryList, setCategoryList] = useState<Category[]>([]); // Estado que contiene listado de categorias
   const [brandList, setBrandList] = useState<Brand[]>([]); // Estado que contiene listado de marcas
   const [loading, setLoading] = useState(true); // Estado de carga
-  const [valorInput, setValorInput] = useState(''); // Estado que contiene el valor del buscador para listar todos los productos 
-  const [priceOrder, setPriceOrder] = useState<PriceOrder>(''); // El estado que contiene el orden de precio (menor o mayor)
+  const [valorInput, setValorInput] = useState(''); // Guarda el texto escrito del buscador
+  const [priceOrder, setPriceOrder] = useState<PriceOrder>(''); // 	Guarda el orden de precio seleccionado.
   const [selectedCategories, setSelectedCategories] = // Estado que contiene las categorias seleccionadas
     useState<number[]>([]);
   const [selectedBrands, setSelectedBrands] = // // Estado que contiene las marcas seleccionadas
@@ -174,12 +163,14 @@ function Home() {
 
           <div className="product__results">
             <div className="product__grid">
+              {/* SI ESTÁ CARGANDO MOSTRAMOS EL PRODUCTSKELENTON 6 VECES, SI PRODUCTFILTER CONTIENE ENTONCES HACEMOS UN .MAP Y CADA PRODUCTO TENDRA SU PRODUCTCARD */}
               {loading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <ProductSkeleton key={index} />
                 ))
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
+                  
                   <ProductCard
                     key={product.id}
                     product={product}

@@ -1,13 +1,8 @@
 import { useState } from 'react';
-
-import {
-  LuChevronUp,
-  LuChevronDown
-} from 'react-icons/lu';
-
-import type { Category, Brand, PriceOrder } from '../types/product';
+import { LuChevronUp, LuChevronDown } from 'react-icons/lu';
 import type { Dispatch, SetStateAction } from 'react';
 
+import type { Category, Brand, PriceOrder } from '../types/product';
 import '../estilos/product/product.filter.css';
 
 type Section = 'categorias' | 'marcas' | 'precio';
@@ -23,6 +18,7 @@ type ProductFiltersProps = {
   setSelectedBrands: Dispatch<SetStateAction<number[]>>;
 };
 
+// Se escargan de mostrar las caterias, marcas y precio
 function ProductFilters({
   categories,
   brands,
@@ -34,6 +30,7 @@ function ProductFilters({
   setSelectedBrands
 }: ProductFiltersProps) {
 
+  // Estado de la secciones, por defecto estan todas abiertas
   const [openSections, setOpenSections] = useState<
     Record<Section, boolean>
   >({
@@ -42,6 +39,7 @@ function ProductFilters({
     precio: true
   });
 
+  // Cambia el valor de la categoría seleccionada para abrir o cerrar la seccion
   const toggleSection = (section: Section) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -81,8 +79,10 @@ function ProductFilters({
                   type="checkbox" 
                   checked={selectedCategories.includes(category.id)}
                   onChange={(event) => {
+                  // Si marca la casilla añade ese id a la lista
                   if (event.target.checked) {
                     setSelectedCategories((prev) => [...prev, category.id])
+                  // Si la desmarca, la elimina
                   } else {
                     setSelectedCategories((prev) =>
                     prev.filter((id) => id !== category.id)

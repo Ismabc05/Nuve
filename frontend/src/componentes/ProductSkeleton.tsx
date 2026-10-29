@@ -1,5 +1,6 @@
 import '../estilos/product/product-skeleton.css';
 
+// Muestra tarjetas provisionales durante la carga.
 function ProductSkeleton() {
   return (
     <article className="product-skeleton">

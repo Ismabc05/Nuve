@@ -25,16 +25,8 @@ export function CartProvider({ children }: CartProviderProps) {
       return;
     }
 
-    const user = JSON.parse(storedUser);
-    const userId = user?.id;
-
-    if (!userId) {
-      setCartCount(0);
-      return;
-    }
-
     try {
-      const orders = await getOrders(userId);
+      const orders = await getOrders();
 
       const activeOrder = orders.find(
         (order: { status: string; items: { quantity: number }[] }) =>
@@ -63,18 +55,12 @@ export function CartProvider({ children }: CartProviderProps) {
       const storedUser = localStorage.getItem("user");
 
       if (!storedUser) {
-        return;
-      }
-
-      const user = JSON.parse(storedUser);
-      const userId = user?.id;
-
-      if (!userId) {
+        setCartCount(0)
         return;
       }
 
       try {
-        const orders = await getOrders(userId);
+        const orders = await getOrders();
 
         const activeOrder = orders.find(
           (order: { status: string; items: { quantity: number }[] }) =>
@@ -107,10 +93,7 @@ export function CartProvider({ children }: CartProviderProps) {
       throw new Error("No hay usuario autenticado");
     }
 
-    const user = JSON.parse(storedUser);
-    const userId = user.id;
-
-    const orders = await getOrders(userId);
+    const orders = await getOrders();
 
     const activeOrder = orders.find(
       (order: { status: string }) => order.status === "active",

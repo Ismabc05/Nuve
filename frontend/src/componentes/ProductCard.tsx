@@ -1,11 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-
 import type { Dispatch, SetStateAction } from 'react';
-
 import { LuHeart, LuShoppingBag } from 'react-icons/lu';
 
 import type { Product } from '../types/product';
-
 import '../estilos/product/product-card.css';
 
 // Recibe todas las props
@@ -16,6 +13,7 @@ type ProductCardProps = {
   onToggleFavorite: () => void; // Función para alternar el estado de favorito del producto
 };
 
+// La funcion productcard representa cada producto y permite marcarlo como favorito.
 function ProductCard({
   product,
   setNotification,
@@ -109,6 +107,7 @@ function ProductCard({
             .map((variant) => variant.color)
             .join(', ')}`}
         >
+          {/* ASÍ SE AGREGAN LOS COLORES */}
           {uniqueColors.map((variant) => (
             <span
               key={variant.color}

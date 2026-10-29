@@ -1,14 +1,9 @@
-import {
-  LuHeart,
-  LuShoppingCart,
-  LuUser,
-  LuSearch
-} from 'react-icons/lu';
+import { LuHeart, LuShoppingCart, LuUser, LuSearch} from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 import '../estilos/navbar/navbar.css'
 import { useCart } from '../context/cart/UseCart';
 import { useFavorite } from '../context/favorites/UseFavorite';
-import { useNavigate } from 'react-router-dom';
 
 // Recibe estas dos props del componente Home que es el que renderiza product
 type NavbarProps = {
@@ -16,6 +11,7 @@ type NavbarProps = {
   setValorInput: (valor: string) => void; // Funcion que actualiza el texto del buscador
 };
 
+// La funcion Navbar contiene el buscador, contador de favoritos, carrito y navegación.
 function Navbar({valorInput, setValorInput}: NavbarProps) {
   const { cartCount } = useCart(); // Nos traemos de useCart el contador de productos de el carrito
   const { favoriteCount } = useFavorite(); // Nos traemos de useCart el contador de productos de favoritos
