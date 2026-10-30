@@ -10,25 +10,28 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LuChevronLeft, LuHeart, LuMinus, LuPlus, LuRotateCcw, LuShieldCheck, LuShoppingBag, LuTruck, } from "react-icons/lu";
 
+// Product muestra un producto en concreto con toda su informacion
 function Product() {
-  const [valorInput, setValorInput] = useState("");
-  const [product, setProduct] = useState<ProductType | null>(null);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [notification, setNotification] = useState("");
+  const [valorInput, setValorInput] = useState(""); // El texto del buscador del Navbar
+  const [product, setProduct] = useState<ProductType | null>(null); // Los datos del producto quer los tipamos de  tipo ProductType
+  const [selectedImage, setSelectedImage] = useState(0); // El id de la imagen seleccionada, por defecto esta en 0
+  const [selectedColor, setSelectedColor] = useState(""); // El color seleccionado
+  const [selectedSize, setSelectedSize] = useState(""); // La talla seleccionada
+  const [quantity, setQuantity] = useState(1); // La cantidad seleccionada, que por defecto es 0
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState(""); // Estado de error
+  const [notification, setNotification] = useState(""); // Estado de notifiacion
 
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { id } = useParams(); // Obtenemos el id de la url
+  const navigate = useNavigate(); // Se usa para navegar
+  const { addToCart } = useCart(); // Funcion para añadir al carrito
 
-  const { isFavorite, addFavoriteProduct, removeFavoriteProduct } = useFavorite();
+  const { isFavorite, addFavoriteProduct, removeFavoriteProduct } = useFavorite(); // Funciones para añadir, eliminar o saber si esta en favoritos
 
+  // Aquí se carga el producto seleccionado
   useEffect(() => {
     const loadProduct = async () => {
+      // Si no existe el id se para el estado de carga y no retornamos nada
       if (!id) {
         setError("Producto no encontrado");
         setLoading(false);
@@ -38,15 +41,20 @@ function Product() {
       const startTime = Date.now();
 
       try {
+        // Si existe empieza a cargar
         setLoading(true);
         setError("");
 
+        // Hace el fetch pasandole el id convertido a numero
         const productData = await productById(Number(id));
 
+        // Actualiza el estado con el producto
         setProduct(productData);
 
+        // Se cgoe la primera variante
         const firstVariant = productData.variants?.[0];
 
+        // Y de esa variante cojemos su color y su talla y actualizamos los estados correspondientes
         if (firstVariant) {
           setSelectedColor(firstVariant.color);
           setSelectedSize(firstVariant.size);
@@ -56,8 +64,8 @@ function Product() {
 
         setError("No se ha podido cargar el producto");
       } finally {
+        // Este codifo calcula cuanto ha tardado la peticion se le suma mas tiempo para que el spinner de carga se muestre
         const elapsedTime = Date.now() - startTime;
-
         const remainingTime = Math.max(1000 - elapsedTime, 0);
 
         setTimeout(() => {
@@ -67,8 +75,10 @@ function Product() {
     };
 
     loadProduct();
+    // Este useEffect se ejecuta siempre que cambia el id, es decir que cambiamos de producto
   }, [id]);
 
+  // Obtenemos los colores únicos, ya que pueden venir repetidos
   const uniqueColors = useMemo(() => {
     if (!product) {
       return [];
@@ -81,6 +91,7 @@ function Product() {
     );
   }, [product]);
 
+    // Obtenemos las tallas unicas, ya que pueden venir repetidos
   const uniqueSizes = useMemo(() => {
     if (!product) {
       return [];
@@ -89,6 +100,7 @@ function Product() {
     return Array.from(new Set(product.variants.map((variant) => variant.size)));
   }, [product]);
 
+  // Se usa para cambiar el formato del precio a euros
   const formattedPrice = product
     ? new Intl.NumberFormat("es-ES", {
         style: "currency",
@@ -104,6 +116,7 @@ function Product() {
     });
   };
 
+  // Elimine o añade el producto a favoritos
   const handleFavorite = async () => {
     if (!product) {
       return;
@@ -151,6 +164,7 @@ function Product() {
     }
   };
 
+  // Si esta cargando muestra el Navbar el Footer y el parrafo de cargando
   if (loading) {
     return (
       <>
@@ -169,6 +183,7 @@ function Product() {
     );
   }
 
+  // Si da error o no existe el producto muestra un parrafo con el error y un boton para volver atras
   if (error || !product) {
     return (
       <>
@@ -240,7 +255,7 @@ function Product() {
               <span className="product-detail__gallery-label">
                 Vista del producto
               </span>
-
+              {/* Muestra La imagen selecciona y el total de imagenes (1/3, 2/3) */}
               <span className="product-detail__gallery-count">
                 {selectedImage + 1} / {product.images.length}
               </span>
@@ -248,6 +263,7 @@ function Product() {
 
             <div className="product-detail__gallery-content">
               <div className="product-detail__thumbnails">
+                {/* Muestra cada una de las imagenes */}
                 {product.images.map((image, index) => (
                   <button
                     key={image.id}
@@ -257,6 +273,7 @@ function Product() {
                         ? "product-detail__thumbnail--active"
                         : ""
                     }`}
+                    // Actualiza el id de la imagen
                     onClick={() => setSelectedImage(index)}
                     aria-label={`Ver imagen ${index + 1}`}
                     aria-pressed={selectedImage === index}
