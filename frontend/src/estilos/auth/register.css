@@ -221,13 +221,10 @@
   line-height: 1.4;
   color: #9b1c1c;
   text-align: left;
-
   opacity: 0;
   transform: translateY(-4px);
   max-height: 0;
-
   overflow: hidden;
-
   transition:
     opacity 0.25s ease,
     transform 0.25s ease,
@@ -248,7 +245,6 @@
   object-fit: cover;
   border-radius: 50%;
 }
-
 
 .register__notification {
   position: fixed;
@@ -301,8 +297,6 @@
   }
 }
 
-
-/* Adaptación para móviles */
 @media (max-width: 600px) {
   .register__notification {
     padding: 16px 18px;

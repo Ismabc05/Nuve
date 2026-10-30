@@ -55,7 +55,6 @@ export const getAddresses = async (userId: number) => {
   return await response.json();
 };
 
-
 export const updateUser = async (
   userId: number,
   userData: UserData

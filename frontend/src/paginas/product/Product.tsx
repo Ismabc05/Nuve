@@ -1,31 +1,14 @@
 import Navbar from "../../componentes/Navbar";
-
 import Footer from "../../componentes/Footer";
+import type { Product as ProductType, Review } from "../../types/product";
+import { productById } from "../../services/product.service";
+import "../../estilos/product/product-detail.css";
+import { useCart } from "../../context/cart/UseCart";
+import { useFavorite } from "../../context/favorites/UseFavorite";
 
 import { useEffect, useMemo, useState } from "react";
-
 import { useNavigate, useParams } from "react-router-dom";
-
-import {
-  LuChevronLeft,
-  LuHeart,
-  LuMinus,
-  LuPlus,
-  LuRotateCcw,
-  LuShieldCheck,
-  LuShoppingBag,
-  LuTruck,
-} from "react-icons/lu";
-
-import type { Product as ProductType, Review } from "../../types/product";
-
-import { productById } from "../../services/product.service";
-
-import "../../estilos/product/product-detail.css";
-
-import { useCart } from "../../context/cart/UseCart";
-
-import { useFavorite } from "../../context/favorites/UseFavorite";
+import { LuChevronLeft, LuHeart, LuMinus, LuPlus, LuRotateCcw, LuShieldCheck, LuShoppingBag, LuTruck, } from "react-icons/lu";
 
 function Product() {
   const [valorInput, setValorInput] = useState("");
@@ -40,11 +23,9 @@ function Product() {
 
   const { id } = useParams();
   const navigate = useNavigate();
-
   const { addToCart } = useCart();
 
-  const { isFavorite, addFavoriteProduct, removeFavoriteProduct } =
-    useFavorite();
+  const { isFavorite, addFavoriteProduct, removeFavoriteProduct } = useFavorite();
 
   useEffect(() => {
     const loadProduct = async () => {

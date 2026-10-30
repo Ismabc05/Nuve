@@ -1,7 +1,3 @@
-/* =========================
-   PÁGINA
-   ========================= */
-
 .perfil-page {
   width: 100%;
   min-height: 100vh;
@@ -9,19 +5,11 @@
   background: #f7f7f5;
 }
 
-/* =========================
-   CONTENEDOR
-   ========================= */
-
 .perfil-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
-
-/* =========================
-   HEADER
-   ========================= */
 
 .perfil-header {
   display: flex;
@@ -98,10 +86,6 @@
   font-weight: 500;
 }
 
-/* =========================
-   SECCIONES
-   ========================= */
-
 .perfil-section {
   margin-bottom: 30px;
   padding: 30px;
@@ -135,10 +119,6 @@
   font-weight: 500;
 }
 
-/* =========================
-   BOTONES
-   ========================= */
-
 .perfil-edit-button {
   flex-shrink: 0;
   padding: 11px 18px;
@@ -157,10 +137,6 @@
   color: #fff;
 }
 
-/* =========================
-   INFORMACIÓN PERSONAL
-   ========================= */
-
 .perfil-personal {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr);
@@ -171,122 +147,87 @@
 .perfil-avatar {
   width: 120px;
   height: 120px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
-
   border-radius: 50%;
-
   background: #f1f1ee;
-
   color: #555;
-
   font-size: 38px;
   font-weight: 500;
 }
 
 .perfil-avatar img {
   display: block;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
 .perfil-info-grid {
   display: grid;
-
   grid-template-columns: repeat(
     2,
     minmax(0, 1fr)
   );
-
   gap: 25px 40px;
 }
 
 .perfil-info-item {
   display: flex;
   flex-direction: column;
-
   gap: 7px;
-
   min-width: 0;
 }
 
 .perfil-info-item span {
   color: #999;
-
   font-size: 10px;
   font-weight: 700;
-
   letter-spacing: 1px;
-
   text-transform: uppercase;
 }
 
 .perfil-info-item strong {
   overflow: hidden;
-
   color: #1d1d1b;
-
   font-size: 14px;
   font-weight: 500;
-
   text-overflow: ellipsis;
 }
 
-/* =========================
-   DIRECCIONES
-   ========================= */
-
 .perfil-addresses {
   display: grid;
-
   grid-template-columns: repeat(
     2,
     minmax(0, 1fr)
   );
-
   gap: 15px;
 }
 
 .perfil-address {
   display: grid;
-
   grid-template-columns:
     45px
     minmax(0, 1fr)
     auto;
-
   gap: 15px;
-
   align-items: start;
-
   padding: 20px;
-
   border: 1px solid #deded9;
-
   background: #fafaf8;
 }
 
 .perfil-address-icon {
   width: 45px;
   height: 45px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid #deded9;
-
   background: #fff;
-
   color: #555;
-
   font-size: 19px;
 }
 
@@ -296,64 +237,42 @@
 
 .perfil-address-content > span {
   display: block;
-
   margin-bottom: 7px;
-
   color: #999;
-
   font-size: 9px;
   font-weight: 700;
-
   letter-spacing: 1.5px;
 }
 
 .perfil-address-content strong {
   display: block;
-
   margin-bottom: 7px;
-
   color: #1d1d1b;
-
   font-size: 14px;
   font-weight: 500;
 }
 
 .perfil-address-content p {
   margin: 3px 0;
-
   color: #777;
-
   font-size: 12px;
-
   line-height: 1.4;
 }
 
-/* =========================
-   ACCIONES DIRECCIÓN
-   ========================= */
-
 .perfil-address-actions {
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-end;
-
   gap: 8px;
-
   align-self: center;
 }
 
 .perfil-address-edit,
 .perfil-address-delete {
   padding: 0;
-
   border: none;
-
   background: transparent;
-
   font-size: 11px;
-
   cursor: pointer;
 }
 
@@ -363,7 +282,6 @@
 
 .perfil-address-edit:hover {
   color: #1d1d1b;
-
   text-decoration: underline;
 }
 
@@ -373,68 +291,45 @@
 
 .perfil-address-delete:hover {
   color: #7f2922;
-
   text-decoration: underline;
 }
 
-/* =========================
-   FORMULARIO DIRECCIÓN
-   ========================= */
-
 .perfil-address-form {
   padding: 25px;
-
   border: 1px solid #deded9;
-
   background: #fafaf8;
 }
 
 .perfil-address-form-header {
   margin-bottom: 25px;
-
   padding-bottom: 20px;
-
   border-bottom: 1px solid #e5e5e1;
 }
 
 .perfil-address-form-header h3 {
   margin: 0;
-
   color: #1d1d1b;
-
   font-size: 20px;
-
   font-weight: 500;
 }
 
 .perfil-address-form-grid {
   display: grid;
-
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
-
   gap: 22px 30px;
 }
 
 .perfil-address-form input {
   width: 100%;
-
   box-sizing: border-box;
-
   padding: 10px 12px;
-
   border: 1px solid #d5d5d0;
-
   background: #fff;
-
   color: #1d1d1b;
-
   font-family: inherit;
-
   font-size: 13px;
-
   outline: none;
-
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -442,7 +337,6 @@
 
 .perfil-address-form input:focus {
   border-color: #1d1d1b;
-
   box-shadow:
     0 0 0 1px #1d1d1b;
 }
@@ -459,84 +353,53 @@
   margin-top: 18px;
 }
 
-/* =========================
-   EMPTY
-   ========================= */
-
 .perfil-empty {
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   min-height: 220px;
-
   padding: 40px 20px;
-
   border: 1px solid #deded9;
-
   background: #fafaf8;
-
   text-align: center;
 }
 
 .perfil-empty-icon {
   margin-bottom: 15px;
-
   color: #777;
-
   font-size: 35px;
 }
 
 .perfil-empty h3 {
   margin: 0 0 8px;
-
   color: #1d1d1b;
-
   font-size: 19px;
-
   font-weight: 500;
 }
 
 .perfil-empty p {
   margin: 0;
-
   color: #777;
-
   font-size: 13px;
 }
 
-/* =========================
-   LOADING
-   ========================= */
-
 .perfil-loading {
   min-height: 60vh;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   gap: 18px;
-
   color: #666;
 }
 
 .perfil-spinner {
   width: 34px;
   height: 34px;
-
   border: 3px solid #deded9;
-
   border-top-color: #1d1d1b;
-
   border-radius: 50%;
-
   animation:
     perfil-spin 0.8s linear infinite;
 }
@@ -547,130 +410,86 @@
   }
 }
 
-/* =========================
-   ERROR
-   ========================= */
-
 .perfil-error {
   min-height: 60vh;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   text-align: center;
 }
 
 .perfil-error-icon {
   width: 48px;
   height: 48px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   margin-bottom: 20px;
-
   border: 1px solid #d6d6d1;
-
   border-radius: 50%;
-
   color: #555;
-
   font-size: 22px;
 }
 
 .perfil-error h2 {
   margin: 0 0 10px;
-
   color: #1d1d1b;
-
   font-size: 28px;
-
   font-weight: 500;
 }
 
 .perfil-error p {
   margin: 0;
-
   color: #777;
 }
 
-/* =========================
-   PEDIDOS
-   ========================= */
-
 .perfil-orders {
   display: flex;
-
   flex-direction: column;
-
   gap: 12px;
 }
 
 .perfil-order {
   display: grid;
-
   grid-template-columns:
     1fr
     1fr
     1fr
     auto;
-
   gap: 25px;
-
   align-items: center;
-
   padding: 20px;
-
   border: 1px solid #deded9;
-
   background: #fafaf8;
 }
 
 .perfil-order-info {
   display: flex;
-
   flex-direction: column;
-
   gap: 7px;
 }
 
 .perfil-order-info span {
   color: #999;
-
   font-size: 9px;
-
   font-weight: 700;
-
   letter-spacing: 1.5px;
 }
 
 .perfil-order-info strong {
   color: #1d1d1b;
-
   font-size: 14px;
-
   font-weight: 500;
 }
 
 .perfil-order-button {
   padding: 10px 16px;
-
   border: 1px solid #1d1d1b;
-
   background: #fff;
-
   color: #1d1d1b;
-
   font-size: 11px;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -678,33 +497,23 @@
 
 .perfil-order-button:hover {
   background: #1d1d1b;
-
   color: #fff;
 }
 
 .perfil-orders-count {
   color: #777;
-
   font-size: 12px;
 }
 
 .perfil-empty-button {
   margin-top: 20px;
-
   padding: 11px 20px;
-
   border: 1px solid #1d1d1b;
-
   background: #1d1d1b;
-
   color: #fff;
-
   font-size: 11px;
-
   font-weight: 500;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -712,13 +521,8 @@
 
 .perfil-empty-button:hover {
   background: #fff;
-
   color: #1d1d1b;
 }
-
-/* =========================
-   EDICIÓN PERFIL
-   ========================= */
 
 .perfil-info-edit {
   width: 100%;
@@ -726,23 +530,14 @@
 
 .perfil-info-edit input {
   width: 100%;
-
   box-sizing: border-box;
-
   padding: 10px 12px;
-
   border: 1px solid #d5d5d0;
-
   background: #fff;
-
   color: #1d1d1b;
-
   font-family: inherit;
-
   font-size: 13px;
-
   outline: none;
-
   transition:
     border-color 0.2s ease;
 }
@@ -753,22 +548,16 @@
 
 .perfil-edit-actions {
   display: flex;
-
   gap: 10px;
-
   margin-top: 10px;
 }
 
 .perfil-edit-save,
 .perfil-edit-cancel {
   padding: 11px 18px;
-
   font-size: 11px;
-
   font-weight: 500;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -777,9 +566,7 @@
 
 .perfil-edit-save {
   border: 1px solid #1d1d1b;
-
   background: #1d1d1b;
-
   color: #fff;
 }
 
@@ -796,9 +583,7 @@
 
 .perfil-edit-cancel {
   border: 1px solid #d5d5d0;
-
   background: #fff;
-
   color: #1d1d1b;
 }
 
@@ -808,59 +593,37 @@
 
 .perfil-form-error {
   margin: 0;
-
   color: #b42318;
-
   font-size: 12px;
 }
 
-/* =========================
-   NOTIFICACIÓN
-   ========================= */
-
 .notification {
   position: fixed;
-
   top: 92px;
   right: 28px;
-
   z-index: 1000;
-
   display: flex;
-
   align-items: flex-start;
-
   gap: 13px;
-
   width: min(
     370px,
     calc(100vw - 32px)
   );
-
   box-sizing: border-box;
-
   padding: 16px 16px 16px 15px;
-
   border: 1px solid
     rgba(31, 31, 31, 0.08);
-
   border-radius: 14px;
-
   background:
     rgba(255, 255, 255, 0.94);
-
   color: #202020;
-
   box-shadow:
     0 18px 45px
       rgba(28, 28, 28, 0.14),
     0 3px 10px
       rgba(28, 28, 28, 0.06);
-
   backdrop-filter: blur(18px);
-
   -webkit-backdrop-filter: blur(18px);
-
   animation:
     notification-in 0.45s
       cubic-bezier(
@@ -873,85 +636,54 @@
 
 .notification__indicator {
   width: 4px;
-
   min-height: 40px;
-
   flex-shrink: 0;
-
   border-radius: 999px;
-
   background: #94db43;
 }
 
 .notification__content {
   min-width: 0;
-
   padding-top: 1px;
 }
 
 .notification__label {
   display: block;
-
   margin-bottom: 4px;
-
   color: #8c8c8c;
-
   font-size: 10px;
-
   font-weight: 700;
-
   letter-spacing: 1.2px;
-
   line-height: 1;
-
   text-transform: uppercase;
 }
 
 .notification__message {
   margin: 0;
-
   color: #292929;
-
   font-size: 13px;
-
   font-weight: 500;
-
   line-height: 1.45;
 }
 
 .notification__close {
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   width: 25px;
   height: 25px;
-
   flex-shrink: 0;
-
   margin-left: auto;
-
   padding: 0;
-
   border: 0;
-
   border-radius: 50%;
-
   background: transparent;
-
   color: #8c8c8c;
-
   font-family: inherit;
-
   font-size: 20px;
-
   font-weight: 300;
-
   line-height: 1;
-
   cursor: pointer;
-
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -960,30 +692,24 @@
 
 .notification__close:hover {
   background: #f3f3f3;
-
   color: #222222;
-
   transform: rotate(90deg);
 }
 
 .notification__close:focus-visible {
   outline: 2px solid #79d95c;
-
   outline-offset: 2px;
 }
 
 @keyframes notification-in {
   from {
     opacity: 0;
-
     transform:
       translateY(-10px)
       translateX(15px);
   }
-
   to {
     opacity: 1;
-
     transform:
       translateY(0)
       translateX(0);
@@ -992,11 +718,8 @@
 
 .perfil-avatar-container {
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   gap: 12px;
 }
 
@@ -1006,24 +729,15 @@
 
 .perfil-image-button {
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
   padding: 9px 14px;
-
   border: 1px solid #1d1d1b;
-
   background: #fff;
-
   color: #1d1d1b;
-
   font-size: 11px;
-
   font-weight: 500;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -1031,13 +745,8 @@
 
 .perfil-image-button:hover {
   background: #1d1d1b;
-
   color: #fff;
 }
-
-/* =========================
-   ACCIONES PERFIL
-   ========================= */
 
 .perfil-section-actions {
   display: flex;
@@ -1091,61 +800,42 @@
   background: #fff1f0;
 }
 
-
-/* =========================
-   MODAL CERRAR SESIÓN
-   ========================= */
-
 .logout-modal-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 20px;
   box-sizing: border-box;
-
   background: rgba(29, 29, 27, 0.48);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-
   animation: logout-overlay-in 0.25s ease both;
 }
 
 .logout-modal {
   position: relative;
-
   width: 100%;
   max-width: 420px;
   box-sizing: border-box;
-
   padding: 30px;
-
   border: 1px solid #deded9;
   border-radius: 2px;
-
   background: #fff;
-
   box-shadow:
     0 24px 70px rgba(29, 29, 27, 0.16),
     0 4px 14px rgba(29, 29, 27, 0.05);
 
   text-align: center;
-
   animation: logout-modal-in 0.35s
     cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Encabezado */
-
 .logout-modal h2 {
   margin: 0 0 12px;
-
   color: #1d1d1b;
-
   font-size: 25px;
   font-weight: 500;
   line-height: 1.25;
@@ -1154,15 +844,11 @@
 
 .logout-modal p {
   margin: 0 0 28px;
-
   color: #777770;
-
   font-size: 14px;
   font-weight: 400;
   line-height: 1.7;
 }
-
-/* Botones */
 
 .logout-modal-buttons {
   display: flex;
@@ -1174,30 +860,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   min-height: 46px;
   box-sizing: border-box;
-
   padding: 12px 18px;
-
   border: 1px solid transparent;
   border-radius: 0;
-
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease,
     border-color 0.2s ease;
 }
-
-/* Confirmar */
 
 .logout-confirm-button {
   border-color: #1d1d1b !important;
@@ -1210,8 +888,6 @@
   background: #3a3a36 !important;
 }
 
-/* Cancelar */
-
 .logout-cancel-button {
   border-color: #deded9 !important;
   background: #fff !important;
@@ -1223,20 +899,15 @@
   background: #f7f7f5 !important;
 }
 
-/* Accesibilidad */
-
 .logout-modal-buttons button:focus-visible {
   outline: 2px solid #777770;
   outline-offset: 3px;
 }
 
-/* Animaciones */
-
 @keyframes logout-overlay-in {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -1254,8 +925,6 @@
   }
 }
 
-/* Móvil */
-
 @media (max-width: 480px) {
   .logout-modal {
     max-width: 100%;
@@ -1272,8 +941,6 @@
   }
 }
 
-/* Respeta las preferencias de movimiento */
-
 @media (prefers-reduced-motion: reduce) {
   .logout-modal-overlay,
   .logout-modal {
@@ -1285,18 +952,11 @@
   }
 }
 
-
-/* =========================
-   SEGURIDAD Y CONTRASEÑA
-   ========================= */
-
 .perfil-password-info {
   display: flex;
   align-items: center;
   gap: 18px;
-
   padding: 20px;
-
   border: 1px solid #deded9;
   background: #fafaf8;
 }
@@ -1305,14 +965,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 46px;
   height: 46px;
   flex-shrink: 0;
-
   border: 1px solid #deded9;
   background: #fff;
-
   font-size: 18px;
 }
 
@@ -1322,27 +979,18 @@
 
 .perfil-password-content strong {
   display: block;
-
   margin-bottom: 6px;
-
   color: #1d1d1b;
-
   font-size: 14px;
   font-weight: 500;
 }
 
 .perfil-password-content p {
   margin: 0;
-
   color: #777;
-
   font-size: 12px;
   line-height: 1.6;
 }
-
-/* =========================
-   SEGURIDAD DE LA CUENTA
-   ========================= */
 
 .perfil-security-section {
   margin-top: 45px;

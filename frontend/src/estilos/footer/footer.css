@@ -42,7 +42,6 @@
 
 .footer__social h3 {
   margin: 0;
-
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -57,19 +56,14 @@
 .footer__social-links a {
   width: 40px;
   height: 40px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid #dededb;
   border-radius: 50%;
-
   color: #555;
   font-size: 18px;
-
   text-decoration: none;
-
   transition:
     color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -96,7 +90,6 @@
 
 .footer__bottom p {
   margin: 0;
-
   font-size: 12px;
   color: #999;
 }

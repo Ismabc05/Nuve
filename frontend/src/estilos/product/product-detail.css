@@ -13,8 +13,6 @@
   min-height: 60vh;
 }
 
-/* Estados */
-
 .product-detail__loader {
   display: flex;
   flex-direction: column;
@@ -69,8 +67,6 @@
   cursor: pointer;
 }
 
-/* Volver */
-
 .product-detail__back-container {
   margin-bottom: 30px;
 }
@@ -96,16 +92,12 @@
   transform: translateX(-3px);
 }
 
-/* Contenedor principal */
-
 .product-detail__container {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
   gap: clamp(42px, 7vw, 96px);
   align-items: start;
 }
-
-/* Galería */
 
 .product-detail__gallery {
   min-width: 0;
@@ -205,8 +197,6 @@
   text-transform: uppercase;
   backdrop-filter: blur(8px);
 }
-
-/* Información */
 
 .product-detail__info {
   padding-top: 22px;
@@ -319,8 +309,6 @@
   line-height: 1.75;
 }
 
-/* Secciones */
-
 .product-detail__section {
   margin-top: 31px;
 }
@@ -358,8 +346,6 @@
   cursor: pointer;
 }
 
-/* Colores */
-
 .product-detail__colors {
   display: flex;
   flex-wrap: wrap;
@@ -389,8 +375,6 @@
     0 0 0 2px #ffffff,
     0 0 0 3px #191919;
 }
-
-/* Tallas */
 
 .product-detail__sizes {
   display: flex;
@@ -423,8 +407,6 @@
   background: #191919;
   color: #ffffff;
 }
-
-/* Compra */
 
 .product-detail__purchase {
   display: flex;
@@ -500,8 +482,6 @@
   cursor: not-allowed;
 }
 
-/* Beneficios */
-
 .product-detail__benefits {
   display: grid;
   gap: 14px;
@@ -539,8 +519,6 @@
   color: #8a8a8a;
   font-size: 11px;
 }
-
-/* Reseñas */
 
 .product-detail__reviews {
   margin-top: 100px;
@@ -641,8 +619,6 @@
   font-size: 13px;
 }
 
-/* Foco */
-
 .product-detail button:focus-visible {
   outline: 2px solid #d95c5c;
   outline-offset: 3px;
@@ -659,8 +635,6 @@
   text-decoration: underline;
   cursor: pointer;
 }
-
-/* Animaciones */
 
 @keyframes favorite-pop {
   0% {
@@ -690,8 +664,6 @@
   }
 }
 
-/* Tablet */
-
 @media (max-width: 950px) {
   .product-detail {
     width: min(100% - 40px, 720px);
@@ -710,8 +682,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* Móvil */
 
 @media (max-width: 600px) {
   .product-detail {
@@ -798,8 +768,6 @@
     padding: 18px;
   }
 }
-
-/* NOTIFICACIÓN */
 
 .notification {
   position: fixed;
