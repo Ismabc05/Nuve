@@ -122,6 +122,10 @@
   justify-content: center;
   gap: 18px;
   color: #666;
+
+  /* Baja el contenido de carga */
+  padding-top: 160px;
+  box-sizing: border-box;
 }
 
 .favoritos-spinner {
@@ -348,6 +352,11 @@
 
   .favoritos-count {
     padding: 0;
+  }
+
+  .favoritos-loading {
+    padding-top: 200px;
+    min-height: 60vh;
   }
 
   .favoritos-grid {

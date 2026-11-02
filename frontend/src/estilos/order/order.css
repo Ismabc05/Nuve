@@ -350,6 +350,8 @@
   justify-content: center;
   color: #777;
   font-size: 13px;
+  padding-top: 160px;
+  box-sizing: border-box;
 }
 
 .order-page__empty {
@@ -468,6 +470,11 @@
 
   .order-summary {
     position: static;
+  }
+
+  .favoritos-loading {
+    padding-top: 120px;
+    min-height: 60vh;
   }
 }
 

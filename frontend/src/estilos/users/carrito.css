@@ -535,6 +535,8 @@
   justify-content: center;
   gap: 18px;
   color: #666;
+  padding-top: 160px;
+  box-sizing: border-box;
 }
 
 .carrito-spinner {
@@ -624,6 +626,11 @@
 
   .carrito-header h1 {
     font-size: 34px;
+  }
+
+  .favoritos-loading {
+    padding-top: 120px;
+    min-height: 60vh;
   }
 
   .carrito-item {

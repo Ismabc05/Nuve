@@ -38,6 +38,8 @@
   justify-content: center;
   gap: 18px;
   color: #666;
+  padding-top: 160px;
+  box-sizing: border-box;
 }
 
 .carrito-spinner {
@@ -1038,6 +1040,11 @@
 
   .perfil-addresses {
     grid-template-columns: 1fr;
+  }
+
+  .favoritos-loading {
+    padding-top: 120px;
+    min-height: 60vh;
   }
 
   .perfil-address-form-grid {
