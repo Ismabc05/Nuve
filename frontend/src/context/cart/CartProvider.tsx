@@ -1,12 +1,7 @@
 import { useCallback, useState, useEffect, type ReactNode } from "react";
 
-import {
-  getOrders,
-  addOrderItem,
-  removeOrderItem,
-  updateOrderItem,
+import { getOrders, addOrderItem, removeOrderItem, updateOrderItem,
 } from "../../services/cart.service";
-
 import { CartContext } from "./CartContext";
 
 // Definimos el tipado de cartProvider que va a tener la propiedad children, esta sirve para que cualqier elemento que este dentro de él podrá acceder a las funciones y valores definidos

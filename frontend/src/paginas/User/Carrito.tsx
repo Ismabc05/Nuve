@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-
-import { getOrders } from "../../services/cart.service";
-
-import Navbar from "../../componentes/Navbar";
-import Footer from "../../componentes/Footer";
 import { useNavigate } from "react-router-dom";
 
+import { getOrders } from "../../services/cart.service";
+import Navbar from "../../componentes/Navbar";
+import Footer from "../../componentes/Footer";
 import "../../estilos/users/carrito.css";
 import { useCart } from "../../context/cart/UseCart";
 import type { Order } from "../../types/carrito";
@@ -46,7 +44,7 @@ function Carrito() {
         setLoading(true);
         setError("");
 
-        const orders = await getOrders(userId);
+        const orders = await getOrders();
 
         console.log(
           "PRODUCT VARIANT:",

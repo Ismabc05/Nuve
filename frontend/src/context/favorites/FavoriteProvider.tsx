@@ -1,11 +1,6 @@
 import { useCallback, useState, useEffect, type ReactNode } from "react";
 
-import {
-  getFavorite,
-  addFavorite,
-  deleteFavorite,
-} from "../../services/favorite.service";
-
+import { getFavorite,  addFavorite, deleteFavorite, } from "../../services/favorite.service";
 import { FavoriteContext } from "./FavoriteContext";
 
 // Definimos el tipado de favoriteProvider que va a tener la propiedad children, esta sirve para que cualqier elemento que este dentro de él podrá acceder a las funciones y valores definidos

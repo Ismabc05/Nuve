@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
-
-import type { Product } from '../../types/product';
-
-import { getFavorite } from '../../services/favorite.service';
-
-import { useFavorite } from '../../context/favorites/UseFavorite';
-
-import ProductCard from '../../componentes/ProductCard';
 import { useNavigate } from 'react-router-dom';
 
+import type { Product } from '../../types/product';
+import { getFavorite } from '../../services/favorite.service';
+import { useFavorite } from '../../context/favorites/UseFavorite';
+import ProductCard from '../../componentes/ProductCard';
 import '../../estilos/users/favorite.css';
 import Navbar from '../../componentes/Navbar';
 import Footer from '../../componentes/Footer';
 
 function Favoritos() {
-  const [favorites, setFavorites] = useState<Product[]>([]);
+  const [favorites, setFavorites] = useState<Product[]>([]); // Estado para almacenar los productos favoritos
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [notification, setNotification] = useState('');
@@ -107,6 +103,7 @@ function Favoritos() {
     }
   };
 
+  // Si el estado de loading es true, mostramos un mensaje de carga
   if (loading) {
     return (
       <main className="favoritos-page">
@@ -118,6 +115,7 @@ function Favoritos() {
     );
   }
 
+  // Si hay un error, mostramos un mensaje de error
   if (error) {
     return (
       <main className="favoritos-page">
