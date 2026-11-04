@@ -50,8 +50,13 @@ function Login() {
 
           localStorage.setItem("token", data.access_token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          await Promise.all([refreshCart(), refreshFavorites()]);
-          navigate("/products");
+
+          if (data.user.role === "admin") {
+            navigate("/admin");
+          } else {
+            await Promise.all([refreshCart(), refreshFavorites()]);
+            navigate("/products");
+          }
         } catch {
           setError("El correo o la contraseña no son correctos");
         } finally {
