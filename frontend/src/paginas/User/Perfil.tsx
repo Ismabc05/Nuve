@@ -24,7 +24,7 @@ import {
   validateProfileImage,
   type ProfileErrors,
   type AddressErrors,
-} from "../../paginas/User/Validation";
+} from "./Validation";
 
 import type { Address, User } from "../../types/perfil";
 import { useCart } from "../../context/cart/UseCart";
