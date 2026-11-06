@@ -2,21 +2,20 @@ import { Route, Routes } from "react-router-dom";
 import { CartProvider } from "./context/cart/CartProvider";
 import { FavoriteProvider } from "./context/favorites/FavoriteProvider";
 
-import Login from "./paginas/auth/Login";
-import Register from "./paginas/auth/Register";
+import Login from "./paginas/Auth/Login";
+import Register from "./paginas/Auth/Register";
 import Home from "./paginas/product/Home";
-import Carrito from "./paginas/user/Carrito";
-import Favoritos from "./paginas/user/Favoritos";
-import Perfil from "./paginas/user/Perfil";
-import OrderSuccess from "./paginas/orders/OrderSuccess";
+import Carrito from "./paginas/User/Carrito";
+import Favoritos from "./paginas/User/Favoritos";
+import Perfil from "./paginas/User/Perfil";
+import OrderSuccess from "./paginas/Orders/OrderSuccess";
 import Product from "./paginas/product/Product";
 import Admin from "./paginas/admin/Admin";
 import RootRedirect from "./paginas/root/RootRedirect";
-import Orders from "./paginas/orders/Order";
+import Orders from "./paginas/Orders/Order";
 import ProtectedRoute from "./paginas/root/RootRedirect";
-import ForgotPassword from "./paginas/auth/ForgotPassword";
-import ResetPassword from "./paginas/auth/ResetPassword";
-
+import ForgotPassword from "./paginas/Auth/ForgotPassword";
+import ResetPassword from "./paginas/Auth/ResetPassword";
 
 function App() {
   return (
