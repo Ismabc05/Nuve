@@ -1,75 +1,74 @@
-# React + TypeScript + Vite
+# Nuvé — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web de la tienda Nuvé, desarrollada con React, TypeScript y Vite. Incluye la experiencia de compra y un panel de administración.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 20.19 o posterior (o 22.12 o posterior).
+- npm.
 
-## React Compiler
+## Instalación y desarrollo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Desde esta carpeta (`frontend`), instala las dependencias e inicia el servidor local:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Vite mostrará en la terminal la dirección local para abrir la aplicación. El servidor de desarrollo utiliza recarga en caliente.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Comandos disponibles
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Inicia el servidor de desarrollo. |
+| `npm run build` | Comprueba los tipos de TypeScript y genera la versión de producción en `dist/`. |
+| `npm run preview` | Sirve localmente la última compilación de producción. |
+| `npm run lint` | Analiza el código con ESLint. |
 
+## Funcionalidades
+
+- Registro, inicio de sesión y recuperación y restablecimiento de contraseña.
+- Catálogo de productos, filtros y detalle de producto.
+- Carrito, favoritos y perfil de usuario.
+- Consulta de pedidos y confirmación de compra.
+- Panel de administración para gestionar productos, pedidos, clientes, catálogo e inventario.
+- Protección de rutas según la sesión y el rol del usuario.
+
+## Rutas principales
+
+| Ruta | Acceso | Página |
+| --- | --- | --- |
+| `/login`, `/register` | Público | Inicio de sesión y registro |
+| `/forgot-password`, `/reset-password` | Público | Recuperación de contraseña |
+| `/products`, `/products/:id` | Con sesión | Tienda y detalle de producto |
+| `/carts`, `/favorites`, `/perfil` | Con sesión | Carrito, favoritos y perfil |
+| `/orders/:id`, `/orders/success` | Con sesión | Pedido y confirmación |
+| `/admin` | Solo administradores | Panel de gestión |
+
+## Estructura del proyecto
+
+```text
+src/
+├── componentes/       # Componentes compartidos de la tienda
+├── context/           # Estado compartido del carrito y favoritos
+├── estilos/           # Hojas de estilo organizadas por área
+├── paginas/           # Páginas agrupadas por funcionalidad
+│   ├── Admin/         # Panel y componentes de administración
+│   ├── Auth/          # Autenticación
+│   ├── Orders/        # Pedidos
+│   ├── Product/       # Tienda y productos
+│   ├── Root/          # Redirecciones y protección de rutas
+│   └── User/          # Carrito, favoritos y perfil
+├── services/          # Comunicación con la API y servicios externos
+└── types/             # Tipos de TypeScript
 ```
+
+Los recursos estáticos, como el logotipo y las imágenes, se encuentran en `public/`.
+
+## API y servicios externos
+
+Los servicios del frontend se conectan actualmente a la API desplegada en `https://nuve-miru.onrender.com`. La subida de imágenes de perfil utiliza Cloudinary. Las direcciones y la configuración correspondiente están definidas en los servicios de `src/services/`; actualmente no se requiere un archivo `.env` para iniciar el frontend.
+
+Para desarrollo local con otra API, actualiza la URL base en los servicios antes de ejecutar la aplicación.
