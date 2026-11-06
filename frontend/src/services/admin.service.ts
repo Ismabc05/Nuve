@@ -1,160 +1,320 @@
-import type { Brand, Category, Product, ProductImage, ProductVariant } from "../types/product";
-
 const API_URL = "https://nuve-miru.onrender.com";
 
-export type AdminUser = {
-  id: number;
-  email: string;
-  role: string;
-  profile?: {
-    id?: number;
-    name?: string;
-    lastname?: string;
-    phone?: string;
-    image?: string;
-    zip_code?: string;
-  } | null;
-};
+// Función auxiliar para realizar las peticiones
 
-export type AdminOrder = {
-  id: number;
-  status: string;
-  total: number | string;
-  paid: boolean;
-  createdAt?: string;
-  user?: AdminUser;
-  items?: {
-    id: number;
-    quantity: number;
-    unitPrice: number | string;
-    productvariant?: ProductVariant & {
-      product?: Product;
-    };
-  }[];
-};
+const getHeaders = () => {
+    const token = localStorage.getItem("token");
 
-export type AdminImage = ProductImage & {
-  product?: Pick<Product, "id" | "name">;
-};
-
-export type AdminVariant = ProductVariant & {
-  product?: Pick<Product, "id" | "name">;
-};
-
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("Tu sesión ha caducado. Inicia sesión para continuar.");
-  }
-
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    let message = body;
-    try {
-      const parsed = JSON.parse(body) as { message?: string | string[] };
-      message = Array.isArray(parsed.message)
-        ? parsed.message.join(", ")
-        : parsed.message ?? body;
-    } catch {
-      // The API may return a plain-text error.
+    if (!token) {
+        throw new Error("Tu sesión ha caducado. Inicia sesión para continuar.");
     }
-    throw new Error(message || `Error del servidor (${response.status})`);
-  }
 
-  if (response.status === 204) {
-    return undefined as T;
-  }
+    return {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    };
+};
 
-  const body = await response.text();
-  return body ? (JSON.parse(body) as T) : (undefined as T);
-}
 
-const json = (method: string, value?: unknown): RequestInit => ({
-  method,
-  ...(value === undefined ? {} : { body: JSON.stringify(value) }),
-});
+// PRODUCTOS
 
-export const getAdminProducts = () => request<Product[]>("/products");
-export const getAdminCategories = () => request<Category[]>("/categories");
-export const getAdminBrands = () => request<Brand[]>("/brands");
-export const getAdminUsers = () => request<AdminUser[]>("/users");
-export const getAdminOrders = () => request<AdminOrder[]>("/orders");
-export const getAdminVariants = () => request<AdminVariant[]>("/product-variant");
-export const getAdminImages = () => request<AdminImage[]>("/product-image");
-
-export const createAdminProduct = (data: {
-  name: string;
-  price: number;
-  description: string;
-  categories: number[];
-  brandId: number;
-}) => request<Product>("/products", json("POST", data));
-
-export const updateAdminProduct = (
-  id: number,
-  data: {
+export const createAdminProduct = async (data: {
     name: string;
     price: number;
     description: string;
     categories: number[];
     brandId: number;
-  },
-) => request<Product>(`/products/${id}`, json("PUT", data));
+}) => {
+    const response = await fetch(`${API_URL}/products`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    });
 
-export const deleteAdminProduct = (id: number) =>
-  request<void>(`/products/${id}`, json("DELETE"));
+    if (!response.ok) {
+        throw new Error("Error al crear el producto");
+    }
 
-export const createAdminCategory = (name: string) =>
-  request<Category>("/categories", json("POST", { name }));
-export const updateAdminCategory = (id: number, name: string) =>
-  request<Category>(`/categories/${id}`, json("PUT", { name }));
-export const deleteAdminCategory = (id: number) =>
-  request<void>(`/categories/${id}`, json("DELETE"));
+    return await response.json();
+};
 
-export const createAdminBrand = (name: string) =>
-  request<Brand>("/brands", json("POST", { name }));
-export const updateAdminBrand = (id: number, name: string) =>
-  request<Brand>(`/brands/${id}`, json("PUT", { name }));
-export const deleteAdminBrand = (id: number) =>
-  request<void>(`/brands/${id}`, json("DELETE"));
+export const updateAdminProduct = async (
+    id: number,
+    data: {
+        name: string;
+        price: number;
+        description: string;
+        categories: number[];
+        brandId: number;
+    }
+) => {
+    const response = await fetch(`${API_URL}/products/${id}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    });
 
-export const updateAdminOrder = (id: number, status: string) =>
-  request<AdminOrder>(`/orders/${id}`, json("PUT", { status }));
-export const deleteAdminUser = (id: number) =>
-  request<void>(`/users/${id}`, json("DELETE"));
+    if (!response.ok) {
+        throw new Error("Error al actualizar el producto");
+    }
 
-export const createAdminVariant = (data: {
-  size: string;
-  color: string;
-  colorHex: string;
-  stock: number;
-  productId: number;
-}) => request<AdminVariant>("/product-variant", json("POST", data));
+    return await response.json();
+};
 
-export const updateAdminVariant = (
-  id: number,
-  data: {
+export const deleteAdminProduct = async (id: number) => {
+    const response = await fetch(`${API_URL}/products/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar el producto");
+    }
+};
+
+
+// CATEGORÍAS
+
+export const createAdminCategory = async (name: string) => {
+    const response = await fetch(`${API_URL}/categories`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al crear la categoría");
+    }
+
+    return await response.json();
+};
+
+export const updateAdminCategory = async (id: number, name: string) => {
+    const response = await fetch(`${API_URL}/categories/${id}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al actualizar la categoría");
+    }
+
+    return await response.json();
+};
+
+export const deleteAdminCategory = async (id: number) => {
+    const response = await fetch(`${API_URL}/categories/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar la categoría");
+    }
+};
+
+
+// MARCAS
+
+export const createAdminBrand = async (name: string) => {
+    const response = await fetch(`${API_URL}/brands`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al crear la marca");
+    }
+
+    return await response.json();
+};
+
+export const updateAdminBrand = async (id: number, name: string) => {
+    const response = await fetch(`${API_URL}/brands/${id}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al actualizar la marca");
+    }
+
+    return await response.json();
+};
+
+export const deleteAdminBrand = async (id: number) => {
+    const response = await fetch(`${API_URL}/brands/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar la marca");
+    }
+};
+
+// USUARIOS
+
+export const getAdminUsers = async () => {
+    const response = await fetch(`${API_URL}/users`, {
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al obtener los usuarios");
+    }
+
+    return await response.json();
+};
+
+export const deleteAdminUser = async (id: number) => {
+    const response = await fetch(`${API_URL}/users/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar el usuario");
+    }
+};
+
+// PEDIDOS
+
+export const getAdminOrders = async () => {
+    const response = await fetch(`${API_URL}/orders`, {
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al obtener los pedidos");
+    }
+
+    return await response.json();
+};
+
+export const updateAdminOrder = async (id: number, status: string) => {
+    const response = await fetch(`${API_URL}/orders/${id}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify({ status }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al actualizar el pedido");
+    }
+
+    return await response.json();
+};
+
+// VARIANTES DE PRODUCTOS
+
+export const getAdminVariants = async () => {
+    const response = await fetch(`${API_URL}/product-variant`, {
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al obtener las variantes");
+    }
+
+    return await response.json();
+};
+
+export const createAdminVariant = async (data: {
     size: string;
     color: string;
     colorHex: string;
     stock: number;
     productId: number;
-  },
-) => request<AdminVariant>(`/product-variant/${id}`, json("PUT", data));
+}) => {
+    const response = await fetch(`${API_URL}/product-variant`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    });
 
-export const deleteAdminVariant = (id: number) =>
-  request<void>(`/product-variant/${id}`, json("DELETE"));
+    if (!response.ok) {
+        throw new Error("Error al crear la variante");
+    }
 
-export const createAdminImage = (data: { url: string; productId: number }) =>
-  request<AdminImage>("/product-image", json("POST", data));
-export const deleteAdminImage = (id: number) =>
-  request<void>(`/product-image/${id}`, json("DELETE"));
+    return await response.json();
+};
+
+export const updateAdminVariant = async (
+    id: number,
+    data: {
+        size: string;
+        color: string;
+        colorHex: string;
+        stock: number;
+        productId: number;
+    }
+) => {
+    const response = await fetch(`${API_URL}/product-variant/${id}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al actualizar la variante");
+    }
+
+    return await response.json();
+};
+
+export const deleteAdminVariant = async (id: number) => {
+    const response = await fetch(`${API_URL}/product-variant/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar la variante");
+    }
+};
+
+// IMÁGENES DE PRODUCTOS
+
+export const getAdminImages = async () => {
+    const response = await fetch(`${API_URL}/product-image`, {
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al obtener las imágenes");
+    }
+
+    return await response.json();
+};
+
+export const createAdminImage = async (data: {
+    url: string;
+    productId: number;
+}) => {
+    const response = await fetch(`${API_URL}/product-image`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al crear la imagen");
+    }
+
+    return await response.json();
+};
+
+export const deleteAdminImage = async (id: number) => {
+    const response = await fetch(`${API_URL}/product-image/${id}`, {
+        method: "DELETE",
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al eliminar la imagen");
+    }
+};
