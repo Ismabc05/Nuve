@@ -1,5 +1,5 @@
 import type { Brand, Category, Product } from '../types/product'
-const API_URL = 'https://nuve-miru.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const products = async (): Promise<Product[]> => {
   const token = localStorage.getItem('token');

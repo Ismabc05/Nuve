@@ -1,6 +1,8 @@
-const API_URL = 'https://nuve-miru.onrender.com';
-const CLOUDINARY_CLOUD_NAME = 'nefbv7lf'; // Nombre único de tu cuenta/Cloudinary Cloud donde se almacenan las imágenes.
-const CLOUDINARY_UPLOAD_PRESET = 'nuve_profile_images'; // Configuración que indica cómo se pueden subir las imágenes a Cloudinary.
+const API_URL = import.meta.env.VITE_API_URL;
+
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 export const findByEmail = async (email: string) => {
     const response = await fetch(

@@ -1,4 +1,4 @@
-const API_URL = 'https://nuve-miru.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const addFavorite = async (userId: number, productId: number) => {
   const token = localStorage.getItem('token');

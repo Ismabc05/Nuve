@@ -1,4 +1,4 @@
-const API_URL = 'https://nuve-miru.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL;
 import type { CreateOrderItem } from '../types/carrito';
 
 export const getOrders = async () => {

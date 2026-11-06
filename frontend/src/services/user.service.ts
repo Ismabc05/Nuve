@@ -1,6 +1,6 @@
 import type { AddressData, UserData } from "../types/perfil";
 
-const API_URL = 'https://nuve-miru.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const getUser = async (userId: number) => {
   const token = localStorage.getItem('token');
