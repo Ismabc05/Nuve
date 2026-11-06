@@ -1,4 +1,4 @@
-import { LuPlus, LuTrash2 } from "react-icons/lu";
+import { LuPlus } from "react-icons/lu";
 import type { AdminImage } from "../../../types/admin";
 import type { Brand, Category, Product } from "../../../types/product";
 import {
@@ -37,7 +37,6 @@ export default function Catalogo({
   onDeleteCategory,
   onDeleteBrand,
   onAddImage,
-  onDeleteImage,
 }: Props) {
   return (
     <div className="admin__catalog-grid">
@@ -105,12 +104,6 @@ export default function Catalogo({
                   <span title={image.product?.name}>
                     {image.product?.name ?? "Producto"}
                   </span>
-                  <button
-                    aria-label="Eliminar imagen"
-                    onClick={() => onDeleteImage(image)}
-                  >
-                    <LuTrash2 size={15} />
-                  </button>
                 </div>
               </article>
             ))}

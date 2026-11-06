@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
-  LuBell,
   LuBoxes,
   LuCheck,
-  LuChevronDown,
   LuCircleAlert,
   LuClipboardList,
   LuLayoutDashboard,
@@ -438,20 +436,12 @@ function Admin() {
               />
               <kbd>⌘ K</kbd>
             </label>
-            <button
-              className="admin__icon-button admin__notification"
-              aria-label="Notificaciones"
-            >
-              <LuBell size={18} />
-              {lowStock > 0 && <span />}
-            </button>
             <div className="admin__profile">
               <span className="admin__avatar admin__avatar--admin">N</span>
               <span>
                 <strong>Administrador</strong>
                 <small>Workspace Nuvé</small>
               </span>
-              <LuChevronDown size={15} />
             </div>
           </div>
         </header>
