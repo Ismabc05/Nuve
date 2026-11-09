@@ -11,9 +11,8 @@ import Perfil from "./paginas/User/Perfil";
 import OrderSuccess from "./paginas/Orders/OrderSuccess";
 import Product from "./paginas/product/Product";
 import Admin from "./paginas/admin/Admin";
-import RootRedirect from "./paginas/root/RootRedirect";
+import { RootRedirect, ProtectedRoute } from "./paginas/root/RootRedirect";
 import Orders from "./paginas/Orders/Order";
-import ProtectedRoute from "./paginas/root/RootRedirect";
 import ForgotPassword from "./paginas/Auth/ForgotPassword";
 import ResetPassword from "./paginas/Auth/ResetPassword";
 
