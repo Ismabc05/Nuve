@@ -24,6 +24,7 @@ import Inventario from "./components/Inventario";
 import Pedidos from "./components/Pedidos";
 import Productos from "./components/Productos";
 import Resumen from "./components/Resumen";
+import AdminSkeleton from "./components/AdminSkeleton";
 import { customerName } from "./components/admin-utils";
 import "../../estilos/admin/admin.css";
 import {
@@ -511,10 +512,7 @@ function Admin() {
           )}
 
           {loading && !data.products.length && !error ? (
-            <div className="admin__loading">
-              <span className="admin__spinner" />
-              Cargando datos de la tienda...
-            </div>
+            <AdminSkeleton />
           ) : (
             <>
               {section === "overview" && (

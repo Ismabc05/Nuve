@@ -8,6 +8,7 @@ import ProductCard from '../../componentes/ProductCard';
 import '../../estilos/users/favorite.css';
 import Navbar from '../../componentes/Navbar';
 import Footer from '../../componentes/Footer';
+import FavoritosSkeleton from './FavoritosSkeleton';
 
 function Favoritos() {
   const [favorites, setFavorites] = useState<Product[]>([]); // Estado para almacenar los productos favoritos
@@ -103,15 +104,13 @@ function Favoritos() {
     }
   };
 
-  // Si el estado de loading es true, mostramos un mensaje de carga
   if (loading) {
     return (
-      <main className="favoritos-page">
-        <div className="favoritos-loading">
-          <div className="favoritos-spinner"></div>
-          <p>Cargando tus favoritos...</p>
-        </div>
-      </main>
+      <>
+        <Navbar valorInput={valorInput} setValorInput={setValorInput} />
+        <FavoritosSkeleton />
+        <Footer />
+      </>
     );
   }
 

@@ -525,33 +525,102 @@
   color: #1d1d1b;
 }
 
-/* LOADING */
+.carrito-skeleton__back {
+  width: 145px;
+  height: 13px;
+  margin-bottom: 30px;
+}
 
-.carrito-loading {
-  min-height: 60vh;
+.carrito-skeleton__heading {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  color: #666;
-  padding-top: 160px;
-  box-sizing: border-box;
+  gap: 12px;
 }
 
-.carrito-spinner {
-  width: 34px;
-  height: 34px;
-  border: 3px solid #deded9;
-  border-top-color: #1d1d1b;
-  border-radius: 50%;
-  animation: carrito-spin 0.8s linear infinite;
+.carrito-skeleton__eyebrow {
+  width: 85px;
+  height: 10px;
 }
 
-@keyframes carrito-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.carrito-skeleton__title {
+  width: 210px;
+  height: 42px;
+}
+
+.carrito-skeleton__subtitle {
+  width: min(550px, 70vw);
+  height: 15px;
+}
+
+.carrito-skeleton__count {
+  width: 95px;
+  height: 35px;
+}
+
+.carrito-skeleton__details {
+  width: min(240px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.carrito-skeleton__category {
+  width: 55px;
+  height: 9px;
+}
+
+.carrito-skeleton__product-name {
+  width: 75%;
+  height: 17px;
+}
+
+.carrito-skeleton__options {
+  width: 90%;
+  height: 12px;
+}
+
+.carrito-skeleton__data {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.carrito-skeleton__data-label {
+  width: 55px;
+  height: 9px;
+}
+
+.carrito-skeleton__data-value {
+  width: 65px;
+  height: 14px;
+}
+
+.carrito-skeleton__quantity {
+  width: 88px;
+  height: 32px;
+}
+
+.carrito-skeleton__summary-heading {
+  width: 145px;
+  height: 22px;
+  margin-bottom: 30px;
+}
+
+.carrito-skeleton__summary-row {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 17px;
+}
+
+.carrito-skeleton__summary-total {
+  width: 100%;
+  height: 22px;
+  margin: 25px 0;
+}
+
+.carrito-skeleton__summary-button {
+  width: 100%;
+  height: 48px;
 }
 
 /* ERROR */
@@ -626,11 +695,6 @@
 
   .carrito-header h1 {
     font-size: 34px;
-  }
-
-  .favoritos-loading {
-    padding-top: 120px;
-    min-height: 60vh;
   }
 
   .carrito-item {

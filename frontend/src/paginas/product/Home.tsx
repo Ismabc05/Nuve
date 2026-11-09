@@ -17,6 +17,7 @@ function Home() {
   const [categoryList, setCategoryList] = useState<Category[]>([]); // Estado que contiene listado de categorias
   const [brandList, setBrandList] = useState<Brand[]>([]); // Estado que contiene listado de marcas
   const [loading, setLoading] = useState(true); // Estado de carga
+  const [filtersLoading, setFiltersLoading] = useState(true);
   const [valorInput, setValorInput] = useState(''); // Guarda el texto escrito del buscador
   const [priceOrder, setPriceOrder] = useState<PriceOrder>(''); // 	Guarda el orden de precio seleccionado.
   const [selectedCategories, setSelectedCategories] = // Estado que contiene las categorias seleccionadas
@@ -85,21 +86,23 @@ function Home() {
         setLoading(false);
       });
 
-    categories()
-      .then((data) => {
-        setCategoryList(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    Promise.allSettled([categories(), brands()]).then(
+      ([categoriesResult, brandsResult]) => {
+        if (categoriesResult.status === 'fulfilled') {
+          setCategoryList(categoriesResult.value);
+        } else {
+          console.error('Error al cargar las categorías:', categoriesResult.reason);
+        }
 
-    brands()
-      .then((data) => {
-        setBrandList(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        if (brandsResult.status === 'fulfilled') {
+          setBrandList(brandsResult.value);
+        } else {
+          console.error('Error al cargar las marcas:', brandsResult.reason);
+        }
+
+        setFiltersLoading(false);
+      },
+    );
   }, []);
 
   const handleFavorite = async (productId: number) => {
@@ -153,6 +156,7 @@ function Home() {
           <ProductFilters
             categories={categoryList}
             brands={brandList}
+            loading={filtersLoading}
             priceOrder={priceOrder}
             setPriceOrder={setPriceOrder}
             selectedCategories={selectedCategories}

@@ -4,12 +4,14 @@ import type { Dispatch, SetStateAction } from 'react';
 
 import type { Category, Brand, PriceOrder } from '../types/product';
 import '../estilos/product/product.filter.css';
+import ProductFiltersSkeleton from './ProductFiltersSkeleton';
 
 type Section = 'categorias' | 'marcas' | 'precio';
 
 type ProductFiltersProps = {
   categories: Category[];
   brands: Brand[];
+  loading: boolean;
   priceOrder: PriceOrder;
   setPriceOrder : (value: PriceOrder) => void;
   selectedCategories: number[];
@@ -22,6 +24,7 @@ type ProductFiltersProps = {
 function ProductFilters({
   categories,
   brands,
+  loading,
   priceOrder,
   setPriceOrder,
   selectedCategories,
@@ -46,6 +49,10 @@ function ProductFilters({
       [section]: !prev[section]
     }));
   };
+
+  if (loading) {
+    return <ProductFiltersSkeleton />;
+  }
 
   return (
     <aside className="product-filters">

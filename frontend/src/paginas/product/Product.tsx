@@ -9,6 +9,7 @@ import { useFavorite } from "../../context/favorites/UseFavorite";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LuChevronLeft, LuHeart, LuMinus, LuPlus, LuRotateCcw, LuShieldCheck, LuShoppingBag, LuTruck, } from "react-icons/lu";
+import ProductDetailSkeleton from "./ProductDetailSkeleton";
 
 // Product muestra un producto en concreto con toda su informacion
 function Product() {
@@ -164,20 +165,12 @@ function Product() {
     }
   };
 
-  // Si esta cargando muestra el Navbar el Footer y el parrafo de cargando
+  // Mantiene la estructura de la página mientras se carga el producto.
   if (loading) {
     return (
       <>
         <Navbar valorInput={valorInput} setValorInput={setValorInput} />
-
-        <main className="product-detail product-detail--state">
-          <div className="product-detail__loader">
-            <span className="product-detail__loader-line" />
-
-            <p>Cargando producto...</p>
-          </div>
-        </main>
-
+        <ProductDetailSkeleton />
         <Footer />
       </>
     );

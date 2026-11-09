@@ -79,6 +79,37 @@
   color: #111;
 }
 
+.product-filters-skeleton__chevron {
+  width: 17px;
+  height: 17px;
+}
+
+.product-filters-skeleton__control {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 3px;
+}
+
+.product-filters-skeleton__label {
+  width: 68%;
+  height: 13px;
+}
+
+.product-filters-skeleton__label--0-1,
+.product-filters-skeleton__label--1-2 {
+  width: 52%;
+}
+
+.product-filters-skeleton__label--0-3,
+.product-filters-skeleton__label--1-3 {
+  width: 76%;
+}
+
+.product-filters-skeleton__label--2-1 {
+  width: 58%;
+}
+
 .product-filters__option input {
   appearance: none;
   width: 18px;

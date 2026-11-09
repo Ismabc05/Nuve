@@ -13,6 +13,7 @@ import type { Order as OrderType } from "../../types/carrito";
 import type { Address } from "../../types/perfil";
 
 import "../../estilos/order/order.css";
+import OrderSkeleton from "./OrderSkeleton";
 
 function Order() {
   const [valorInput, setValorInput] = useState("");
@@ -135,15 +136,7 @@ function Order() {
     return (
       <>
         <Navbar valorInput={valorInput} setValorInput={setValorInput} />
-
-        <main className="order-page">
-          <div className="carrito-loading">
-            <div className="carrito-spinner"></div>
-
-            <p>Cargando tu pedido...</p>
-          </div>
-        </main>
-
+        <OrderSkeleton />
         <Footer />
       </>
     );

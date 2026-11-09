@@ -29,6 +29,7 @@ import {
 import type { Address, User } from "../../types/perfil";
 import { useCart } from "../../context/cart/UseCart";
 import { useFavorite } from "../../context/favorites/UseFavorite";
+import PerfilSkeleton from "./PerfilSkeleton";
 
 const getOrderStatus = (status: string) => {
   switch (status.toLowerCase()) {
@@ -425,15 +426,7 @@ function Perfil() {
     return (
       <>
         <Navbar valorInput={valorInput} setValorInput={setValorInput} />
-
-        <main className="perfil-page">
-          <div className="perfil-loading">
-            <div className="perfil-spinner" />
-
-            <p>Cargando perfil...</p>
-          </div>
-        </main>
-
+        <PerfilSkeleton />
         <Footer />
       </>
     );

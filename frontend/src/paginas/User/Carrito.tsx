@@ -7,6 +7,7 @@ import Footer from "../../componentes/Footer";
 import "../../estilos/users/carrito.css";
 import { useCart } from "../../context/cart/UseCart";
 import type { Order } from "../../types/carrito";
+import CarritoSkeleton from "./CarritoSkeleton";
 
 function Carrito() {
   const [order, setOrder] = useState<Order | null>(null);
@@ -85,13 +86,11 @@ function Carrito() {
 
   if (loading) {
     return (
-      <main className="carrito-page">
-        <div className="carrito-loading">
-          <div className="carrito-spinner"></div>
-
-          <p>Cargando tu carrito...</p>
-        </div>
-      </main>
+      <>
+        <Navbar valorInput={valorInput} setValorInput={setValorInput} />
+        <CarritoSkeleton />
+        <Footer />
+      </>
     );
   }
 

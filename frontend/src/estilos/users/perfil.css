@@ -30,27 +30,6 @@
   letter-spacing: 2px;
 }
 
-.carrito-loading {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  color: #666;
-  padding-top: 160px;
-  box-sizing: border-box;
-}
-
-.carrito-spinner {
-  width: 34px;
-  height: 34px;
-  border: 3px solid #deded9;
-  border-top-color: #1d1d1b;
-  border-radius: 50%;
-  animation: carrito-spin 0.8s linear infinite;
-}
-
 .perfil-header h1 {
   margin: 0 0 12px;
   color: #1d1d1b;
@@ -386,30 +365,65 @@
   font-size: 13px;
 }
 
-.perfil-loading {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  color: #666;
+.perfil-skeleton__back {
+  width: 145px;
+  height: 13px;
+  margin-bottom: 30px;
 }
 
-.perfil-spinner {
-  width: 34px;
-  height: 34px;
-  border: 3px solid #deded9;
-  border-top-color: #1d1d1b;
+.perfil-skeleton__eyebrow,
+.perfil-skeleton__section-label {
+  width: 120px;
+  height: 10px;
+  margin-bottom: 12px;
+}
+
+.perfil-skeleton__title {
+  width: 220px;
+  height: 42px;
+  margin-bottom: 12px;
+}
+
+.perfil-skeleton__subtitle {
+  width: min(550px, 70vw);
+  height: 15px;
+}
+
+.perfil-skeleton__section-title {
+  width: 175px;
+  height: 23px;
+}
+
+.perfil-skeleton__action {
+  width: 140px;
+  height: 38px;
+}
+
+.perfil-skeleton__avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  animation:
-    perfil-spin 0.8s linear infinite;
 }
 
-@keyframes perfil-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.perfil-skeleton__field-label {
+  width: 75px;
+  height: 10px;
+}
+
+.perfil-skeleton__field-value {
+  width: 70%;
+  height: 16px;
+}
+
+.perfil-skeleton__address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.perfil-skeleton__address {
+  height: 125px;
 }
 
 .perfil-error {
@@ -1042,11 +1056,6 @@
     grid-template-columns: 1fr;
   }
 
-  .favoritos-loading {
-    padding-top: 120px;
-    min-height: 60vh;
-  }
-
   .perfil-address-form-grid {
     grid-template-columns: 1fr;
   }
@@ -1055,6 +1064,10 @@
 @media (max-width: 600px) {
   .perfil-page {
     padding: 30px 15px 60px;
+  }
+
+  .perfil-skeleton__address-grid {
+    grid-template-columns: 1fr;
   }
 
   .perfil-header {

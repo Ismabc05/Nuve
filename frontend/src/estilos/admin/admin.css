@@ -1472,27 +1472,76 @@
   box-shadow: 0 8px 24px rgba(32, 35, 31, .09);
 }
 
-.admin__loading {
-  min-height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #777a71;
-  font-size: 11px;
+.admin-skeleton__stats,
+.admin-skeleton__panels {
+  display: grid;
+  gap: 13px;
 }
 
-.admin__spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #e2e4dc;
-  border-top-color: #69775f;
-  border-radius: 50%;
-  animation: admin-spin .7s linear infinite;
+.admin-skeleton__stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
 }
 
-@keyframes admin-spin {
-  to { transform: rotate(360deg); }
+.admin-skeleton__panels {
+  grid-template-columns: 1.08fr .92fr;
+}
+
+.admin-skeleton__stat,
+.admin-skeleton__panel {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid #ecece6;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.admin-skeleton__stat {
+  min-height: 115px;
+}
+
+.admin-skeleton__label {
+  width: 65%;
+  height: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-skeleton__value {
+  width: 45%;
+  height: 23px;
+  margin-bottom: 10px;
+}
+
+.admin-skeleton__meta {
+  width: 70%;
+  height: 9px;
+}
+
+.admin-skeleton__panel {
+  min-height: 235px;
+  padding: 19px;
+}
+
+.admin-skeleton__heading {
+  width: 42%;
+  height: 13px;
+  margin-bottom: 26px;
+}
+
+.admin-skeleton__line {
+  width: 90%;
+  height: 10px;
+  margin-bottom: 15px;
+}
+
+.admin-skeleton__line--short {
+  width: 62%;
+}
+
+.admin-skeleton__chart {
+  width: 100%;
+  height: 110px;
+  margin-top: 22px;
 }
 
 .admin__modal-backdrop {
@@ -1734,6 +1783,10 @@
   .admin__stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .admin-skeleton__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -1834,6 +1887,10 @@
     grid-template-columns: 1fr;
   }
 
+  .admin-skeleton__panels {
+    grid-template-columns: 1fr;
+  }
+
   .admin__welcome {
     min-height: 208px;
   }
@@ -1908,9 +1965,15 @@
   }
 
   .admin__stats,
-  .admin__stats--compact {
+  .admin__stats--compact,
+  .admin-skeleton__stats {
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+  }
+
+  .admin-skeleton__stat {
+    min-height: 106px;
+    padding: 12px;
   }
 
   .admin__stat-card {

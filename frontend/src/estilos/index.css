@@ -24,3 +24,29 @@ body,
 body {
   background: #fff;
 }
+
+.skeleton-block {
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    #eeeeeb 25%,
+    #f7f7f5 50%,
+    #eeeeeb 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
+}
